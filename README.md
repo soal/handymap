@@ -1,2 +1,2 @@
 # handmap
-Geo service for visualizong hystory events and proccess
+Geo service for visualize hystory events and processes
