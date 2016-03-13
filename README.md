@@ -1,2 +1,2 @@
-# handmap
-Geo service for visualize hystory events and processes
+# Handymap
+Geo service for visualize historical events and processes
