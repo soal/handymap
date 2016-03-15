@@ -45,6 +45,7 @@ coverage.xml
 # IDEs files
 *.sublime-*
 *.idea
+*.tern-*
 
 # Node.js stuff
 node_modules
