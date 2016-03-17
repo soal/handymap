@@ -52,21 +52,19 @@ gulp.task("vendor", function() {
   var jsFilter = filter("**/*.js");
   var cssFilter = filter("**/*.css");
 
-  return gulp.src(bowerFiles({
-      includeDev: true
-    }),
+  var vendors = bowerFiles();
+  return gulp.src(vendors,
     { base: vendorPath }
     )
     .pipe(jsFilter)
     .pipe(concat("vendor.js"))
-    .pipe(gulpif(production, uglify()))
+    .pipe(gulpif(true, uglify()))
     .pipe(gulp.dest(staticPath + "/js"))
     // .pipe(jsFilter.restore())
     .pipe(cssFilter)
     .pipe(concat("vendor.css"))
     .pipe(gulpif(production, minifyCSS()))
     .pipe(gulp.dest(staticPath + "/css"));
-
 });
 
 gulp.task("flask", function() {
