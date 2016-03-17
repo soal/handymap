@@ -13,13 +13,14 @@
 
 </head>
 <body>
-
-    {% block body %}
-    {% endblock %}
+    <div id="app">
+        {% block body %}
+        {% endblock %}
+    </div>
 
     {% block js %}
-        <script src="{{ static('js/vendor.js') }}" type="text/javascript" charset="utf-8" async defer></script>
-        <script src="{{ static('js/app.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+        <script src="{{ static('js/vendor.js') }}" type="text/javascript" charset="utf-8"></script>
+        <script src="{{ static('js/app.js') }}" type="text/javascript" charset="utf-8"></script>
     {% endblock %}
 
 </body>
