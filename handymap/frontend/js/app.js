@@ -1,6 +1,3 @@
-var _ = require("lodash");
-// Test
-
 var myTestObj = {
   a: 1,
   b: 2,

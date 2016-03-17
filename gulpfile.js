@@ -10,18 +10,21 @@ var gulp       = require("gulp"),
     removeLogs = require("gulp-removelogs"),
     // clean      = require("gulp-clean"),
     plumber    = require("gulp-plumber"),
+    bowerFiles = require("main-bower-files"),
+    filter     = require("gulp-filter"),
     exec       = require("child_process").exec;
 
-var appName = "app";
-var staticPath = appName + "/static";
+var appName = "handymap",
+    staticPath = appName + "/static",
+    stylesPath = appName + "/frontend/styles",
+    jsPath = appName + "/frontend/js",
+    vendorPath = appName + "/frontend/vendor";
 
-var stylesPath = appName + "/frontend/styles";
-var jsPath = appName + "/frontend/js";
 
 var production = false;
 
 gulp.task("styles", function() {
-  gulp.src([ stylesPath + "/**/*.styl" ])
+  return gulp.src([ stylesPath + "/**/*.styl" ])
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
     .pipe(stylus())
@@ -33,7 +36,7 @@ gulp.task("styles", function() {
 });
 
 gulp.task("js", function() {
-  gulp.src(jsPath + "/**/*.js")
+  return gulp.src(jsPath + "/**/*.js")
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
     .pipe(babel({ presets: ["es2015"] }))
@@ -43,6 +46,27 @@ gulp.task("js", function() {
     .pipe(gulpif(production, rename({ suffix: ".min" })))
     .pipe(gulpif(!production, sourcemaps.write("./")))
     .pipe(gulp.dest(staticPath + "/js"));
+});
+
+gulp.task("vendor", function() {
+  var jsFilter = filter("**/*.js");
+  var cssFilter = filter("**/*.css");
+
+  return gulp.src(bowerFiles({
+      includeDev: true
+    }),
+    { base: vendorPath }
+    )
+    .pipe(jsFilter)
+    .pipe(concat("vendor.js"))
+    .pipe(gulpif(production, uglify()))
+    .pipe(gulp.dest(staticPath + "/js"))
+    // .pipe(jsFilter.restore())
+    .pipe(cssFilter)
+    .pipe(concat("vendor.css"))
+    .pipe(gulpif(production, minifyCSS()))
+    .pipe(gulp.dest(staticPath + "/css"));
+
 });
 
 gulp.task("flask", function() {
@@ -55,9 +79,10 @@ gulp.task("flask", function() {
 gulp.task("dev", ["flask", "js", "styles"], function() {
   gulp.watch(jsPath + "/**/*.js", ["js"]);
   gulp.watch(stylesPath + "/**/*.styl", ["styles"]);
+  gulp.watch("bower.json",["vendor"]);
 
 });
 
-gulp.task("prod", ["js", "styles"]);
+gulp.task("prod", ["vendor", "js", "styles"]);
 
 gulp.task("default", ["dev"]);

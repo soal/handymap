@@ -53,3 +53,4 @@ node_modules
 
 # Generated static files
 handymap/static/*
+handymap/frontend/vendor/*
