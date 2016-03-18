@@ -58,7 +58,7 @@ gulp.task("vendor", function() {
     )
     .pipe(jsFilter)
     .pipe(concat("vendor.js"))
-    .pipe(gulpif(true, uglify()))
+    .pipe(gulpif(production, uglify()))
     .pipe(gulp.dest(staticPath + "/js"))
     // .pipe(jsFilter.restore())
     .pipe(cssFilter)

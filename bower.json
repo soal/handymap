@@ -20,7 +20,12 @@
     "backbone.marionette": "marionette#^2.4.5",
     "jquery": "^2.2.1",
     "underscore": "^1.8.3",
-    "ractive": "^0.7.3",
-    "ractive-backbone": "ractive-adaptors-backbone#^0.3.0"
+    "hogan.js": "hogan#^3.0.2"
+  },
+  "overrides": {
+    "hogan.js": {
+      "main": "./web/builds/3.0.2/hogan-3.0.2.js"
+    }
+
   }
 }
