@@ -1,27 +1,36 @@
 var gulp       = require("gulp"),
+    browserify = require("browserify"),
+    watchify   = require("watchify"),
     gulpif     = require("gulp-if"),
     uglify     = require("gulp-uglify"),
     concat     = require("gulp-concat"),
-    babel      = require("gulp-babel"),
+    source     = require("vinyl-source-stream"),
+    buffer     = require("vinyl-buffer"),
+    babel      = require("babelify"),
     stylus     = require("gulp-stylus"),
     sourcemaps = require("gulp-sourcemaps"),
     minifyCSS  = require("gulp-minify-css"),
     rename     = require("gulp-rename"),
     removeLogs = require("gulp-removelogs"),
-    // clean      = require("gulp-clean"),
     plumber    = require("gulp-plumber"),
+    hoganify   = require("hoganify"),
     exec       = require("child_process").exec;
 
-var appName = "app";
+var appName = "handymap";
 var staticPath = appName + "/static";
 
 var stylesPath = appName + "/frontend/styles";
-var jsPath = appName + "/frontend/js";
+var jsAppFile = appName + "/frontend/js/app.js";
+
 
 var production = false;
 
+gulp.task("set-production", function() {
+  production = true;
+});
+
 gulp.task("styles", function() {
-  gulp.src([ stylesPath + "/**/*.styl" ])
+  return gulp.src([ stylesPath + "/**/*.styl" ])
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
     .pipe(stylus())
@@ -32,17 +41,52 @@ gulp.task("styles", function() {
     .pipe(gulp.dest(staticPath + "/css"));
 });
 
-gulp.task("js", function() {
-  gulp.src(jsPath + "/**/*.js")
-    .pipe(gulpif(!production, plumber()))
-    .pipe(gulpif(!production, sourcemaps.init()))
-    .pipe(babel({ presets: ["es2015"] }))
-    .pipe(concat("app.js"))
-    .pipe(gulpif(production, removeLogs()))
-    .pipe(gulpif(production, uglify()))
-    .pipe(gulpif(production, rename({ suffix: ".min" })))
-    .pipe(gulpif(!production, sourcemaps.write("./")))
-    .pipe(gulp.dest(staticPath + "/js"));
+function compileJS(watch) {
+  var bundler = watchify(
+    browserify(jsAppFile, { debug: true })
+    .transform(babel, { presets: ["es2015"] })
+    .transform(hoganify, { extensions: [".mustache"] })
+  );
+
+  function rebundle() {
+    bundler.bundle()
+      .on("error", function(err) { console.error(err); this.emit("end"); })
+      .pipe(source("app.js"))
+      .pipe(buffer())
+      .pipe(gulpif(!production, plumber()))
+      .pipe(gulpif(production, removeLogs()))
+      .pipe(gulpif(production, uglify()))
+      .pipe(gulpif(!production, sourcemaps.init({ loadMaps: true })))
+      .pipe(gulpif(!production, sourcemaps.write("./")))
+      .pipe(gulp.dest(staticPath + "/js"));
+  }
+
+  if (watch) {
+    bundler.on("update", function() {
+      console.log("-> bundling...");
+      rebundle();
+      console.log("-> Bundled!");
+    });
+  }
+
+  rebundle();
+}
+
+function watchJS() {
+  return compileJS(true);
+}
+
+gulp.task("compileJS", function() { return compileJS(); });
+gulp.task("watchJS", function() { return watchJS(); });
+
+// gulp.task("compileStyles", function() { return compileStyles(); });
+// gulp.task("watchStyles", function() { return watchStyles(); });
+
+gulp.task("flask", function() {
+  return exec("./server.py", function(err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+  });
 });
 
 gulp.task("flask", function() {
@@ -52,12 +96,11 @@ gulp.task("flask", function() {
   });
 });
 
-gulp.task("dev", ["flask", "js", "styles"], function() {
-  gulp.watch(jsPath + "/**/*.js", ["js"]);
+gulp.task("dev", ["flask", "watchJS", "styles"], function() {
   gulp.watch(stylesPath + "/**/*.styl", ["styles"]);
-
+  gulp.watch(appName + "/frontend/templates/**/*.hg", ["hogan"]);
 });
 
-gulp.task("prod", ["js", "styles"]);
+gulp.task("prod", ["set-production", "compileJS", "styles"]);
 
 gulp.task("default", ["dev"]);
