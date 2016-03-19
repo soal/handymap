@@ -1,5 +1,8 @@
-var Router = Marionette.AppRouter.extend({
+module.exports = function() {
+  var Router = Marionette.AppRouter.extend({
 
-});
+  });
 
-app.router = new Router();
+  var router = new Router();
+  return router;
+}

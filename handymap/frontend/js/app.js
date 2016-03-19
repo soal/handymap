@@ -1,9 +1,7 @@
-Marionette.TemplateCache.prototype.compileTemplate = function(rawTemplate, options) {
-  return function(data) {
-    return Hogan.compile(rawTemplate).render(data);
-  };
-};
-
+var Backbone = require("backbone"),
+    Marionette = require("backbone.marionette"),
+    testTemplate = require("./templates/testTemplate.mustache")
+;
 
 var App = Marionette.Application.extend({
   container: "#app"
@@ -17,9 +15,6 @@ app.on("start", function() {
 
 app.start();
 
-
-
-
 var TestModel = Backbone.Model.extend({
 
 });
@@ -30,12 +25,14 @@ app.testModel = new TestModel({
     anotherName: "Иaков"
   });
 
-// app.testModel.set();
-
 var TestView = Marionette.ItemView.extend({
   el: "#test-elem",
-  template: "#test-templ"
+  template: function(data) {
+    return testTemplate.render(data);
+  }
 });
 
 app.testView = new TestView({ model: app.testModel });
 app.testView.render();
+
+module.exports = function() { return app; };
