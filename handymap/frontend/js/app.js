@@ -1,8 +1,7 @@
-var Backbone = require("backbone"),
+var Backbone =  require("backbone"),
     Marionette = require("backbone.marionette"),
     testTemplate = require("./templates/testTemplate.mustache")
 ;
-
 var App = Marionette.Application.extend({
   container: "#app"
 });
@@ -19,10 +18,14 @@ var TestModel = Backbone.Model.extend({
 
 });
 
+app.testFunctionForTest = function(one, two) {
+  return Math.pow(one, two);
+};
+
 app.testModel = new TestModel({
     hello: "Привет",
     mustName: "Иов",
-    anotherName: "Иaков"
+    anotherName: "Экклесиаст"
   });
 
 var TestView = Marionette.ItemView.extend({
@@ -35,4 +38,4 @@ var TestView = Marionette.ItemView.extend({
 app.testView = new TestView({ model: app.testModel });
 app.testView.render();
 
-module.exports = function() { return app; };
+module.exports = app;
