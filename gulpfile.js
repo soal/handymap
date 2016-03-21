@@ -17,18 +17,18 @@ var gulp       = require("gulp"),
     hoganify   = require("hoganify"),
     karma      = require("karma"),
     exec       = require("child_process").exec,
-    execSync       = require("child_process").execSync;
+    execSync   = require("child_process").execSync;
 
 var appName = "handymap",
 
-    staticDir = `${appName}/static`,
-    stylesDir = `${appName}/frontend/styles`,
+    staticDir = `${appName}/client/static`,
+    stylesDir = `${appName}/client/styles`,
 
-    jsDir = `${appName}/frontend/js`,
+    jsDir = `${appName}/client/js`,
     jsAppFile = `${jsDir}/app.js`,
 
-    testsDir = "tests",
-    serverTestsDir =  `${testsDir}/server`;
+    serverTestsDir =  `${appName}/server/tests`,
+    serverTestsFile =  `${serverTestsDir}/tests.py`;
 
 
 var production = false;
@@ -93,7 +93,7 @@ gulp.task("watchJS", () => watchJS(jsAppFile, "app.js",  `${staticDir}/js`));
 gulp.task("testServer", () => {
   var log=gutil.log, colors=gutil.colors;
   log(colors.bgBlue.bold.white("======= BACKEND TESTING ========"));
-  var testOut = execSync("python ./tests/server/tests.py");
+  var testOut = execSync(`python ${serverTestsFile}`);
   console.log(testOut);
 });
 

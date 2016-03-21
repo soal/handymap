@@ -1,0 +1,1 @@
+# handymap/__init__.py
