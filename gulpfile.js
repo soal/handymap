@@ -122,7 +122,7 @@ gulp.task("flask", () => {
 
 gulp.task("dev", ["flask", "watchJS", "styles"], () => {
   gulp.watch(`${stylesDir}/**/*.styl`, ["styles"]);
-  gulp.watch(`${appName}/frontend/templates/**/*.hg`, ["hogan"]);
+  gulp.watch(`${jsDir}/**/*.hg`, ["hogan"]);
 });
 
 gulp.task("prod", ["set-production", "compileJS", "styles"]);
