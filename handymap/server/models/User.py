@@ -1,0 +1,1 @@
+from handymap.server import app

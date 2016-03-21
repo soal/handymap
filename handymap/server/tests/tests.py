@@ -1,11 +1,14 @@
-from handymap import handymap
 import unittest
 
+
 class HandymapTestCase(unittest.TestCase):
+    """HandymapTestCase - base class for calling unit tests on handymap"""
+    def __init__(self, arg):
+        super(HandymapTestCase, self).__init__()
 
     def setUp(self):
-        handymap.app.config['TESTING'] = True
-        self.app = handymap.app.test_client()
+        self.app.config['TESTING'] = True
+        self.app = self.app.test_client()
 
     def tearDown(self):
         pass

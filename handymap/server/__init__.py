@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, url_for, send_file, request, abort
 
 app = Flask(
@@ -5,12 +6,13 @@ app = Flask(
     template_folder='templates',
     static_folder='../client/static'
 )
+# app.config.from_object(os.environ['APP_SETTINGS'])
+app.debug = True
 
 app.jinja_env.globals['static'] = (
     lambda filename: url_for('static', filename = filename)
 )
 
-app.debug = True
 
 @app.route('/')
 def index():
@@ -19,14 +21,14 @@ def index():
 @app.route('/events')
 def events():
     if request.is_xhr:
-        return send_file('test_data/events.json', 'JSON')
+        return send_file('../test_data/events.json', 'JSON')
     else:
         abort(404)
 
 @app.route('/russia/<process>')
 def show_process(process):
     if request.is_xhr:
-        return send_file('test_data/%s.json', 'JSON') % process
+        return send_file('../test_data/%s.json', 'JSON') % process
     else:
         abort(404)
 
@@ -36,3 +38,5 @@ def show_process(process):
 #         return send_file('frontend/templates/%s.mustache' % name, 'text/html')
 #     else:
 #         abort(404)
+#
+from handymap.server.models import User

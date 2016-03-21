@@ -1,4 +1,4 @@
-var app  = require("../../handymap/frontend/js/app");
+var app  = require("../js/app");
 
 describe("app.testFunctionForTest", function() {
   it("app.testFunctionForTest видима", function() {

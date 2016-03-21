@@ -91,15 +91,19 @@ gulp.task("watchJS", () => watchJS(jsAppFile, "app.js",  `${staticDir}/js`));
 // gulp.task("watchStyles", function() { return watchStyles(); });
 //
 gulp.task("testServer", () => {
-  var log=gutil.log, colors=gutil.colors;
+  var log = gutil.log,
+      colors = gutil.colors;
+
   log(colors.bgBlue.bold.white("======= BACKEND TESTING ========"));
-  var testOut = execSync(`python ${serverTestsFile}`);
-  console.log(testOut);
+  execSync(`python ./manage.py cov`);
 });
 
 gulp.task("testClient", ["testServer"], (done) => {
-  var log=gutil.log, colors=gutil.colors;
+  var log = gutil.log,
+      colors = gutil.colors;
+
   log(colors.bgMagenta.bold.white("======= FRONTEND TESTING ======="));
+
   new karma.Server({
     configFile: `${__dirname}/karma.conf.js`,
     singleRun: true

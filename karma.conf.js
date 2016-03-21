@@ -5,48 +5,48 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: "",
 
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'jasmine'],
+    frameworks: ["browserify", "jasmine"],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'handymap/frontend/js/**/*.js',
-      'tests/client/**/*spec.js'
+      "handymap/client/js/**/*.js",
+      "handymap/client/tests/**/*spec.js"
     ],
 
 
     // list of files to exclude
     exclude: [
-      'handymap/frontend/js/templates/**/*.mustache'
+      "handymap/client/js/templates/**/*.mustache"
     ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        'handymap/frontend/js/**/*.js': ['browserify'],
-        'tests/client/**/*spec.js': ['browserify']
+        "handymap/client/js/**/*.js": ["browserify"],
+        "handymap/client/tests/**/*spec.js": ["browserify"]
     },
 
     browserify: {
         debug: false,
-        transform: [ 'babelify', 'hoganify' ]
+        transform: [ "babelify", "hoganify" ]
     },
 
 
     // test results reporter to use
-    // possible values: 'dots', 'progress'
+    // possible values: "dots", "progress"
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['mocha'],
+    reporters: ["mocha"],
 
     // plugins: [
-    //   'karma-jasmine',
-    //   'karma-mocha-reporter'
+    //   "karma-jasmine",
+    //   "karma-mocha-reporter"
     // ],
 
 
@@ -69,7 +69,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    browsers: ["PhantomJS"],
 
 
     // Continuous Integration mode
@@ -79,5 +79,5 @@ module.exports = function(config) {
     // Concurrency level
     // how many browser should be started simultaneous
     concurrency: Infinity
-  })
-}
+  });
+};
