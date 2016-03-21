@@ -1,4 +1,5 @@
 var gulp       = require("gulp"),
+    gutil =  require("gulp-util"),
     browserify = require("browserify"),
     watchify   = require("watchify"),
     gulpif     = require("gulp-if"),
@@ -14,23 +15,30 @@ var gulp       = require("gulp"),
     removeLogs = require("gulp-removelogs"),
     plumber    = require("gulp-plumber"),
     hoganify   = require("hoganify"),
-    exec       = require("child_process").exec;
+    karma      = require("karma"),
+    exec       = require("child_process").exec,
+    execSync       = require("child_process").execSync;
 
-var appName = "handymap";
-var staticPath = appName + "/static";
+var appName = "handymap",
 
-var stylesPath = appName + "/frontend/styles";
-var jsAppFile = appName + "/frontend/js/app.js";
+    staticDir = `${appName}/static`,
+    stylesDir = `${appName}/frontend/styles`,
+
+    jsDir = `${appName}/frontend/js`,
+    jsAppFile = `${jsDir}/app.js`,
+
+    testsDir = "tests",
+    serverTestsDir =  `${testsDir}/server`;
 
 
 var production = false;
 
-gulp.task("set-production", function() {
+gulp.task("set-production", () => {
   production = true;
 });
 
-gulp.task("styles", function() {
-  return gulp.src([ stylesPath + "/**/*.styl" ])
+gulp.task("styles", () => {
+  return gulp.src([  `${stylesDir}/**/*.styl` ])
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
     .pipe(stylus())
@@ -38,27 +46,27 @@ gulp.task("styles", function() {
     .pipe(concat("app.css"))
     .pipe(gulpif(production, rename({ suffix: ".min" })))
     .pipe(gulpif(!production, sourcemaps.write("./")))
-    .pipe(gulp.dest(staticPath + "/css"));
+    .pipe(gulp.dest(`${staticDir}/css`));
 });
 
-function compileJS(watch) {
+function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
   var bundler = watchify(
-    browserify(jsAppFile, { debug: true })
+    browserify(sourceFilePath, { debug: true })
     .transform(babel, { presets: ["es2015"] })
-    .transform(hoganify, { extensions: [".mustache"] })
+    .transform(hoganify, { extensions: [".mustache"], live: true })
   );
 
   function rebundle() {
     bundler.bundle()
       .on("error", function(err) { console.error(err); this.emit("end"); })
-      .pipe(source("app.js"))
+      .pipe(source(sourceFileName))
       .pipe(buffer())
       .pipe(gulpif(!production, plumber()))
       .pipe(gulpif(production, removeLogs()))
       .pipe(gulpif(production, uglify()))
       .pipe(gulpif(!production, sourcemaps.init({ loadMaps: true })))
       .pipe(gulpif(!production, sourcemaps.write("./")))
-      .pipe(gulp.dest(staticPath + "/js"));
+      .pipe(gulp.dest(destinationDir));
   }
 
   if (watch) {
@@ -72,33 +80,45 @@ function compileJS(watch) {
   rebundle();
 }
 
-function watchJS() {
-  return compileJS(true);
+function watchJS(sourceFilePath, sourceFileName, destinationDir) {
+  return compileJS(sourceFilePath, sourceFileName, destinationDir, true);
 }
 
-gulp.task("compileJS", function() { return compileJS(); });
-gulp.task("watchJS", function() { return watchJS(); });
+gulp.task("compileJS", () => compileJS(jsAppFile, "app.js", `${staticDir}/js`));
+gulp.task("watchJS", () => watchJS(jsAppFile, "app.js",  `${staticDir}/js`));
 
 // gulp.task("compileStyles", function() { return compileStyles(); });
 // gulp.task("watchStyles", function() { return watchStyles(); });
+//
+gulp.task("testServer", () => {
+  var log=gutil.log, colors=gutil.colors;
+  log(colors.bgBlue.bold.white("======= BACKEND TESTING ========"));
+  var testOut = execSync("python ./tests/server/tests.py");
+  console.log(testOut);
+});
 
-gulp.task("flask", function() {
-  return exec("./server.py", function(err, stdout, stderr) {
+gulp.task("testClient", ["testServer"], (done) => {
+  var log=gutil.log, colors=gutil.colors;
+  log(colors.bgMagenta.bold.white("======= FRONTEND TESTING ======="));
+  new karma.Server({
+    configFile: `${__dirname}/karma.conf.js`,
+    singleRun: true
+  }, done).start();
+});
+
+
+gulp.task("test", ["testServer", "testClient"]);
+
+gulp.task("flask", () => {
+  return exec("python ./manage.py runserver", (err, stdout, stderr) => {
     console.log(stdout);
     console.log(stderr);
   });
 });
 
-gulp.task("flask", function() {
-  exec("python ./manage.py runserver", function(err, stdout, stderr) {
-    console.log(stdout);
-    console.log(stderr);
-  });
-});
-
-gulp.task("dev", ["flask", "watchJS", "styles"], function() {
-  gulp.watch(stylesPath + "/**/*.styl", ["styles"]);
-  gulp.watch(appName + "/frontend/templates/**/*.hg", ["hogan"]);
+gulp.task("dev", ["flask", "watchJS", "styles"], () => {
+  gulp.watch(`${stylesDir}/**/*.styl`, ["styles"]);
+  gulp.watch(`${appName}/frontend/templates/**/*.hg`, ["hogan"]);
 });
 
 gulp.task("prod", ["set-production", "compileJS", "styles"]);
