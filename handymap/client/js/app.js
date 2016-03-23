@@ -1,41 +1,14 @@
-var Backbone =  require("backbone"),
-    Marionette = require("backbone.marionette"),
-    testTemplate = require("./templates/testTemplate.mustache");
+// const Vue = require("vue"),
+//       store = require("./vuex/store"),
+//       Main = require("./components/main");
+//
+//
+import Vue from "vue";
+import store from "./vuex/store";
+import Main from "./components/main.vue";
 
-var App = Marionette.Application.extend({
-  container: "#app"
+new Vue({
+  el: "#app",
+  store,
+  components: { Main }
 });
-
-var app = new App();
-
-app.on("start", function() {
-  Backbone.history.start();
-});
-
-app.start();
-
-var TestModel = Backbone.Model.extend({
-
-});
-
-app.testFunctionForTest = function(one, two) {
-  return Math.pow(one, two);
-};
-
-app.testModel = new TestModel({
-    hello: "Привет",
-    mustName: "Иов",
-    anotherName: "Экклесиаст"
-  });
-
-var TestView = Marionette.ItemView.extend({
-  el: "#test-elem",
-  template(data) {
-    return testTemplate.render(data);
-  }
-});
-
-app.testView = new TestView({ model: app.testModel });
-app.testView.render();
-
-module.exports = app;
