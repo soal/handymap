@@ -26,7 +26,7 @@ var appName = "handymap",
     stylesDir = `${appName}/client/styles`,
 
     jsDir = `${appName}/client/js`,
-    jsAppFile = `${jsDir}/app.js`,
+    jsAppFile = `${jsDir}/main.js`,
 
     serverTestsDir =  `${appName}/server/tests`,
     serverTestsFile =  `${serverTestsDir}/tests.py`;

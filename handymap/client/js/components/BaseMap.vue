@@ -1,16 +1,13 @@
 <template>
-  <h1>{{ hello }}</h1>
+  <h1>{{ hello }} And from nested component!</h1>
 </template>
 
-<script type="text/javascript">
-
+<script>
 export default {
-  // components: {},
   vuex: {
     getters: {
       hello: state => state.hello
     }
-  },
+  }
 }
-
 </script>
