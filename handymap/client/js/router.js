@@ -1,3 +1,5 @@
+var Marionette = require("backbone.marionette");
+
 module.exports = function() {
   var Router = Marionette.AppRouter.extend({
 
@@ -5,4 +7,4 @@ module.exports = function() {
 
   var router = new Router();
   return router;
-}
+};

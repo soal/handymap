@@ -1,7 +1,7 @@
 var Backbone =  require("backbone"),
     Marionette = require("backbone.marionette"),
-    testTemplate = require("./templates/testTemplate.mustache")
-;
+    testTemplate = require("./templates/testTemplate.mustache");
+
 var App = Marionette.Application.extend({
   container: "#app"
 });
@@ -30,7 +30,7 @@ app.testModel = new TestModel({
 
 var TestView = Marionette.ItemView.extend({
   el: "#test-elem",
-  template: function(data) {
+  template(data) {
     return testTemplate.render(data);
   }
 });

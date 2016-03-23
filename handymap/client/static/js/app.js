@@ -4,6 +4,7 @@
 var Backbone = require("backbone"),
     Marionette = require("backbone.marionette"),
     testTemplate = require("./templates/testTemplate.mustache");
+
 var App = Marionette.Application.extend({
   container: "#app"
 });

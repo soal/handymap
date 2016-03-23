@@ -37,7 +37,7 @@ gulp.task("set-production", () => {
   production = true;
 });
 
-gulp.task("styles", () => {
+gulp.task("styles", ()=> {
   return gulp.src([  `${stylesDir}/**/*.styl` ])
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
@@ -95,7 +95,7 @@ gulp.task("testServer", () => {
       colors = gutil.colors;
 
   log(colors.bgBlue.bold.white("======= BACKEND TESTING ========"));
-  execSync(`python ./manage.py cov`);
+  execSync("python ./manage.py cov");
 });
 
 gulp.task("testClient", ["testServer"], (done) => {
@@ -113,7 +113,7 @@ gulp.task("testClient", ["testServer"], (done) => {
 
 gulp.task("test", ["testServer", "testClient"]);
 
-gulp.task("flask", () => {
+gulp.task("flask", ()=> {
   return exec("python ./manage.py runserver", (err, stdout, stderr) => {
     console.log(stdout);
     console.log(stderr);
