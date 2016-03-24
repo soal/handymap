@@ -52,6 +52,6 @@ coverage.xml
 node_modules
 
 # Generated static files
-handymap/client/static/*
-handymap/clietn/static/**/*
+handymap/client/static/js/*
+handymap/clietn/static/css/*
 
