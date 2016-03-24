@@ -1,1 +1,2 @@
-export const LOAD_EVENTS = "LOAD_EVENTS";
+export const GET_FACTS = "GET_FACTS";
+export const GET_FACT  = "GET_FACT";
