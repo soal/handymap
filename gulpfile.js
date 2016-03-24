@@ -1,5 +1,5 @@
 var gulp       = require("gulp"),
-    gutil =  require("gulp-util"),
+    gutil      = require("gulp-util"),
     browserify = require("browserify"),
     watchify   = require("watchify"),
     gulpif     = require("gulp-if"),
@@ -14,7 +14,6 @@ var gulp       = require("gulp"),
     rename     = require("gulp-rename"),
     removeLogs = require("gulp-removelogs"),
     plumber    = require("gulp-plumber"),
-    // hoganify   = require("hoganify"),
     vueify      = require("vueify"),
     karma      = require("karma"),
     exec       = require("child_process").exec,
@@ -53,6 +52,7 @@ function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
     browserify(sourceFilePath, { debug: true })
     .transform(vueify)
     .transform(babel, { presets: ["es2015"] })
+
     // .transform(hoganify, { extensions: [".mustache"], live: true })
   );
 
@@ -109,7 +109,6 @@ gulp.task("testClient", ["testServer"], done => {
     singleRun: true
   }, done).start();
 });
-
 
 gulp.task("test", ["testServer", "testClient"]);
 

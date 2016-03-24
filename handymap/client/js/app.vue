@@ -1,21 +1,20 @@
 <template>
 <div id="app">
   <h1>{{ hello }}</h1>
-  <router-view keep-alive transition transition-mode="out-in">
+  <router-view keep-alive>
   </router-view>
 </div>
 </template>
 
-<script type="text/javascript">
+<script>
 
-import store from './vuex/store'
+import store from "./storage/store";
+import BaseMap from "./components/BaseMap.vue";
 
 export default {
   store,
-  vuex: {
-    getters: {
-      hello: state => state.hello
-    }
+  components: {
+    BaseMap
   }
 }
 

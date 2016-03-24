@@ -18,14 +18,14 @@ app.jinja_env.globals['static'] = (
 def index():
     return render_template('index.html')
 
-@app.route('/events')
+@app.route('/api/events/')
 def events():
-    if request.is_xhr:
-        return send_file('../test_data/events.json', 'JSON')
-    else:
-        abort(404)
+    # if request.is_xhr:
+    return send_file('../test_data/events.json', 'JSON')
+    # else:
+        # abort(404)
 
-@app.route('/russia/<process>')
+@app.route('/api/russia/<process>')
 def show_process(process):
     if request.is_xhr:
         return send_file('../test_data/%s.json', 'JSON') % process
