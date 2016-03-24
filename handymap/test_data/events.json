@@ -1,0 +1,25 @@
+{
+  "events":
+  [
+    {
+      "id": 1,
+      "slug": "petrograd_rebellion",
+      "name": "Rebellion in Petrograd",
+      "date": {
+        "day": 7,
+        "month": 11,
+        "year": 1917
+      }
+    },
+    {
+      "id": 2,
+      "slug": "moscow_rebellion",
+      "name": "Rebellion in Moscow",
+      "date": {
+        "day": 12,
+        "month": 11,
+        "year": 1917
+      }
+    }
+  ]
+}

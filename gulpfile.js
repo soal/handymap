@@ -1,5 +1,5 @@
 var gulp       = require("gulp"),
-    gutil =  require("gulp-util"),
+    gutil      = require("gulp-util"),
     browserify = require("browserify"),
     watchify   = require("watchify"),
     gulpif     = require("gulp-if"),
@@ -14,7 +14,7 @@ var gulp       = require("gulp"),
     rename     = require("gulp-rename"),
     removeLogs = require("gulp-removelogs"),
     plumber    = require("gulp-plumber"),
-    hoganify   = require("hoganify"),
+    vueify      = require("vueify"),
     karma      = require("karma"),
     exec       = require("child_process").exec,
     execSync   = require("child_process").execSync;
@@ -25,7 +25,7 @@ var appName = "handymap",
     stylesDir = `${appName}/client/styles`,
 
     jsDir = `${appName}/client/js`,
-    jsAppFile = `${jsDir}/app.js`,
+    jsAppFile = `${jsDir}/main.js`,
 
     serverTestsDir =  `${appName}/server/tests`,
     serverTestsFile =  `${serverTestsDir}/tests.py`;
@@ -33,11 +33,9 @@ var appName = "handymap",
 
 var production = false;
 
-gulp.task("set-production", () => {
-  production = true;
-});
+gulp.task("set-production", () => production = true);
 
-gulp.task("styles", ()=> {
+gulp.task("styles", () => {
   return gulp.src([  `${stylesDir}/**/*.styl` ])
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
@@ -52,8 +50,10 @@ gulp.task("styles", ()=> {
 function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
   var bundler = watchify(
     browserify(sourceFilePath, { debug: true })
+    .transform(vueify)
     .transform(babel, { presets: ["es2015"] })
-    .transform(hoganify, { extensions: [".mustache"], live: true })
+
+    // .transform(hoganify, { extensions: [".mustache"], live: true })
   );
 
   function rebundle() {
@@ -70,7 +70,7 @@ function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
   }
 
   if (watch) {
-    bundler.on("update", function() {
+    bundler.on("update", () => {
       console.log("-> bundling...");
       rebundle();
       console.log("-> Bundled!");
@@ -98,7 +98,7 @@ gulp.task("testServer", () => {
   execSync("python ./manage.py cov");
 });
 
-gulp.task("testClient", ["testServer"], (done) => {
+gulp.task("testClient", ["testServer"], done => {
   var log = gutil.log,
       colors = gutil.colors;
 
@@ -110,10 +110,9 @@ gulp.task("testClient", ["testServer"], (done) => {
   }, done).start();
 });
 
-
 gulp.task("test", ["testServer", "testClient"]);
 
-gulp.task("flask", ()=> {
+gulp.task("flask", () => {
   return exec("python ./manage.py runserver", (err, stdout, stderr) => {
     console.log(stdout);
     console.log(stderr);

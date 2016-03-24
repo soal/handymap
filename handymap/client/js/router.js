@@ -1,10 +1,20 @@
-var Marionette = require("backbone.marionette");
+import Vue from "vue";
+import Router from "vue-router";
+import BaseMap from "./components/BaseMap.vue";
 
-module.exports = function() {
-  var Router = Marionette.AppRouter.extend({
 
-  });
+Vue.use(Router);
 
-  var router = new Router();
-  return router;
-};
+var router = new Router({
+  history: true,
+  transitionOnLoad: true,
+  saveScrollPosition: true
+});
+
+
+router.map({
+  "/": {
+    component: BaseMap
+  }
+});
+export default router;
