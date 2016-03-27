@@ -10,13 +10,16 @@ Vue.config.debug = debug;
 
 const store =  new Vuex.Store({
   state: {
-    events: [],
+    facts: [],
     user: {}
   },
   mutations: {
-   GET_FACTS(state, data) {
-    state.events = data.events;
-   }
+    SET_FACTS(state, data) {
+      state.facts = data.events;
+    },
+    SET_FACT(state, data) {
+      state.facts[data.id] = data.info;
+    }
   },
   modules: {},
   strict: true

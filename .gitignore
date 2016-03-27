@@ -47,6 +47,7 @@ coverage.xml
 *.sublime-*
 *.idea
 *.tern-*
+*.vscode
 
 # Node.js stuff
 node_modules

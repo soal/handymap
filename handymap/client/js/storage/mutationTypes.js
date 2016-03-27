@@ -1,2 +1,2 @@
-export const GET_FACTS = "GET_FACTS";
-export const GET_FACT  = "GET_FACT";
+export const SET_FACTS = "SET_FACTS";
+export const SET_FACT  = "SET_FACT";

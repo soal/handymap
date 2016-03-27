@@ -1,6 +1,6 @@
 <template>
-  <div v-for="event in events">
-    <b>{{ event.date }}</b>&nbsp;<span>{{ event.name }}</span>
+  <div v-for="fact in facts">
+    <b>{{ fact.date }}</b>&nbsp;<span>{{ fact.name }}</span>
   </div>
 </template>
 
@@ -8,25 +8,23 @@
 <script>
 
 import _ from "lodash";
-import Fact from "../actions/eventActions";
-
-console.log(Fact)
+import factActions from "../actions/eventActions";
 
 export default {
   name: "BaseMap",
   vuex: {
     getters: {
-      events: state => {
-        var events = [];
-        for (event of state.events) {
-          let formatted = _.clone(event);
-          formatted.date = `${event.date.day}.${event.date.month}.${event.date.year}`
-          events.push(formatted);
+      facts: state => {
+        var facts = [];
+        for (let fact of state.facts) {
+          let formatted = _.clone(fact);
+          formatted.date = `${fact.date.day}.${fact.date.month}.${fact.date.year}`
+          facts.push(formatted);
         }
-        return events;
+        return facts;
       }
     },
-    actions: _.extend(Fact.actions(), {})
+    actions: _.extend(factActions(), {})
   },
   ready() {
     this.get()

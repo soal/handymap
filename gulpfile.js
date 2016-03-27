@@ -47,13 +47,11 @@ gulp.task("styles", () => {
     .pipe(gulp.dest(`${staticDir}/css`));
 });
 
-function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
+function compileJS(sourceFilePath="", sourceFileName="", destinationDir="", watch=false) {
   var bundler = watchify(
     browserify(sourceFilePath, { debug: true })
     .transform(vueify)
     .transform(babel, { presets: ["es2015"] })
-
-    // .transform(hoganify, { extensions: [".mustache"], live: true })
   );
 
   function rebundle() {
@@ -103,7 +101,6 @@ gulp.task("testClient", ["testServer"], done => {
       colors = gutil.colors;
 
   log(colors.bgMagenta.bold.white("======= FRONTEND TESTING ======="));
-
   new karma.Server({
     configFile: `${__dirname}/karma.conf.js`,
     singleRun: true

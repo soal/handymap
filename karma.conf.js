@@ -16,14 +16,12 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       "handymap/client/js/**/*.js",
-      "handymap/client/tests/**/*spec.js"
+      "handymap/client/tests/**/*.spec.js"
     ],
 
 
     // list of files to exclude
-    exclude: [
-      "handymap/client/js/templates/**/*.mustache"
-    ],
+    exclude: [],
 
 
     // preprocess matching files before serving them to the browser
@@ -35,7 +33,7 @@ module.exports = function(config) {
 
     browserify: {
         debug: false,
-        transform: [ "babelify", "hoganify" ]
+        transform: [ "babelify", "vueify"]
     },
 
 
