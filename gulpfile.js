@@ -47,7 +47,7 @@ gulp.task("styles", () => {
     .pipe(gulp.dest(`${staticDir}/css`));
 });
 
-function compileJS(sourceFilePath="", sourceFileName="", destinationDir="", watch=false) {
+function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
   var bundler = watchify(
     browserify(sourceFilePath, { debug: true })
     .transform(vueify)
