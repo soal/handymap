@@ -21,10 +21,10 @@ def index():
 
 @app.route('/api/events/')
 def events():
-    # if request.is_xhr:
-    return send_file('../test_data/events.json', 'JSON')
-    # else:
-        # abort(404)
+    if request.is_xhr:
+        return send_file('../test_data/events.json', 'JSON')
+    else:
+        abort(404)
 
 @app.route('/api/russia/<process>')
 def show_process(process):
