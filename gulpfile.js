@@ -121,8 +121,12 @@ gulp.task("flask", () => {
   });
 });
 
-gulp.task("dev", ["flask", "watchJS", "styles"], () => {
+gulp.task("dev", ["flask", "watchJS", "styles"], ()=> {
   gulp.watch(`${stylesDir}/**/*.{sass, scss}`, ["styles"]);
+});
+
+gulp.task("buildDev", ["compileJS", "styles"], ()=> {
+  process.exit();
 });
 
 gulp.task("prod", ["set-production", "compileJS", "styles"]);
