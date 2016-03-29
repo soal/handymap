@@ -21,12 +21,12 @@ Geo service for visualize historical events and processes
 ####Installing dependencies on Fedora linux
 #####Install node 4 repository:
 ```
-sudo dnf install -y https://rpm.nodesource.com/pub_4.x/fc/23/x86_64/nodesource-release-fc23-1.noarch.rpm
+sudo dnf install https://rpm.nodesource.com/pub_4.x/fc/23/x86_64/nodesource-release-fc23-1.noarch.rpm
 ```
 #####Nodejs, Python and system dependencies for it:
 ```
 sudo dnf check-update
-sudo dnf install -y nodejs gcc gcc-c++ make glibc-headers python3 python3-virtualenv python3-devel python3-psycopg2 postgresql postgresql-devel postgresql-server postgresql-contrib libffi-devel redhat-rpm-config
+sudo dnf install nodejs gcc gcc-c++ make glibc-headers python3 python3-virtualenv python3-devel python3-psycopg2 postgresql postgresql-devel postgresql-server postgresql-contrib libffi-devel redhat-rpm-config
 ```
 #####Setting up python environment:
 Create virtual python environment:
