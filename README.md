@@ -25,7 +25,7 @@ sudo dnf install -y https://rpm.nodesource.com/pub_4.x/fc/23/x86_64/nodesource-r
 ```
 #####Nodejs, Python and system dependencies for it:
 ```
-sudo dnf install -y nodejs gcc gcc-c++ make glibc-headers python3 python3-virtualenv python3-devel python3-psycopg2 postgresql postgresql-devel postgresql-server postgresql-contrib libffi-devel
+sudo dnf install -y nodejs gcc gcc-c++ make glibc-headers python3 python3-virtualenv python3-devel python3-psycopg2 postgresql postgresql-devel postgresql-server postgresql-contrib libffi-devel redhat-rpm-config
 ```
 #####Setting up python environment:
 Create virtual python environment:
