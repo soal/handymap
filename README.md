@@ -40,27 +40,6 @@ Switch to this environment:
 ```
 source hm_env/bin/activate
 ```
-__*Note for VirtualBox users*__
-
-*VirtualBox currently don't support virtualenv in shared folders. So, if your project folder is shared between host and guest systems it will result an error.
-You can handle it by moving directory with virtualenv modules (hm_env in example below) in another place, for example in home directory.*
-
-*Example:*
-
-*If `/home/user/dev/handymap` is your project directory, you should create virtualenv in home dir:*
-```
-cd /home/user
-virtualenv-3.4 hm_env
-```
-*Use it for Python:*
-```
-source hm_env/bin/activate
-```
-*and go to your project directory:*
-```
-cd /home/user/dev/handymap
-```
-
 
 Install project Python dependencies:
 ```
@@ -75,6 +54,7 @@ Take a break while npm working on =)
 
 #####Start PostgreSQL database server:
 ```
+sudo postgresql-setup --initdb
 sudo systemctl start postgresql
 ```
 Enable autostart PostgreSQL database server on system boot:
