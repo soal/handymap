@@ -14,7 +14,7 @@ const store =  new Vuex.Store({
     user: {}
   },
   mutations: {
-    SET_FACTS(/** { object } */state, /** {Object} */data) {
+    SET_FACTS(state, data) {
       state.facts = data.events;
     },
     SET_FACT(state, data) {
