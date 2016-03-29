@@ -68,6 +68,10 @@ Use `gulp` for start dev server and serving frontend files:
 ```
 gulp
 ```
+To only build frontend files and not watch for changes:
+```
+gulp buildDev 
+```
 To start all tests use:
 ```
 gulp test
