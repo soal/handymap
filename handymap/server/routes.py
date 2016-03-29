@@ -18,6 +18,6 @@ def show_process(process):
 
 routes = [
     Functional('/', index),
-    Functional('/api/events/', events),
+    Functional('/api/events', events),
     # Functional('/api/russia/<process>', show_process)
 ]

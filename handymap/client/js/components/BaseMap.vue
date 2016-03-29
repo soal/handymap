@@ -8,7 +8,7 @@
 <script>
 
 import _ from "lodash";
-import factActions from "../actions/eventActions";
+import factActions from "../actions/factActions";
 
 export default {
   name: "BaseMap",
@@ -24,10 +24,10 @@ export default {
         return facts;
       }
     },
-    actions: _.extend(factActions(), {})
+    actions: _.extend(factActions, {})
   },
   ready() {
-    this.get()
+    this.get();
   }
 }
 

@@ -1,3 +1,8 @@
+/**
+ * Helpers module
+ */
+
+import _ from "lodash";
 import store from "./storage/store";
 
 var dispatch = store.dispatch;
@@ -105,8 +110,37 @@ class Crud {
      * Object of initialized Crud methods. Should be called in component
      * @return {Object} Object contains methods for adding to "actions" property of component
      */
-    this.actions = ()=> methods(dispatch, this.resource, resourceName);
+    this.actions = methods(dispatch, this.resource, this.resourceName);
   }
 }
 
-export default Crud;
+/**
+ * Decorator for resource actions. Add CRUD actions to given actions object
+ *
+ * @class ResourceActions
+ * @extends {Crud}
+ */
+class ResourceActions extends Crud {
+
+  /**
+   * Creates an instance of ResourceActions.
+   *
+   * @param {Object} resource Vue-resource Resource object
+   * @param {String} resourceName Name of the Resource
+   * @param {Object} [resourceActions] Object of actions for this resource
+   */
+  constructor(resource, resourceName, resourceActions={}) {
+    var crud = super(resource, resourceName);
+    this.resource = resource;
+    this.resourceName = resourceName;
+    this.actions = _.extend(
+      resourceActions,
+      crud.actions
+    );
+  }
+}
+
+/** Build CRUD actions for given resource */
+export { Crud };
+/** Decorator for resource actions. Add CRUD actions to given actions object */
+export { ResourceActions };
