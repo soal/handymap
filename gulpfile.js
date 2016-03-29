@@ -8,13 +8,14 @@ var gulp       = require("gulp"),
     source     = require("vinyl-source-stream"),
     buffer     = require("vinyl-buffer"),
     babel      = require("babelify"),
-    stylus     = require("gulp-stylus"),
+    sass       = require("gulp-sass"),
+    globbing   = require("gulp-css-globbing"),
     sourcemaps = require("gulp-sourcemaps"),
     minifyCSS  = require("gulp-minify-css"),
     rename     = require("gulp-rename"),
     removeLogs = require("gulp-removelogs"),
     plumber    = require("gulp-plumber"),
-    vueify      = require("vueify"),
+    vueify     = require("vueify"),
     karma      = require("karma"),
     exec       = require("child_process").exec,
     execSync   = require("child_process").execSync;
@@ -36,11 +37,15 @@ var production = false;
 gulp.task("set-production", () => production = true);
 
 gulp.task("styles", () => {
-  return gulp.src([  `${stylesDir}/**/*.styl` ])
+  return gulp.src([  `${stylesDir}/**/*.{sass, scss}` ])
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
-    .pipe(stylus())
+    .pipe(sass())
     .pipe(gulpif(production, minifyCSS()))
+    .pipe(globbing({
+        extensions: [".scss", ".sass"]
+     }))
+    .pipe(sass().on("error", sass.logError))
     .pipe(concat("app.css"))
     .pipe(gulpif(production, rename({ suffix: ".min" })))
     .pipe(gulpif(!production, sourcemaps.write("./")))
@@ -117,8 +122,7 @@ gulp.task("flask", () => {
 });
 
 gulp.task("dev", ["flask", "watchJS", "styles"], () => {
-  gulp.watch(`${stylesDir}/**/*.styl`, ["styles"]);
-  gulp.watch(`${jsDir}/**/*.hg`, ["hogan"]);
+  gulp.watch(`${stylesDir}/**/*.{sass, scss}`, ["styles"]);
 });
 
 gulp.task("prod", ["set-production", "compileJS", "styles"]);

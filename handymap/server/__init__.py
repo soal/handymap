@@ -1,5 +1,12 @@
 import os
 from flask import Flask, render_template, url_for, send_file, request, abort
+from flask_migrate import Migrate, MigrateCommand
+from flask_mail import Mail
+from flask_user import UserManager, SQLAlchemyAdapter
+from flask_wtf.csrf import CsrfProtect
+
+from flask.ext.via import Via
+
 
 
 app = Flask(
@@ -13,31 +20,27 @@ app.debug = True
 app.jinja_env.globals['static'] = (
     lambda filename: url_for('static', filename = filename)
 )
+app.config.update({'VIA_ROUTES_MODULE': 'handymap.server.routes'})
+
+if app.testing:
+    app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF checks while testing
+
+# Setup Flask-Via routes pulgin
+via = Via()
+via.init_app(app, route_module='handymap.server.routes')
+
+# Setup Flask-Mail
+mail = Mail(app)
+
+# Setup WTForms CsrfProtect
+CsrfProtect(app)
+
+# Define bootstrap_is_hidden_field for flask-bootstrap's bootstrap_wtf.html
+from wtforms.fields import HiddenField
+
+def is_hidden_field_filter(field):
+    return isinstance(field, HiddenField)
 
 
-@app.route('/')
-def index():
-    return render_template('index.html')
 
-@app.route('/api/events/')
-def events():
-    if request.is_xhr:
-        return send_file('../test_data/events.json', 'JSON')
-    else:
-        abort(404)
-
-@app.route('/api/russia/<process>')
-def show_process(process):
-    if request.is_xhr:
-        return send_file('../test_data/%s.json', 'JSON') % process
-    else:
-        abort(404)
-
-# @app.route('/templates/<name>')
-# def send_template(name):
-#     if request.is_xhr:
-#         return send_file('frontend/templates/%s.mustache' % name, 'text/html')
-#     else:
-#         abort(404)
-#
-from handymap.server.models import User
+# from handymap.server.models import User

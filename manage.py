@@ -4,6 +4,7 @@ import unittest, coverage
 
 from flask.ext.script import Manager, Server
 from flask_failsafe import failsafe
+from flask.ext.migrate import Migrate, MigrateCommand
 
 from handymap.server import app
 
@@ -27,7 +28,8 @@ def create_app():
     return app
 
 manager = Manager(create_app)
-manager.add_command("runserver", Server())
+manager.add_command('runserver', Server())
+manager.add_command('migrate', MigrateCommand)
 
 @manager.command
 def test():
@@ -55,6 +57,30 @@ def cov():
         return 0
     else:
         return 1
+
+@manager.command
+def create_db():
+    """Creates the db tables."""
+    app.db.create_all()
+
+
+@manager.command
+def drop_db():
+    """Drops the db tables."""
+    app.db.drop_all()
+
+
+@manager.command
+def create_admin():
+    """Creates the admin user."""
+    app.db.session.add(User(email='ad@min.com', password='admin', admin=True))
+    app.db.session.commit()
+
+
+@manager.command
+def create_data():
+    """Creates sample data."""
+    pass
 
 
 if __name__ == '__main__':
