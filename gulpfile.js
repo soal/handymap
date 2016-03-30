@@ -125,10 +125,8 @@ gulp.task("dev", ["flask", "watchJS", "styles"], ()=> {
   gulp.watch(`${stylesDir}/**/*.{sass, scss}`, ["styles"]);
 });
 
-gulp.task("buildDev", ["compileJS", "styles"], ()=> {
-  process.exit();
-});
+gulp.task("buildDev", ["compileJS", "styles"], ()=> process.exit());
 
-gulp.task("prod", ["set-production", "compileJS", "styles"]);
+gulp.task("prod", ["set-production", "compileJS", "styles"], ()=> process.exit());
 
 gulp.task("default", ["dev"]);
