@@ -54,5 +54,5 @@ node_modules
 
 # Generated static files
 handymap/client/static/js/*.js*
-handymap/clietn/static/css/*.css*
+handymap/client/static/css/*.css*
 
