@@ -38,7 +38,7 @@ class User(db.Model, UserMixin):
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(50), nullable=False, server_default=u'', unique=True)  # for @roles_accepted()
+    name = db.Column(db.String(50), nullable=False, server_default='', unique=True)  # for @roles_accepted()
     label = db.Column(db.Unicode(255), server_default='')  # for display purposes
 
 
@@ -54,7 +54,7 @@ class UsersRoles(db.Model):
 # It augments the Flask-User RegisterForm with additional fields
 class UserRegisterForm(RegisterForm):
     username = StringField('username', validators=[
-        validators.DataRequired('username name is required')])
+    validators.DataRequired('username name is required')])
     first_name = StringField('First name')
     last_name = StringField('Last name')
 
@@ -62,7 +62,7 @@ class UserRegisterForm(RegisterForm):
 # Define the User profile form
 class UserProfileForm(Form):
     username = StringField('username', validators=[
-        validators.DataRequired('username name is required')])
+    validators.DataRequired('username name is required')])
     first_name = StringField('First name')
     last_name = StringField('Last name')
     submit = SubmitField('Save')

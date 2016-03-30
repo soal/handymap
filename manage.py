@@ -7,7 +7,7 @@ from flask_failsafe import failsafe
 from flask.ext.migrate import Migrate, MigrateCommand
 
 from handymap.server import app, db
-from handymap.server.models.User import User
+from handymap.server.models.User import User, Role, UsersRoles
 
 
 COV = coverage.coverage(
@@ -74,7 +74,9 @@ def drop_db():
 @manager.command
 def create_admin():
     """Creates the admin user."""
-    db.session.add(User(username='admin', email='ad@min.com', password='admin'))
+    # TODO: Set admin role to admin user
+    db.session.add(Role(id=1, name='admins', label='Administrators'))
+    db.session.add(User(id=1, username='admin', email='ad@min.com', password='admin', active=True))
     db.session.commit()
 
 
