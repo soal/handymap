@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, url_for, send_file, request, abort
+from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from flask_mail import Mail
 from flask_user import UserManager, SQLAlchemyAdapter
@@ -14,7 +15,13 @@ app = Flask(
     template_folder='templates',
     static_folder='../client/static'
 )
-# app.config.from_object(os.environ['APP_SETTINGS'])
+try:
+    os.environ['APP_SETTINGS']
+except:
+     os.environ['APP_SETTINGS'] = 'handymap.server.settings.DevelopmentConfig'
+
+
+app.config.from_object(os.environ['APP_SETTINGS'])
 app.debug = True
 
 app.jinja_env.globals['static'] = (
@@ -24,6 +31,8 @@ app.config.update({'VIA_ROUTES_MODULE': 'handymap.server.routes'})
 
 if app.testing:
     app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF checks while testing
+
+db = SQLAlchemy(app)
 
 # Setup Flask-Via routes pulgin
 via = Via()

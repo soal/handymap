@@ -6,7 +6,8 @@ from flask.ext.script import Manager, Server
 from flask_failsafe import failsafe
 from flask.ext.migrate import Migrate, MigrateCommand
 
-from handymap.server import app
+from handymap.server import app, db
+from handymap.server.models.User import User
 
 
 COV = coverage.coverage(
@@ -61,20 +62,20 @@ def cov():
 @manager.command
 def create_db():
     """Creates the db tables."""
-    app.db.create_all()
+    db.create_all()
 
 
 @manager.command
 def drop_db():
     """Drops the db tables."""
-    app.db.drop_all()
+    db.drop_all()
 
 
 @manager.command
 def create_admin():
     """Creates the admin user."""
-    app.db.session.add(User(email='ad@min.com', password='admin', admin=True))
-    app.db.session.commit()
+    db.session.add(User(username='admin', email='ad@min.com', password='admin'))
+    db.session.commit()
 
 
 @manager.command
