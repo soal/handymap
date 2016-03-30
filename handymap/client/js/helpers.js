@@ -2,7 +2,7 @@
  * Helpers module
  */
 
-import _ from "lodash";
+
 import store from "./storage/store";
 
 var dispatch = store.dispatch;
@@ -133,14 +133,11 @@ class ResourceActions extends Crud {
     var crud = super(resource, resourceName);
     this.resource = resource;
     this.resourceName = resourceName;
-    this.actions = _.extend(
-      resourceActions,
-      crud.actions
+    this.actions = Object.assign(
+      crud.actions,
+      resourceActions
     );
   }
 }
 
-/** Build CRUD actions for given resource */
-export { Crud };
-/** Decorator for resource actions. Add CRUD actions to given actions object */
-export { ResourceActions };
+export { Crud, ResourceActions };

@@ -7,7 +7,7 @@
 
 <script>
 
-import _ from "lodash";
+
 import factActions from "../actions/factActions";
 
 export default {
@@ -24,7 +24,10 @@ export default {
         return facts;
       }
     },
-    actions: _.extend(factActions, {})
+    actions: Object.assign(
+      factActions,
+      {}
+    )
   },
   ready() {
     this.get();
