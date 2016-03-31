@@ -75,8 +75,13 @@ def drop_db():
 def create_admin():
     """Creates the admin user."""
     # TODO: Set admin role to admin user
-    db.session.add(Role(id=1, name='admins', label='Administrators'))
-    db.session.add(User(id=1, username='admin', email='ad@min.com', password='admin', active=True))
+    admin_role = Role(id=1, name='admins', label='Administrators')
+    admin_user = User(id=1, username='admin', email='ad@min.com', password='admin', active=True)
+    admin_user_role = UsersRoles(user_id=admin_user.id, role_id=admin_role.id)
+    db.session.add(admin_role)
+    db.session.add(admin_user)
+    db.session.commit()
+    db.session.add(admin_user_role)
     db.session.commit()
 
 
