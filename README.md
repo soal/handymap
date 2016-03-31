@@ -57,8 +57,47 @@ Take a break while npm working on =)
 sudo postgresql-setup --initdb
 sudo systemctl start postgresql
 ```
+Now we need to create database for development.
+First, we need to create user in database, wich will be used by our app for access to db.
+Switch to postgres user and open postresql console for initial setup:
+```
+sudo -iu postgres
+psql
+```
+In postgres console:
+```
+CREATE USER hm WITH password 'hm';
+CREATE DATABASE hm;
+GRANT ALL privileges ON DATABASE hm TO hm;
+```
+*Note, if you want to use other user instead of "hm", you need to change "hm" on your username and password in Handymap configuration file `settings.py`*
+
+After that, exit psql console by pressing Ctrl+D and log out from user postgresql (Ctrl+D).
+Next, open file /var/lib/pgsql/data/pg_hba.conf under root user, for example:
+```
+sudo nano /var/lib/pgsql/data/pg_hba.conf
+```
+In the end of file you can see smtg like:
+```
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     peer
+```
+change `local all all peer` to `local all all md5` to enable password authentication for users created only for postgresql.
+It could be smtg like:
+```
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     md5
+```
+After that, save file and restart PostgreSQL server:
+```
+sudo systemctl restart postgresql
+```
 Enable autostart PostgreSQL database server on system boot:
-```bash
+```
 sudo systemctl enable postgresql
 ```
 Done! =)
@@ -83,6 +122,18 @@ gulp testServer
 To start only frontend tests:
 ```
 gulp testClient
+```
+Create database inital data:
+```
+./manage.py create_db
+```
+Create initial admin user:
+```
+./manage.py create_admin
+```
+Delete all information in database:
+```
+./manage.py drop_db
 ```
 If you want start only Python development server without serving frontent files use `manage.py`:
 ```
