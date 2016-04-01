@@ -51,6 +51,7 @@ coverage.xml
 
 # Node.js stuff
 node_modules
+*npm-debug*
 
 # Generated static files
 handymap/client/static/js/*.js*
