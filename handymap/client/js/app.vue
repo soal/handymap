@@ -2,7 +2,7 @@
 <div id="app">
   <header id="top-menu">
     <div id="brand" class="fixed-logo">
-      <a href="#" id="logo" class="main-logo label label-danger">HM</a>
+      <a href="/" id="logo" class="main-logo label label-danger">{{ title.short }}</a>
       <a v-show="menuShowed" @click="menuShowed = !menuShowed" href="javascript:;" class="angle-switcher up"><i class="fa fa-angle-double-up"></i></a>
       <a v-show="!menuShowed" @click="menuShowed = !menuShowed" href="javascript:;" class="angle-switcher"><i class="fa fa-angle-double-down"></i></a>
     </div>

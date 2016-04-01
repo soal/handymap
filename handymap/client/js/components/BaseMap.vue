@@ -7,7 +7,6 @@
 
 <script>
 
-
 import factActions from "../actions/factActions";
 
 export default {
@@ -17,7 +16,7 @@ export default {
       facts: state => {
         var facts = [];
         for (let fact of state.facts) {
-          let formatted = _.clone(fact);
+          let formatted = Object.assign({}, fact);
           formatted.date = `${fact.date.day}.${fact.date.month}.${fact.date.year}`
           facts.push(formatted);
         }
