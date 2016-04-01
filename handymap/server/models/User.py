@@ -8,6 +8,10 @@ from handymap.server import db
 # Define the User data model. Make sure to add the flask_user.UserMixin !!
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
+
+    # def __init__(self):
+    #     pass
+
     id = db.Column(db.Integer, primary_key=True)
 
     # User authentication information (required for Flask-User)
@@ -18,7 +22,6 @@ class User(db.Model, UserMixin):
     #User email information
     email = db.Column(db.Unicode(255), nullable=False, server_default='', unique=True)
     confirmed_at = db.Column(db.DateTime())
-
     active = db.Column(db.Boolean(), nullable=False, server_default='0')
 
     # User information
