@@ -37,10 +37,10 @@ var production = false;
 gulp.task("set-production", () => production = true);
 
 gulp.task("styles", () => {
-  return gulp.src([  `${stylesDir}/**/*.{sass, scss}` ])
+  return gulp.src([  `${stylesDir}/app.sass` ])
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
-    .pipe(sass())
+    .pipe(sass({ includePaths: "node_modules/bootstrap/scss/" }).on("error", sass.logError))
     .pipe(gulpif(production, minifyCSS()))
     .pipe(globbing({
         extensions: [".scss", ".sass"]
