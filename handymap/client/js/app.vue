@@ -7,10 +7,17 @@
     </div>
     <nav v-show="menuShowed" class="navbar navbar-dark bg-primary">
       <ul class="nav navbar-nav">
-        <li class="nav-item">
-          <a href="/about" class="nav-link">About</a>
-         </li>
+        <li class="nav-item"><a href="/about" class="nav-link">О нас</a></li>
+        <li class="nav-item"><a href="#" v-link="mymaps" class="nav-link">Мои карты</a></li>
+        <li class="nav-item"></li>
+        <li class="nav-item pull-xs-right"><a href="#" v-link="login" class="nav-link">Войти</a></li>
       </ul>
+
+    <form class="form-inline">
+      <input class="form-control" placeholder="Search" type="text">
+      <button class="btn btn-secondary-outline" type="submit">Search</button>
+    </form>
+
     </nav>
    </header>
   <router-view keep-alive></router-view>

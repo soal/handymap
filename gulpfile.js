@@ -35,9 +35,10 @@ var appName = "handymap",
 var production = false;
 
 gulp.task("set-production", () => production = true);
+// TODO: Set production environment variable
 
 gulp.task("styles", () => {
-  return gulp.src([  `${stylesDir}/app.sass` ])
+  return gulp.src([`${stylesDir}/app.sass`])
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
     .pipe(sass({ includePaths: "node_modules/bootstrap/scss/" }).on("error", sass.logError))
@@ -47,7 +48,7 @@ gulp.task("styles", () => {
      }))
     .pipe(sass().on("error", sass.logError))
     .pipe(concat("app.css"))
-    .pipe(gulpif(production, rename({ suffix: ".min" })))
+    // .pipe(gulpif(production, rename({ suffix: ".min" })))
     .pipe(gulpif(!production, sourcemaps.write("./")))
     .pipe(gulp.dest(`${staticDir}/css`));
 });
@@ -125,8 +126,14 @@ gulp.task("dev", ["flask", "watchJS", "styles"], ()=> {
   gulp.watch(`${stylesDir}/**/*.{sass, scss}`, ["styles"]);
 });
 
-gulp.task("buildDev", ["compileJS", "styles"], ()=> process.exit());
+gulp.task("buildDev", ["compileJS", "styles"]
+  // FIXME: stop gulp process correctly
+  // , ()=> process.exit()
+);
 
-gulp.task("prod", ["set-production", "compileJS", "styles"], ()=> process.exit());
+gulp.task("prod", ["set-production", "compileJS", "styles"]
+  // FIXME: stop gulp process correctly
+  // , ()=> process.exit()
+);
 
 gulp.task("default", ["dev"]);
