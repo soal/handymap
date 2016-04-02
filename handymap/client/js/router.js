@@ -15,9 +15,6 @@ var router = new Router({
 router.map({
   "/": {
     component: BaseMap
-  },
-  "/mymaps": {
-
   }
 });
 export default router;
