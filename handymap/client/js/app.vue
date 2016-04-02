@@ -3,8 +3,7 @@
   <header id="top-menu">
     <div id="brand" class="fixed-logo">
       <a href="/" id="logo" class="main-logo label label-danger">{{ title.short }}</a>
-      <a v-show="menuShowed" @click="menuShowed = !menuShowed" href="javascript:;" class="angle-switcher up"><i class="fa fa-angle-double-up"></i></a>
-      <a v-show="!menuShowed" @click="menuShowed = !menuShowed" href="javascript:;" class="angle-switcher"><i class="fa fa-angle-double-down"></i></a>
+      <a v-angle-switcher="menuShowed" v-bind:showed=menuShowed></a>
     </div>
     <nav v-show="menuShowed" class="navbar navbar-dark bg-primary">
       <ul class="nav navbar-nav">
@@ -22,6 +21,7 @@
 
 import store from "./storage/store";
 import BaseMap from "./components/BaseMap.vue";
+import angleSwitcher from "./directives/angle-switcher";
 
 export default {
   store,
@@ -39,9 +39,6 @@ export default {
     }
   },
   methods: {
-    toggleMenu(event) {
-
-    }
   }
 }
 

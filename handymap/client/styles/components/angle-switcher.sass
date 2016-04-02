@@ -10,13 +10,15 @@
   text-align: center
   vertical-align: top
 
-  i
-    @extend fa
-
   &.up
-    @extend fa-angle-double-up
-    color: white
+    i
+      @extend .#{$fa-css-prefix}-angle-double-up
+      color: white
 
   &.down
-    @extend fa-angle-double-down
-    color: black
+    i
+      @extend .#{$fa-css-prefix}-angle-double-down
+      color: black
+  i
+    @extend .#{$fa-css-prefix}
+
