@@ -9,6 +9,13 @@ Vue.config.debug = debug;
 
 const store =  new Vuex.Store({
   state: {
+    title: {
+      full: "Handymap",
+      short: "HM"
+    },
+    menu: [
+      ["About", "/about"]
+    ],
     facts: [],
     user: {}
   },
@@ -21,7 +28,7 @@ const store =  new Vuex.Store({
     }
   },
   modules: {},
-  strict: true
+  strict: debug
 });
 
 export default store;
