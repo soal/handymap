@@ -69,3 +69,4 @@ class UserProfileForm(Form):
     first_name = StringField('First name')
     last_name = StringField('Last name')
     submit = SubmitField('Save')
+

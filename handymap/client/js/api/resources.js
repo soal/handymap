@@ -8,9 +8,11 @@ Vue.use(Resource);
 Vue.http.options.crossOrigin = true;
 Vue.http.options.xhr = { withCredentials: true };
 Vue.http.headers.common["X-Requested-With"] = "XMLHttpRequest";
+Vue.http.headers.common["MimeType"] = "application/json";
+
 
 /** Fact resource for endpoint 'events/{id}' */
-export const Fact = Vue.resource(`${API_ROOT}/events{/id}`);
+export const Fact = Vue.resource(`${API_ROOT}/facts{/id}`);
 /** User resource resource for endpoint 'users/{id}'*/
 export const User = Vue.resource(`${API_ROOT}/users{/id}`);
 /** Profile resource for endpoint 'profile'*/

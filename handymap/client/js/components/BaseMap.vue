@@ -11,7 +11,8 @@
 <script>
 
 import factActions from "../actions/factActions";
-import L from "leaflet";
+import M from "mapbox-gl";
+import {MAP_SOURCE, MAPBOX_ACCESS_TOKEN} from "../config";
 
 export default {
   name: "BaseMap",
@@ -36,13 +37,19 @@ export default {
 
   },
   ready() {
-    const baseMap = L.map("map").setView([51.505, -0.09], 8);
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png32?access_token={accessToken}', {
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-      maxZoom: 15,
-      id: 'soal.pipb5on6',
-      accessToken: 'pk.eyJ1Ijoic29hbCIsImEiOiJjaW1qZndnMmwwMDEzdzBtNHRxcGFrampqIn0.bpwowsJ4GLBdsPnnXuZboA'
-    }).addTo(baseMap);
+    M.accessToken = MAPBOX_ACCESS_TOKEN;
+    var map = new M.Map({
+        container: 'map',
+        style: MAP_SOURCE,
+        center: [8.3221, 46.5928],
+        maxZoom: 6,
+        minZoom: 1.76,
+        zoom: 3,
+        hash: true
+    });
+
+    map.addControl(new M.Navigation());
+
     this.get();
 
   }

@@ -21,7 +21,7 @@ const store =  new Vuex.Store({
   },
   mutations: {
     SET_FACTS(state, data) {
-      state.facts = data.events;
+      state.facts = data.facts;
     },
     SET_FACT(state, data) {
       state.facts[data.id] = data.info;
