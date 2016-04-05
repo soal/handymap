@@ -41,7 +41,7 @@ gulp.task("styles", () => {
   return gulp.src([`${stylesDir}/app.sass`])
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
-    .pipe(sass({ includePaths: "node_modules/bootstrap/scss/" }).on("error", sass.logError))
+    .pipe(sass({ includePaths: ["node_modules/bootstrap/scss/", "node_modules/leaflet/dist"] }).on("error", sass.logError))
     .pipe(gulpif(production, minifyCSS()))
     .pipe(globbing({
         extensions: [".scss", ".sass"]

@@ -1,6 +1,5 @@
 {
-  "events":
-  [
+  "facts": [
     {
       "id": 1,
       "slug": "petrograd_rebellion",
@@ -20,6 +19,5 @@
         "month": 11,
         "year": 1917
       }
-    }
-  ]
+    }]
 }
