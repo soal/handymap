@@ -66,8 +66,8 @@ function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
       .pipe(source(sourceFileName))
       .pipe(buffer())
       .pipe(gulpif(!production, plumber()))
-      .pipe(gulpif(production, removeLogs()))
-      .pipe(gulpif(production, uglify()))
+      // .pipe(gulpif(production, removeLogs()))
+      .pipe(gulpif(production, uglify())) //FIXME: find a way to remove console.log in production safety
       .pipe(gulpif(!production, sourcemaps.init({ loadMaps: true })))
       .pipe(gulpif(!production, sourcemaps.write("./")))
       .pipe(gulp.dest(destinationDir));
