@@ -34,8 +34,15 @@ var appName = "handymap",
 
 var production = false;
 
-gulp.task("set-production", () => production = true);
-// TODO: Set production environment variable
+gulp.task("set-production", () => {
+  production = true;
+  process.env.NODE_ENV = "production";
+});
+
+gulp.task("setup", () => {
+  //TODO: Make setup task.
+  //Install deps etc.
+});
 
 gulp.task("styles", () => {
   return gulp.src([`${stylesDir}/app.sass`])
