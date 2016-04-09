@@ -17,7 +17,7 @@ def show_process(process):
         abort(404)
 
 def map_style():
-    return send_file('../client/static/mapstyle.json', 'application/json')
+    return send_file('../static/mapstyle.json', 'application/json')
 
 routes = [
     Functional('/', index),

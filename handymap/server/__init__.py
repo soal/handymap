@@ -13,7 +13,7 @@ from flask.ext.via import Via
 app = Flask(
     __name__,
     template_folder='templates',
-    static_folder='../client/static'
+    static_folder='../static'
 )
 try:
     os.environ['APP_SETTINGS']

@@ -48,12 +48,13 @@ coverage.xml
 *.idea
 *.tern-*
 *.vscode
+typings
 
 # Node.js stuff
 node_modules
 *npm-debug*
 
 # Generated static files
-handymap/client/static/js/*.js*
-handymap/client/static/css/*.css*
+handymap/static/js/*.js*
+handymap/static/css/*.css*
 
