@@ -1,3 +1,5 @@
+/// <reference path="../../../typings/tsd.d.ts" />
+
 import Backbone from "backbone";
 import BackboneNativeView from "backbone.nativeview";
 
@@ -6,7 +8,7 @@ import Marionette from "backbone.marionette";
 
 import Layout from "./layout";
 
-//TODO: for development only
+// TODO: for development only
 if (window.__agent) {
   window.__agent.start(Backbone, Marionette);
 }

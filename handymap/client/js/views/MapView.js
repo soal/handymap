@@ -20,4 +20,5 @@ const MapView = Marionette.ItemView.extend({
   }
 });
 
+
 export default MapView;
