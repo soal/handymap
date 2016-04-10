@@ -1,11 +1,9 @@
 import Marionette from "backbone.marionette";
 import template from "../templates/layout.mustache";
 
-import Fact from "./models/Fact";
-
 import MapView from "./views/MapView";
 import HeaderView from "./views/HeaderView";
-import InfoView from "./views/InfoView";
+import {InfoView} from "./views/InfoView";
 
 const Layout =  Marionette.LayoutView.extend({
   el: "#layout",
@@ -18,7 +16,6 @@ const Layout =  Marionette.LayoutView.extend({
     info:        "#info",
     menuOverlay: "#menu-overlay"
   },
-
   onRender() {
     this.mapView = new MapView();
     this.headerView = new HeaderView();

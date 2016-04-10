@@ -15,10 +15,10 @@
     <div class="tab-pane active" role="tabpanel">
       <ul>
         {{#items}}
-          <li><b>{{date}}</b>&&nbsp;&&nbsp;{{name}}</li>
+          <li><b>{{date.day}}.{{date.month}}.{{date.year}}г.</b>&nbsp;&nbsp;{{label}}</li>
         {{/items}}
         {{^items}}
-          Нет событий :(
+          Нет событий =(
         {{/items}}
       </ul>
     </div>

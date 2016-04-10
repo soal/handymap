@@ -17,7 +17,6 @@ var gulp       = require("gulp"),
     plumber    = require("gulp-plumber"),
     hoganify   = require("hoganify"),
     karma      = require("karma"),
-    shim       = require("browserify-shim")
     exec       = require("child_process").exec,
     execSync   = require("child_process").execSync;
 

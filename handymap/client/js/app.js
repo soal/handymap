@@ -1,5 +1,3 @@
-/// <reference path="../../../typings/tsd.d.ts" />
-
 import Backbone from "backbone";
 import BackboneNativeView from "backbone.nativeview";
 
