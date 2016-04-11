@@ -11,22 +11,23 @@ var gulp       = require("gulp"),
     sass       = require("gulp-sass"),
     globbing   = require("gulp-css-globbing"),
     sourcemaps = require("gulp-sourcemaps"),
-    minifyCSS  = require("gulp-minify-css"),
+    cleanCSS   = require("gulp-clean-css"),
     rename     = require("gulp-rename"),
     removeLogs = require("gulp-removelogs"),
     plumber    = require("gulp-plumber"),
-    vueify     = require("vueify"),
+    hoganify   = require("hoganify"),
     karma      = require("karma"),
     exec       = require("child_process").exec,
     execSync   = require("child_process").execSync;
 
 var appName = "handymap",
 
-    staticDir = `${appName}/client/static`,
+    staticDir = `${appName}/static`,
     stylesDir = `${appName}/client/styles`,
+    vendorDir = `${appName}/client/vendor`,
 
     jsDir = `${appName}/client/js`,
-    jsAppFile = `${jsDir}/main.js`,
+    jsAppFile = `${jsDir}/app.js`,
 
     serverTestsDir =  `${appName}/server/tests`,
     serverTestsFile =  `${serverTestsDir}/tests.py`;
@@ -45,13 +46,16 @@ gulp.task("setup", () => {
 });
 
 gulp.task("styles", () => {
-  return gulp.src([`${stylesDir}/app.sass`])
+  return gulp.src([ `${stylesDir}/app.sass` ])
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
-    .pipe(sass({ includePaths: ["node_modules/bootstrap/scss/", "node_modules/leaflet/dist"] }).on("error", sass.logError))
-    .pipe(gulpif(production, minifyCSS()))
+    .pipe(sass({
+      includePaths: [ "node_modules/bootstrap/scss/" ]
+    })
+    .on("error", sass.logError))
+    .pipe(gulpif(production, cleanCSS({ compatibility: "ie10" })))
     .pipe(globbing({
-        extensions: [".scss", ".sass"]
+        extensions: [ ".scss", ".sass" ]
      }))
     .pipe(sass().on("error", sass.logError))
     .pipe(concat("app.css"))
@@ -62,9 +66,11 @@ gulp.task("styles", () => {
 
 function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
   var bundler = watchify(
-    browserify(sourceFilePath, { debug: true })
-    .transform(vueify)
-    .transform(babel, { presets: ["es2015"] })
+    browserify(sourceFilePath, {
+      debug: true
+    })
+    .transform(hoganify, { live: true, ext: ".mustache" })
+    .transform(babel, { presets: [ "es2015" ] })
   );
 
   function rebundle() {
@@ -109,7 +115,7 @@ gulp.task("testServer", () => {
   execSync("python ./manage.py cov");
 });
 
-gulp.task("testClient", ["testServer"], done => {
+gulp.task("testClient", [ "testServer" ], done => {
   var log = gutil.log,
       colors = gutil.colors;
 
@@ -120,7 +126,7 @@ gulp.task("testClient", ["testServer"], done => {
   }, done).start();
 });
 
-gulp.task("test", ["testServer", "testClient"]);
+gulp.task("test", [ "testServer", "testClient" ]);
 
 gulp.task("flask", () => {
   return exec("python ./manage.py runserver", (err, stdout, stderr) => {
@@ -130,7 +136,7 @@ gulp.task("flask", () => {
 });
 
 gulp.task("dev", ["flask", "watchJS", "styles"], ()=> {
-  gulp.watch(`${stylesDir}/**/*.{sass, scss}`, ["styles"]);
+  gulp.watch(`${stylesDir}/**/*.{sass, scss}`, [ "styles" ]);
 });
 
 gulp.task("buildDev", ["compileJS", "styles"]

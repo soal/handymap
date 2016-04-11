@@ -17,13 +17,10 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "^2.2.1",
-    "hogan.js": "hogan#^3.0.2",
-    "backbone.marionette": "marionette#^2.4.5"
+    "backbone.marionette": "marionette#3.0.0-pre.3",
+    "bootstrap": "4"
   },
-  "overrides": {
-    "hogan.js": {
-      "main": "./web/builds/3.0.2/hogan-3.0.2.js"
-    }
+  "devDependencies": {
+    "backbone.nativeview": "^0.3.3"
   }
 }
