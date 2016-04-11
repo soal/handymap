@@ -11,18 +11,14 @@ const InfoView = Marionette.ItemView.extend({
     this.render();
   },
   collectionEvents: {
-    "add": "modelAdded",
-    "update": "collectionChanged"
+    "update": "collectionUpdated"
   },
-  modelAdded() {
-    this.render();
-  },
-  collectionChanged() {
+  collectionUpdatedps() {
     this.render();
   },
   onRender() {
-      unwrap(this);
-    }
+    unwrap(this);
+  }
 });
 
 // const InfoCollectionView = Marionette.CollectionView.extend({
