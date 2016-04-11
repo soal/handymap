@@ -1,1 +1,0 @@
-# handymap/server/madels
