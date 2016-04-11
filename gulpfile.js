@@ -12,25 +12,17 @@ var gulp       = require("gulp"),
     globbing   = require("gulp-css-globbing"),
     sourcemaps = require("gulp-sourcemaps"),
     cleanCSS   = require("gulp-clean-css"),
-    rename     = require("gulp-rename"),
-    removeLogs = require("gulp-removelogs"),
     plumber    = require("gulp-plumber"),
     hoganify   = require("hoganify"),
     karma      = require("karma"),
     exec       = require("child_process").exec,
     execSync   = require("child_process").execSync;
 
-var appName = "handymap",
+var staticDir = "static",
+    stylesDir = "app/styles",
 
-    staticDir = `${appName}/static`,
-    stylesDir = `${appName}/client/styles`,
-    vendorDir = `${appName}/client/vendor`,
-
-    jsDir = `${appName}/client/js`,
-    jsAppFile = `${jsDir}/app.js`,
-
-    serverTestsDir =  `${appName}/server/tests`,
-    serverTestsFile =  `${serverTestsDir}/tests.py`;
+    jsDir = "app/js",
+    jsAppFile = `${jsDir}/app.js`;
 
 
 var production = false;
@@ -107,35 +99,19 @@ gulp.task("watchJS", () => watchJS(jsAppFile, "app.js",  `${staticDir}/js`));
 // gulp.task("compileStyles", function() { return compileStyles(); });
 // gulp.task("watchStyles", function() { return watchStyles(); });
 //
-gulp.task("testServer", () => {
+
+gulp.task("test", done => {
   var log = gutil.log,
       colors = gutil.colors;
 
-  log(colors.bgBlue.bold.white("======= BACKEND TESTING ========"));
-  execSync("python ./manage.py cov");
-});
-
-gulp.task("testClient", [ "testServer" ], done => {
-  var log = gutil.log,
-      colors = gutil.colors;
-
-  log(colors.bgMagenta.bold.white("======= FRONTEND TESTING ======="));
+  log(colors.bgMagenta.bold.white("======= TESTING ======="));
   new karma.Server({
     configFile: `${__dirname}/karma.conf.js`,
     singleRun: true
   }, done).start();
 });
 
-gulp.task("test", [ "testServer", "testClient" ]);
-
-gulp.task("flask", () => {
-  return exec("python ./manage.py runserver", (err, stdout, stderr) => {
-    console.log(stdout);
-    console.log(stderr);
-  });
-});
-
-gulp.task("dev", ["flask", "watchJS", "styles"], ()=> {
+gulp.task("dev", ["watchJS", "styles"], ()=> {
   gulp.watch(`${stylesDir}/**/*.{sass, scss}`, [ "styles" ]);
 });
 
