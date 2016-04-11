@@ -54,6 +54,4 @@ node_modules
 *npm-debug*
 
 # Generated static files
-static/js/*.js*
-static/css/*.css*
-
+static

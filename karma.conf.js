@@ -15,8 +15,8 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      "handymap/client/js/**/*.js",
-      "handymap/client/tests/**/*.spec.js"
+      "app/js/**/*.js",
+      "tests/**/*.spec.js"
     ],
 
 
@@ -27,8 +27,8 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        "handymap/client/js/**/*.js": ["browserify"],
-        "handymap/client/tests/**/*spec.js": ["browserify"]
+        "app/js/**/*.js": ["browserify"],
+        "tests/**/*spec.js": ["browserify"]
     },
 
     browserify: {

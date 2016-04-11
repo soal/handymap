@@ -1,10 +1,8 @@
 import Backbone from "backbone";
 import BackboneNativeView from "backbone.nativeview";
-
 Object.assign(Backbone.View.prototype, BackboneNativeView);
-import Marionette from "backbone.marionette";
-
 import Layout from "./layout";
+import Marionette from "backbone.marionette";
 
 // TODO: for development only
 if (window.__agent) {

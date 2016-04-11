@@ -15,8 +15,7 @@ var gulp       = require("gulp"),
     plumber    = require("gulp-plumber"),
     hoganify   = require("hoganify"),
     karma      = require("karma"),
-    exec       = require("child_process").exec,
-    execSync   = require("child_process").execSync;
+    nodemon    = require("gulp-nodemon");
 
 var staticDir = "static",
     stylesDir = "app/styles",
@@ -111,7 +110,14 @@ gulp.task("test", done => {
   }, done).start();
 });
 
-gulp.task("dev", ["watchJS", "styles"], ()=> {
+gulp.task("server", ()=> {
+  return nodemon({
+    script: "server.js",
+    tasks: ["watchJS"]
+  });
+});
+
+gulp.task("dev", ["watchJS", "styles", "server"], ()=> {
   gulp.watch(`${stylesDir}/**/*.{sass, scss}`, [ "styles" ]);
 });
 

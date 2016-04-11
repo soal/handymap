@@ -14,12 +14,14 @@
     "browserify-bower": "^0.6.0",
     "browserify-shim": "^3.8.12",
     "debowerify": "^1.4.1",
+    "express": "^4.13.4",
     "gulp": "~3.9.1",
     "gulp-clean-css": "^2.0.4",
     "gulp-concat": "~2.6.0",
     "gulp-css-globbing": "^0.1.8",
     "gulp-exec": "~2.1.2",
     "gulp-if": "~2.0.0",
+    "gulp-nodemon": "^2.0.6",
     "gulp-plumber": "~1.1.0",
     "gulp-rename": "~1.2.2",
     "gulp-sass": "^2.2.0",
@@ -39,5 +41,13 @@
     "vinyl-buffer": "~1.0.0",
     "vinyl-source-stream": "latest",
     "watchify": "latest"
+  },
+  "aliasify": {
+    "aliases": {
+      "backbone": "exoskeleton"
+    }
+  },
+  "scripts": {
+    "server": "nodemon server.js"
   }
 }

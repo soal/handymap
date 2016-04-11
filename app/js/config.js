@@ -6,7 +6,6 @@ export const MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoic29hbCIsImEiOiJjaW1qZndnMmwwMDEzd
 
 const mapboxSource = "mapbox://styles/soal/cimlxnm0d006yzpmccqs5dg01";
 const localSource = "../static/mapstyle.json";
-
 /**
  * What maps source you want to use? mapbox
  * @type {String}

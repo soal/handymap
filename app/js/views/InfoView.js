@@ -13,7 +13,7 @@ const InfoView = Marionette.ItemView.extend({
   collectionEvents: {
     "update": "collectionUpdated"
   },
-  collectionUpdatedps() {
+  collectionUpdated() {
     this.render();
   },
   onRender() {
