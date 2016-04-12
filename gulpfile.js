@@ -71,7 +71,7 @@ function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
       .pipe(buffer())
       .pipe(gulpif(!production, plumber()))
       // .pipe(gulpif(production, removeLogs()))
-      .pipe(gulpif(production, uglify())) //FIXME: find a way to remove console.log in production safety
+      .pipe(gulpif(production, uglify())) //FIXME:0 find a way to remove console.log in production safety
       .pipe(gulpif(!production, sourcemaps.init({ loadMaps: true })))
       .pipe(gulpif(!production, sourcemaps.write("./")))
       .pipe(gulp.dest(destinationDir));
@@ -122,12 +122,12 @@ gulp.task("dev", ["watchJS", "styles", "server"], ()=> {
 });
 
 gulp.task("buildDev", ["compileJS", "styles"]
-  // FIXME: stop gulp process correctly
+  // FIXME:10 stop gulp process correctly
   // , ()=> process.exit()
 );
 
 gulp.task("prod", ["set-production", "compileJS", "styles"]
-  // FIXME: stop gulp process correctly
+  // FIXME:20 stop gulp process correctly
   // , ()=> process.exit()
 );
 

@@ -1,10 +1,10 @@
 import Backbone from "backbone";
 import BackboneNativeView from "backbone.nativeview";
 Object.assign(Backbone.View.prototype, BackboneNativeView);
-import Layout from "./layout";
 import Marionette from "backbone.marionette";
+import Layout from "./layout";
 
-// TODO: for development only
+// NOTE: for development only
 if (window.__agent) {
   window.__agent.start(Backbone, Marionette);
 }
@@ -31,4 +31,3 @@ app.on("start", function() {
 });
 
 app.start();
-

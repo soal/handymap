@@ -47,6 +47,7 @@ coverage.xml
 *.idea
 *.tern-*
 *.vscode
+*.imdone
 typings
 
 # Node.js stuff
