@@ -3,7 +3,7 @@ import {API_ROOT} from "../config";
 
 const Fact = Backbone.Model.extend({
   defaults: {
-    id: "",
+    id: null,
     date: {},
     name: "",
     label: ""
@@ -19,7 +19,4 @@ const FactsCollection = Backbone.Collection.extend({
   }
 });
 
-
-const facts = new FactsCollection();
-
-export {Fact, facts};
+export {Fact, FactsCollection};

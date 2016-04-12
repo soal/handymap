@@ -1,17 +1,18 @@
 import Marionette from "backbone.marionette";
 
 import {unwrap} from "../helpers";
-import {facts} from "../models/Facts";
+import {FactsCollection} from "../models/Facts";
 import infoTemplate from "../../templates/info/layout.mustache";
 
 const InfoView = Marionette.ItemView.extend({
   template: (data) => infoTemplate.render(data),
-  collection: facts,
+  collection: new FactsCollection(),
   onShow() {
-    this.render();
+    // this.render();
   },
   collectionEvents: {
-    "update": "collectionUpdated"
+    "sync": "collectionUpdated"
+    // "update": "collectionUpdated"
   },
   collectionUpdated() {
     this.render();
