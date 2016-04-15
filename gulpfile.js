@@ -11,25 +11,17 @@ var gulp       = require("gulp"),
     sass       = require("gulp-sass"),
     globbing   = require("gulp-css-globbing"),
     sourcemaps = require("gulp-sourcemaps"),
-    minifyCSS  = require("gulp-minify-css"),
-    rename     = require("gulp-rename"),
-    removeLogs = require("gulp-removelogs"),
+    cleanCSS   = require("gulp-clean-css"),
     plumber    = require("gulp-plumber"),
-    vueify     = require("vueify"),
+    hoganify   = require("hoganify"),
     karma      = require("karma"),
-    exec       = require("child_process").exec,
-    execSync   = require("child_process").execSync;
+    nodemon    = require("gulp-nodemon");
 
-var appName = "handymap",
+var staticDir = "static",
+    stylesDir = "app/styles",
 
-    staticDir = `${appName}/client/static`,
-    stylesDir = `${appName}/client/styles`,
-
-    jsDir = `${appName}/client/js`,
-    jsAppFile = `${jsDir}/main.js`,
-
-    serverTestsDir =  `${appName}/server/tests`,
-    serverTestsFile =  `${serverTestsDir}/tests.py`;
+    jsDir = "app/js",
+    jsAppFile = `${jsDir}/app.js`;
 
 
 var production = false;
@@ -45,13 +37,16 @@ gulp.task("setup", () => {
 });
 
 gulp.task("styles", () => {
-  return gulp.src([`${stylesDir}/app.sass`])
+  return gulp.src([ `${stylesDir}/app.sass` ])
     .pipe(gulpif(!production, plumber()))
     .pipe(gulpif(!production, sourcemaps.init()))
-    .pipe(sass({ includePaths: ["node_modules/bootstrap/scss/", "node_modules/leaflet/dist"] }).on("error", sass.logError))
-    .pipe(gulpif(production, minifyCSS()))
+    .pipe(sass({
+      includePaths: [ "node_modules/bootstrap/scss/" ]
+    })
+    .on("error", sass.logError))
+    .pipe(gulpif(production, cleanCSS({ compatibility: "ie10" })))
     .pipe(globbing({
-        extensions: [".scss", ".sass"]
+        extensions: [ ".scss", ".sass" ]
      }))
     .pipe(sass().on("error", sass.logError))
     .pipe(concat("app.css"))
@@ -62,9 +57,11 @@ gulp.task("styles", () => {
 
 function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
   var bundler = watchify(
-    browserify(sourceFilePath, { debug: true })
-    .transform(vueify)
-    .transform(babel, { presets: ["es2015"] })
+    browserify(sourceFilePath, {
+      debug: true
+    })
+    .transform(hoganify, { live: true, ext: ".mustache" })
+    .transform(babel, { presets: [ "es2015" ] })
   );
 
   function rebundle() {
@@ -74,7 +71,7 @@ function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
       .pipe(buffer())
       .pipe(gulpif(!production, plumber()))
       // .pipe(gulpif(production, removeLogs()))
-      .pipe(gulpif(production, uglify())) //FIXME: find a way to remove console.log in production safety
+      .pipe(gulpif(production, uglify())) //FIXME:0 find a way to remove console.log in production safety
       .pipe(gulpif(!production, sourcemaps.init({ loadMaps: true })))
       .pipe(gulpif(!production, sourcemaps.write("./")))
       .pipe(gulp.dest(destinationDir));
@@ -101,45 +98,36 @@ gulp.task("watchJS", () => watchJS(jsAppFile, "app.js",  `${staticDir}/js`));
 // gulp.task("compileStyles", function() { return compileStyles(); });
 // gulp.task("watchStyles", function() { return watchStyles(); });
 //
-gulp.task("testServer", () => {
+
+gulp.task("test", done => {
   var log = gutil.log,
       colors = gutil.colors;
 
-  log(colors.bgBlue.bold.white("======= BACKEND TESTING ========"));
-  execSync("python ./manage.py cov");
-});
-
-gulp.task("testClient", ["testServer"], done => {
-  var log = gutil.log,
-      colors = gutil.colors;
-
-  log(colors.bgMagenta.bold.white("======= FRONTEND TESTING ======="));
+  log(colors.bgMagenta.bold.white("======= TESTING ======="));
   new karma.Server({
     configFile: `${__dirname}/karma.conf.js`,
     singleRun: true
   }, done).start();
 });
 
-gulp.task("test", ["testServer", "testClient"]);
-
-gulp.task("flask", () => {
-  return exec("python ./manage.py runserver", (err, stdout, stderr) => {
-    console.log(stdout);
-    console.log(stderr);
+gulp.task("server", ()=> {
+  return nodemon({
+    script: "server.js",
+    tasks: ["watchJS"]
   });
 });
 
-gulp.task("dev", ["flask", "watchJS", "styles"], ()=> {
-  gulp.watch(`${stylesDir}/**/*.{sass, scss}`, ["styles"]);
+gulp.task("dev", ["watchJS", "styles", "server"], ()=> {
+  gulp.watch(`${stylesDir}/**/*.{sass, scss}`, [ "styles" ]);
 });
 
 gulp.task("buildDev", ["compileJS", "styles"]
-  // FIXME: stop gulp process correctly
+  // FIXME:10 stop gulp process correctly
   // , ()=> process.exit()
 );
 
 gulp.task("prod", ["set-production", "compileJS", "styles"]
-  // FIXME: stop gulp process correctly
+  // FIXME:20 stop gulp process correctly
   // , ()=> process.exit()
 );
 

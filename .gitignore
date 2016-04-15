@@ -20,7 +20,6 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-hm_env
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -48,12 +47,12 @@ coverage.xml
 *.idea
 *.tern-*
 *.vscode
+*.imdone
+typings
 
 # Node.js stuff
 node_modules
 *npm-debug*
 
 # Generated static files
-handymap/client/static/js/*.js*
-handymap/client/static/css/*.css*
-
+static
