@@ -1,5 +1,5 @@
 /**
- * Helpers module
+ * CRUD service module
  */
 
 import cacheService from "./cacheService";
@@ -9,7 +9,7 @@ var dispatch = store.dispatch;
 
 /**
  * @class Crud — helper class that realize common interface for CRUD requests.
- * Provides CRUD actions by pattern: "<action> + <Resourse name>" e.g.
+ * Provides CRUD actions by pattern: "<action> + <Resourse name>" e.g. getFact, updateFact, createFact, removeFact
  */
 class Crud {
   /**
