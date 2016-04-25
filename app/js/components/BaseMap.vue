@@ -3,7 +3,7 @@
     <div id="map"></div>
   </div>
   <div class="infobox">
-    <router-view transition="fade"></router-view>
+    <router-view></router-view>
   </div>
 </template>
 

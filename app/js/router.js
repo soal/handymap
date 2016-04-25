@@ -19,9 +19,6 @@ router.map({
     component: BaseMap,
     subRoutes: {
       "/": {
-        // This component will be rendered into Foo's <router-view>
-        // when /foo is matched. Using an inline component definition
-        // here for convenience.
         component: {
           template: "<p>Nothing to show yet</p>"
         }
