@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _helpers = require("../helpers");
+var _crudService = require("../services/crudService");
 
 var _resources = require("../api/resources");
 
@@ -14,12 +14,12 @@ var _resources = require("../api/resources");
 var actions = {
   /** Fact actions */
 };
-actions = new _helpers.ResourceActions(_resources.Fact, "Fact", actions).actions;
+actions = new _crudService.ResourceActions(_resources.Fact, "Fact", actions).actions;
 
 /** Actions for Fact resource including CRUD actions */
 exports.default = actions;
 
-},{"../api/resources":2,"../helpers":8}],2:[function(require,module,exports){
+},{"../api/resources":2,"../services/crudService":11}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -57,7 +57,7 @@ var Profile = exports.Profile = _vue2.default.resource(_config.API_ROOT + "/prof
 /** Process resource for endpoint 'processes/{id}'*/
 var Process = exports.Process = _vue2.default.resource(_config.API_ROOT + "/processes{/id}");
 
-},{"../config":6,"vue":228,"vue-resource":216}],3:[function(require,module,exports){
+},{"../config":6,"vue":229,"vue-resource":217}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -110,7 +110,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./components/BaseMap.vue":4,"./directives/angle-switcher":7,"./storage/store":12,"vue":228,"vue-hot-reload-api":202}],4:[function(require,module,exports){
+},{"./components/BaseMap.vue":4,"./directives/angle-switcher":7,"./storage/store":13,"vue":229,"vue-hot-reload-api":203}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -148,7 +148,6 @@ exports.default = {
   },
   activate: function activate() {},
   ready: function ready() {
-    console.log(this.$children);
     _mapboxGl2.default.accessToken = _config.MAPBOX_ACCESS_TOKEN;
     var map = new _mapboxGl2.default.Map({
       container: "map",
@@ -161,8 +160,6 @@ exports.default = {
     });
 
     map.addControl(new _mapboxGl2.default.Navigation());
-
-    // this.getFact();
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -178,7 +175,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../actions/factActions":1,"../config":6,"./InfoBox.vue":5,"babel-runtime/core-js/object/assign":14,"mapbox-gl":91,"vue":228,"vue-hot-reload-api":202}],5:[function(require,module,exports){
+},{"../actions/factActions":1,"../config":6,"./InfoBox.vue":5,"babel-runtime/core-js/object/assign":15,"mapbox-gl":92,"vue":229,"vue-hot-reload-api":203}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -222,7 +219,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update(id, module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../actions/factActions":1,"babel-runtime/core-js/object/assign":14,"vue":228,"vue-hot-reload-api":202}],6:[function(require,module,exports){
+},{"../actions/factActions":1,"babel-runtime/core-js/object/assign":15,"vue":229,"vue-hot-reload-api":203}],6:[function(require,module,exports){
 (function (process){
 "use strict";
 
@@ -246,7 +243,7 @@ var MAP_SOURCE = exports.MAP_SOURCE = mapboxSource;
 
 }).call(this,require('_process'))
 
-},{"_process":187}],7:[function(require,module,exports){
+},{"_process":188}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -293,7 +290,121 @@ exports.default = _vue2.default.directive("angle-switcher", {
   }
 });
 
-},{"vue":228}],8:[function(require,module,exports){
+},{"vue":229}],8:[function(require,module,exports){
+"use strict";
+
+var _vue = require("vue");
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _vuexRouterSync = require("vuex-router-sync");
+
+var _localforage = require("localforage");
+
+var _localforage2 = _interopRequireDefault(_localforage);
+
+var _store = require("./storage/store");
+
+var _store2 = _interopRequireDefault(_store);
+
+var _router = require("./router");
+
+var _router2 = _interopRequireDefault(_router);
+
+var _app = require("./app.vue");
+
+var _app2 = _interopRequireDefault(_app);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_vue2.default.config.debug = true;
+
+_localforage2.default.setDriver([_localforage2.default.INDEXEDDB, _localforage2.default.WEBSQL, _localforage2.default.LOCALSTORAGE]);
+
+(0, _vuexRouterSync.sync)(_store2.default, _router2.default);
+
+_router2.default.start(_app2.default, "#app");
+
+window.Vue = _vue2.default;
+
+},{"./app.vue":3,"./router":9,"./storage/store":13,"localforage":53,"vue":229,"vuex-router-sync":230}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _vue = require("vue");
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _vueRouter = require("vue-router");
+
+var _vueRouter2 = _interopRequireDefault(_vueRouter);
+
+var _BaseMap = require("./components/BaseMap.vue");
+
+var _BaseMap2 = _interopRequireDefault(_BaseMap);
+
+var _InfoBox = require("./components/InfoBox.vue");
+
+var _InfoBox2 = _interopRequireDefault(_InfoBox);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_vue2.default.use(_vueRouter2.default);
+
+var router = new _vueRouter2.default({
+  history: true,
+  transitionOnLoad: true,
+  saveScrollPosition: true
+});
+
+router.map({
+  "/": {
+    name: "main",
+    component: _BaseMap2.default,
+    subRoutes: {
+      "/": {
+        // This component will be rendered into Foo's <router-view>
+        // when /foo is matched. Using an inline component definition
+        // here for convenience.
+        component: {
+          template: "<p>Nothing to show yet</p>"
+        }
+      },
+      "fact": {
+        name: "fact",
+        component: _InfoBox2.default
+      }
+    }
+  }
+});
+exports.default = router;
+
+},{"./components/BaseMap.vue":4,"./components/InfoBox.vue":5,"vue":229,"vue-router":228}],10:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _localforage = require("localforage");
+
+var _localforage2 = _interopRequireDefault(_localforage);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  getItem: function getItem(id) {
+    return _localforage2.default.getItem(id);
+  },
+  setItem: function setItem() {},
+  removeItem: function removeItem() {},
+  clearStorage: function clearStorage() {}
+};
+
+},{"localforage":53}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -301,7 +412,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ResourceActions = exports.Crud = undefined;
 
-var _store = require("./storage/store");
+var _cacheService = require("./cacheService");
+
+var _cacheService2 = _interopRequireDefault(_cacheService);
+
+var _store = require("../storage/store");
 
 var _store2 = _interopRequireDefault(_store);
 
@@ -342,18 +457,39 @@ function Crud(resource, resourceName) {
     return _ref5 = {}, _defineProperty(_ref5, "get" + resourceName, function undefined(_ref) {
       var dispatch = _ref.dispatch;
       var id = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-      var callback = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
-      var preventDefaultAcion = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+      var cache = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
+      var callback = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+      var preventDefaultAcion = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
 
-      resource.get({ id: id }).then(function (res) {
+      function mutate(response) {
         if (callback) {
-          res = callback({ dispatch: dispatch }, res);
+          response = callback({ dispatch: dispatch }, response);
         }
         if (!preventDefaultAcion) {
-          dispatch("SET_" + (id ? resourceName.toUpperCase() : resourceName.toUpperCase() + "S"), res.data ? res.data : res);
+          dispatch("SET_" + (id ? resourceName.toUpperCase() : resourceName.toUpperCase() + "S"), response.data ? response.data : response);
         }
-      }, function (err) {
-        return console.error(err);
+      }
+
+      var result = null;
+
+      if (cache) {
+        result = _cacheService2.default.getItem(resourceName + "_" + id);
+      } else {
+        result = resource.get({ id: id });
+      }
+      result.then(function (cachedItem) {
+        if (cachedItem) {
+          mutate(cachedItem);
+        }
+        return cachedItem;
+      }).then(function (cachedItem) {
+        if (cachedItem == null) {
+          resource.get({ id: id }).then(function (response) {
+            mutate(response);
+          });
+        }
+      }).catch(function (err) {
+        return console.log(err);
       });
     }), _defineProperty(_ref5, "create" + resourceName, function undefined(_ref2) {
       var dispatch = _ref2.dispatch;
@@ -453,99 +589,7 @@ var ResourceActions = function (_Crud) {
 exports.Crud = Crud;
 exports.ResourceActions = ResourceActions;
 
-},{"./storage/store":12}],9:[function(require,module,exports){
-"use strict";
-
-var _vue = require("vue");
-
-var _vue2 = _interopRequireDefault(_vue);
-
-var _vuexRouterSync = require("vuex-router-sync");
-
-var _localforage = require("localforage");
-
-var _localforage2 = _interopRequireDefault(_localforage);
-
-var _store = require("./storage/store");
-
-var _store2 = _interopRequireDefault(_store);
-
-var _router = require("./router");
-
-var _router2 = _interopRequireDefault(_router);
-
-var _app = require("./app.vue");
-
-var _app2 = _interopRequireDefault(_app);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_vue2.default.config.debug = true;
-
-_localforage2.default.setDriver([_localforage2.default.INDEXEDDB, _localforage2.default.WEBSQL, _localforage2.default.LOCALSTORAGE]);
-
-(0, _vuexRouterSync.sync)(_store2.default, _router2.default);
-
-_router2.default.start(_app2.default, "#app");
-
-window.Vue = _vue2.default;
-
-},{"./app.vue":3,"./router":10,"./storage/store":12,"localforage":52,"vue":228,"vuex-router-sync":229}],10:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _vue = require("vue");
-
-var _vue2 = _interopRequireDefault(_vue);
-
-var _vueRouter = require("vue-router");
-
-var _vueRouter2 = _interopRequireDefault(_vueRouter);
-
-var _BaseMap = require("./components/BaseMap.vue");
-
-var _BaseMap2 = _interopRequireDefault(_BaseMap);
-
-var _InfoBox = require("./components/InfoBox.vue");
-
-var _InfoBox2 = _interopRequireDefault(_InfoBox);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_vue2.default.use(_vueRouter2.default);
-
-var router = new _vueRouter2.default({
-  history: true,
-  transitionOnLoad: true,
-  saveScrollPosition: true
-});
-
-router.map({
-  "/": {
-    name: "main",
-    component: _BaseMap2.default,
-    subRoutes: {
-      "/": {
-        // This component will be rendered into Foo's <router-view>
-        // when /foo is matched. Using an inline component definition
-        // here for convenience.
-        component: {
-          template: '<p>Default sub view for Foo</p>'
-        }
-      },
-      "fact": {
-        name: "fact",
-        component: _InfoBox2.default
-      }
-    }
-  }
-});
-exports.default = router;
-
-},{"./components/BaseMap.vue":4,"./components/InfoBox.vue":5,"vue":228,"vue-router":227}],11:[function(require,module,exports){
+},{"../storage/store":13,"./cacheService":10}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -554,7 +598,7 @@ Object.defineProperty(exports, "__esModule", {
 var SET_FACTS = exports.SET_FACTS = "SET_FACTS";
 var SET_FACT = exports.SET_FACT = "SET_FACT";
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 (function (process){
 "use strict";
 
@@ -572,9 +616,13 @@ var _vuex = require("vuex");
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
+var _localforage = require("localforage");
+
+var _localforage2 = _interopRequireDefault(_localforage);
+
 var _mutationTypes = require("./mutationTypes");
 
-var M = _interopRequireWildcard(_mutationTypes);
+var Mut = _interopRequireWildcard(_mutationTypes);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -597,10 +645,11 @@ var store = new _vuex2.default.Store({
     facts: [],
     user: {}
   },
-  mutations: (_mutations = {}, _defineProperty(_mutations, M.SET_FACTS, function (state, data) {
+  mutations: (_mutations = {}, _defineProperty(_mutations, Mut.SET_FACTS, function (state, data) {
     state.facts = state.facts.concat(data);
-  }), _defineProperty(_mutations, M.SET_FACT, function (state, data) {
+  }), _defineProperty(_mutations, Mut.SET_FACT, function (state, data) {
     state.facts = state.facts.concat(data);
+    _localforage2.default.setItem("Fact_" + data.id, data);
   }), _mutations),
   modules: {},
   strict: debug
@@ -610,7 +659,7 @@ exports.default = store;
 
 }).call(this,require('_process'))
 
-},{"./mutationTypes":11,"_process":187,"vue":228,"vuex":230}],13:[function(require,module,exports){
+},{"./mutationTypes":12,"_process":188,"localforage":53,"vue":229,"vuex":231}],14:[function(require,module,exports){
 // http://wiki.commonjs.org/wiki/Unit_Testing/1.0
 //
 // THIS IS NOT TESTED NOR LIKELY TO WORK OUTSIDE V8!
@@ -971,26 +1020,26 @@ var objectKeys = Object.keys || function (obj) {
   return keys;
 };
 
-},{"util/":194}],14:[function(require,module,exports){
+},{"util/":195}],15:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/assign"), __esModule: true };
-},{"core-js/library/fn/object/assign":15}],15:[function(require,module,exports){
+},{"core-js/library/fn/object/assign":16}],16:[function(require,module,exports){
 require('../../modules/es6.object.assign');
 module.exports = require('../../modules/$.core').Object.assign;
-},{"../../modules/$.core":18,"../../modules/es6.object.assign":28}],16:[function(require,module,exports){
+},{"../../modules/$.core":19,"../../modules/es6.object.assign":29}],17:[function(require,module,exports){
 module.exports = function(it){
   if(typeof it != 'function')throw TypeError(it + ' is not a function!');
   return it;
 };
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = function(it){
   return toString.call(it).slice(8, -1);
 };
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 var core = module.exports = {version: '1.2.6'};
 if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 // optional / simple context binding
 var aFunction = require('./$.a-function');
 module.exports = function(fn, that, length){
@@ -1011,13 +1060,13 @@ module.exports = function(fn, that, length){
     return fn.apply(that, arguments);
   };
 };
-},{"./$.a-function":16}],20:[function(require,module,exports){
+},{"./$.a-function":17}],21:[function(require,module,exports){
 // 7.2.1 RequireObjectCoercible(argument)
 module.exports = function(it){
   if(it == undefined)throw TypeError("Can't call method on  " + it);
   return it;
 };
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 var global    = require('./$.global')
   , core      = require('./$.core')
   , ctx       = require('./$.ctx')
@@ -1064,7 +1113,7 @@ $export.P = 8;  // proto
 $export.B = 16; // bind
 $export.W = 32; // wrap
 module.exports = $export;
-},{"./$.core":18,"./$.ctx":19,"./$.global":23}],22:[function(require,module,exports){
+},{"./$.core":19,"./$.ctx":20,"./$.global":24}],23:[function(require,module,exports){
 module.exports = function(exec){
   try {
     return !!exec();
@@ -1072,18 +1121,18 @@ module.exports = function(exec){
     return true;
   }
 };
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 var global = module.exports = typeof window != 'undefined' && window.Math == Math
   ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
 if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
 var cof = require('./$.cof');
 module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
   return cof(it) == 'String' ? it.split('') : Object(it);
 };
-},{"./$.cof":17}],25:[function(require,module,exports){
+},{"./$.cof":18}],26:[function(require,module,exports){
 var $Object = Object;
 module.exports = {
   create:     $Object.create,
@@ -1097,7 +1146,7 @@ module.exports = {
   getSymbols: $Object.getOwnPropertySymbols,
   each:       [].forEach
 };
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 // 19.1.2.1 Object.assign(target, source, ...)
 var $        = require('./$')
   , toObject = require('./$.to-object')
@@ -1131,18 +1180,18 @@ module.exports = require('./$.fails')(function(){
   }
   return T;
 } : Object.assign;
-},{"./$":25,"./$.fails":22,"./$.iobject":24,"./$.to-object":27}],27:[function(require,module,exports){
+},{"./$":26,"./$.fails":23,"./$.iobject":25,"./$.to-object":28}],28:[function(require,module,exports){
 // 7.1.13 ToObject(argument)
 var defined = require('./$.defined');
 module.exports = function(it){
   return Object(defined(it));
 };
-},{"./$.defined":20}],28:[function(require,module,exports){
+},{"./$.defined":21}],29:[function(require,module,exports){
 // 19.1.3.1 Object.assign(target, source)
 var $export = require('./$.export');
 
 $export($export.S + $export.F, 'Object', {assign: require('./$.object-assign')});
-},{"./$.export":21,"./$.object-assign":26}],29:[function(require,module,exports){
+},{"./$.export":22,"./$.object-assign":27}],30:[function(require,module,exports){
 // (c) Dean McNamee <dean@gmail.com>, 2012.
 //
 // https://github.com/deanm/css-color-parser-js
@@ -1344,7 +1393,7 @@ function parseCSSColor(css_str) {
 
 try { exports.parseCSSColor = parseCSSColor } catch(e) { }
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 module.exports = createFilter;
@@ -1409,7 +1458,7 @@ function compareFn(a, b) {
     return a < b ? -1 : a > b ? 1 : 0;
 }
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 var wgs84 = require('wgs84');
 
 module.exports.geometry = geometry;
@@ -1475,7 +1524,7 @@ function rad(_) {
     return _ * Math.PI / 180;
 }
 
-},{"wgs84":232}],32:[function(require,module,exports){
+},{"wgs84":233}],33:[function(require,module,exports){
 var geojsonArea = require('geojson-area');
 
 module.exports = rewind;
@@ -1526,7 +1575,7 @@ function cw(_) {
     return geojsonArea.ring(_) >= 0;
 }
 
-},{"geojson-area":31}],33:[function(require,module,exports){
+},{"geojson-area":32}],34:[function(require,module,exports){
 'use strict';
 
 module.exports = clip;
@@ -1679,7 +1728,7 @@ function newSlice(slices, slice, area, dist) {
     return [];
 }
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 'use strict';
 
 module.exports = convert;
@@ -1825,7 +1874,7 @@ function calcRingBBox(min, max, points) {
     }
 }
 
-},{"./simplify":36}],35:[function(require,module,exports){
+},{"./simplify":37}],36:[function(require,module,exports){
 'use strict';
 
 module.exports = geojsonvt;
@@ -2067,7 +2116,7 @@ function isClippedSquare(tile, extent, buffer) {
     return true;
 }
 
-},{"./clip":33,"./convert":34,"./tile":37,"./transform":38,"./wrap":39}],36:[function(require,module,exports){
+},{"./clip":34,"./convert":35,"./tile":38,"./transform":39,"./wrap":40}],37:[function(require,module,exports){
 'use strict';
 
 module.exports = simplify;
@@ -2143,7 +2192,7 @@ function getSqSegDist(p, a, b) {
     return dx * dx + dy * dy;
 }
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 'use strict';
 
 module.exports = createTile;
@@ -2230,7 +2279,7 @@ function addFeature(tile, feature, tolerance, noSimplify) {
     }
 }
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 'use strict';
 
 exports.tile = transformTile;
@@ -2273,7 +2322,7 @@ function transformPoint(p, extent, z2, tx, ty) {
     return [x, y];
 }
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 'use strict';
 
 var clip = require('./clip');
@@ -2336,7 +2385,7 @@ function shiftCoords(points, offset) {
     return newPoints;
 }
 
-},{"./clip":33}],40:[function(require,module,exports){
+},{"./clip":34}],41:[function(require,module,exports){
 /**
  * @fileoverview gl-matrix - High performance matrix and vector operations
  * @author Brandon Jones
@@ -2374,7 +2423,7 @@ exports.quat = require("./gl-matrix/quat.js");
 exports.vec2 = require("./gl-matrix/vec2.js");
 exports.vec3 = require("./gl-matrix/vec3.js");
 exports.vec4 = require("./gl-matrix/vec4.js");
-},{"./gl-matrix/common.js":41,"./gl-matrix/mat2.js":42,"./gl-matrix/mat2d.js":43,"./gl-matrix/mat3.js":44,"./gl-matrix/mat4.js":45,"./gl-matrix/quat.js":46,"./gl-matrix/vec2.js":47,"./gl-matrix/vec3.js":48,"./gl-matrix/vec4.js":49}],41:[function(require,module,exports){
+},{"./gl-matrix/common.js":42,"./gl-matrix/mat2.js":43,"./gl-matrix/mat2d.js":44,"./gl-matrix/mat3.js":45,"./gl-matrix/mat4.js":46,"./gl-matrix/quat.js":47,"./gl-matrix/vec2.js":48,"./gl-matrix/vec3.js":49,"./gl-matrix/vec4.js":50}],42:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -2446,7 +2495,7 @@ glMatrix.equals = function(a, b) {
 
 module.exports = glMatrix;
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -2884,7 +2933,7 @@ mat2.multiplyScalarAndAdd = function(out, a, b, scale) {
 
 module.exports = mat2;
 
-},{"./common.js":41}],43:[function(require,module,exports){
+},{"./common.js":42}],44:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -3355,7 +3404,7 @@ mat2d.equals = function (a, b) {
 
 module.exports = mat2d;
 
-},{"./common.js":41}],44:[function(require,module,exports){
+},{"./common.js":42}],45:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -4103,7 +4152,7 @@ mat3.equals = function (a, b) {
 
 module.exports = mat3;
 
-},{"./common.js":41}],45:[function(require,module,exports){
+},{"./common.js":42}],46:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -6241,7 +6290,7 @@ mat4.equals = function (a, b) {
 
 module.exports = mat4;
 
-},{"./common.js":41}],46:[function(require,module,exports){
+},{"./common.js":42}],47:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -6843,7 +6892,7 @@ quat.equals = vec4.equals;
 
 module.exports = quat;
 
-},{"./common.js":41,"./mat3.js":44,"./vec3.js":48,"./vec4.js":49}],47:[function(require,module,exports){
+},{"./common.js":42,"./mat3.js":45,"./vec3.js":49,"./vec4.js":50}],48:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -7432,7 +7481,7 @@ vec2.equals = function (a, b) {
 
 module.exports = vec2;
 
-},{"./common.js":41}],48:[function(require,module,exports){
+},{"./common.js":42}],49:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -8211,7 +8260,7 @@ vec3.equals = function (a, b) {
 
 module.exports = vec3;
 
-},{"./common.js":41}],49:[function(require,module,exports){
+},{"./common.js":42}],50:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -8822,7 +8871,7 @@ vec4.equals = function (a, b) {
 
 module.exports = vec4;
 
-},{"./common.js":41}],50:[function(require,module,exports){
+},{"./common.js":42}],51:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -8908,7 +8957,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -8933,7 +8982,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 (function (process,global){
 /*!
     localForage -- Offline Storage, Improved
@@ -11793,7 +11842,7 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"_process":187}],53:[function(require,module,exports){
+},{"_process":188}],54:[function(require,module,exports){
 'use strict';
 
 function constant(value) {
@@ -11877,7 +11926,7 @@ exports['piecewise-constant'] = function(f) {
     }
 };
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 'use strict';
 
 var format = require('util').format;
@@ -11895,7 +11944,7 @@ function ValidationError(key, value /*, message, ...*/) {
 
 module.exports = ValidationError;
 
-},{"util":194}],55:[function(require,module,exports){
+},{"util":195}],56:[function(require,module,exports){
 'use strict';
 
 module.exports = function (output) {
@@ -11908,7 +11957,7 @@ module.exports = function (output) {
     return output;
 };
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 'use strict';
 
 module.exports = function getType(val) {
@@ -11927,7 +11976,7 @@ module.exports = function getType(val) {
     }
 };
 
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 'use strict';
 
 /**
@@ -11943,7 +11992,7 @@ module.exports = function unbundle(value) {
     }
 };
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 var ValidationError = require('../error/validation_error');
@@ -12010,7 +12059,7 @@ module.exports = function validate(options) {
     }
 };
 
-},{"../error/validation_error":54,"../util/extend":55,"../util/get_type":56,"./validate_array":59,"./validate_boolean":60,"./validate_color":61,"./validate_constants":62,"./validate_enum":63,"./validate_filter":64,"./validate_function":65,"./validate_layer":66,"./validate_number":68,"./validate_object":69,"./validate_source":71,"./validate_string":72}],59:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/extend":56,"../util/get_type":57,"./validate_array":60,"./validate_boolean":61,"./validate_color":62,"./validate_constants":63,"./validate_enum":64,"./validate_filter":65,"./validate_function":66,"./validate_layer":67,"./validate_number":69,"./validate_object":70,"./validate_source":72,"./validate_string":73}],60:[function(require,module,exports){
 'use strict';
 
 var getType = require('../util/get_type');
@@ -12064,7 +12113,7 @@ module.exports = function validateArray(options) {
     return errors;
 };
 
-},{"../error/validation_error":54,"../util/get_type":56,"./validate":58}],60:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/get_type":57,"./validate":59}],61:[function(require,module,exports){
 'use strict';
 
 var getType = require('../util/get_type');
@@ -12082,7 +12131,7 @@ module.exports = function validateBoolean(options) {
     return [];
 };
 
-},{"../error/validation_error":54,"../util/get_type":56}],61:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/get_type":57}],62:[function(require,module,exports){
 'use strict';
 
 var ValidationError = require('../error/validation_error');
@@ -12105,7 +12154,7 @@ module.exports = function validateColor(options) {
     return [];
 };
 
-},{"../error/validation_error":54,"../util/get_type":56,"csscolorparser":29}],62:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/get_type":57,"csscolorparser":30}],63:[function(require,module,exports){
 'use strict';
 
 var ValidationError = require('../error/validation_error');
@@ -12139,7 +12188,7 @@ module.exports = function validateConstants(options) {
 
 };
 
-},{"../error/validation_error":54,"../util/get_type":56}],63:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/get_type":57}],64:[function(require,module,exports){
 'use strict';
 
 var ValidationError = require('../error/validation_error');
@@ -12157,7 +12206,7 @@ module.exports = function validateEnum(options) {
     return errors;
 };
 
-},{"../error/validation_error":54,"../util/unbundle_jsonlint":57}],64:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/unbundle_jsonlint":58}],65:[function(require,module,exports){
 'use strict';
 
 var ValidationError = require('../error/validation_error');
@@ -12249,7 +12298,7 @@ module.exports = function validateFilter(options) {
     return errors;
 };
 
-},{"../error/validation_error":54,"../util/get_type":56,"../util/unbundle_jsonlint":57,"./validate_enum":63}],65:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/get_type":57,"../util/unbundle_jsonlint":58,"./validate_enum":64}],66:[function(require,module,exports){
 'use strict';
 
 var ValidationError = require('../error/validation_error');
@@ -12336,7 +12385,7 @@ module.exports = function validateFunction(options) {
 
 };
 
-},{"../error/validation_error":54,"../util/get_type":56,"./validate":58,"./validate_array":59,"./validate_object":69}],66:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/get_type":57,"./validate":59,"./validate_array":60,"./validate_object":70}],67:[function(require,module,exports){
 'use strict';
 
 var ValidationError = require('../error/validation_error');
@@ -12449,7 +12498,7 @@ module.exports = function validateLayer(options) {
     return errors;
 };
 
-},{"../error/validation_error":54,"../util/extend":55,"../util/unbundle_jsonlint":57,"./validate_filter":64,"./validate_layout_property":67,"./validate_object":69,"./validate_paint_property":70}],67:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/extend":56,"../util/unbundle_jsonlint":58,"./validate_filter":65,"./validate_layout_property":68,"./validate_object":70,"./validate_paint_property":71}],68:[function(require,module,exports){
 'use strict';
 
 var validate = require('./validate');
@@ -12488,7 +12537,7 @@ module.exports = function validateLayoutProperty(options) {
 
 };
 
-},{"../error/validation_error":54,"./validate":58}],68:[function(require,module,exports){
+},{"../error/validation_error":55,"./validate":59}],69:[function(require,module,exports){
 'use strict';
 
 var getType = require('../util/get_type');
@@ -12515,7 +12564,7 @@ module.exports = function validateNumber(options) {
     return [];
 };
 
-},{"../error/validation_error":54,"../util/get_type":56}],69:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/get_type":57}],70:[function(require,module,exports){
 'use strict';
 
 var ValidationError = require('../error/validation_error');
@@ -12568,7 +12617,7 @@ module.exports = function validateObject(options) {
     return errors;
 };
 
-},{"../error/validation_error":54,"../util/get_type":56,"./validate":58}],70:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/get_type":57,"./validate":59}],71:[function(require,module,exports){
 'use strict';
 
 var validate = require('./validate');
@@ -12618,7 +12667,7 @@ module.exports = function validatePaintProperty(options) {
 
 };
 
-},{"../error/validation_error":54,"./validate":58}],71:[function(require,module,exports){
+},{"../error/validation_error":55,"./validate":59}],72:[function(require,module,exports){
 'use strict';
 
 var ValidationError = require('../error/validation_error');
@@ -12695,7 +12744,7 @@ module.exports = function validateSource(options) {
     }
 };
 
-},{"../error/validation_error":54,"../util/unbundle_jsonlint":57,"./validate_enum":63,"./validate_object":69}],72:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/unbundle_jsonlint":58,"./validate_enum":64,"./validate_object":70}],73:[function(require,module,exports){
 'use strict';
 
 var getType = require('../util/get_type');
@@ -12713,7 +12762,7 @@ module.exports = function validateString(options) {
     return [];
 };
 
-},{"../error/validation_error":54,"../util/get_type":56}],73:[function(require,module,exports){
+},{"../error/validation_error":55,"../util/get_type":57}],74:[function(require,module,exports){
 'use strict';
 
 var validateConstants = require('./validate/validate_constants');
@@ -12779,13 +12828,13 @@ function wrapCleanErrors(inner) {
 
 module.exports = validateStyleMin;
 
-},{"../reference/latest.min":75,"./validate/validate":58,"./validate/validate_constants":62,"./validate/validate_filter":64,"./validate/validate_layer":66,"./validate/validate_layout_property":67,"./validate/validate_paint_property":70,"./validate/validate_source":71}],74:[function(require,module,exports){
+},{"../reference/latest.min":76,"./validate/validate":59,"./validate/validate_constants":63,"./validate/validate_filter":65,"./validate/validate_layer":67,"./validate/validate_layout_property":68,"./validate/validate_paint_property":71,"./validate/validate_source":72}],75:[function(require,module,exports){
 module.exports = require('./v8.json');
 
-},{"./v8.json":76}],75:[function(require,module,exports){
+},{"./v8.json":77}],76:[function(require,module,exports){
 module.exports = require('./v8.min.json');
 
-},{"./v8.min.json":77}],76:[function(require,module,exports){
+},{"./v8.min.json":78}],77:[function(require,module,exports){
 module.exports={
   "$version": 8,
   "$root": {
@@ -14167,9 +14216,9 @@ module.exports={
   }
 }
 
-},{}],77:[function(require,module,exports){
-module.exports={"$version":8,"$root":{"version":{"required":true,"type":"enum","values":[8]},"name":{"type":"string"},"metadata":{"type":"*"},"center":{"type":"array","value":"number"},"zoom":{"type":"number"},"bearing":{"type":"number","default":0,"period":360,"units":"degrees"},"pitch":{"type":"number","default":0,"units":"degrees"},"sources":{"required":true,"type":"sources"},"sprite":{"type":"string"},"glyphs":{"type":"string"},"transition":{"type":"transition"},"layers":{"required":true,"type":"array","value":"layer"}},"sources":{"*":{"type":"source"}},"source":["source_tile","source_geojson","source_video","source_image"],"source_tile":{"type":{"required":true,"type":"enum","values":["vector","raster"]},"url":{"type":"string"},"tiles":{"type":"array","value":"string"},"minzoom":{"type":"number","default":0},"maxzoom":{"type":"number","default":22},"tileSize":{"type":"number","default":512,"units":"pixels"},"*":{"type":"*"}},"source_geojson":{"type":{"required":true,"type":"enum","values":["geojson"]},"data":{"type":"*"},"maxzoom":{"type":"number","default":14},"buffer":{"type":"number","default":64},"tolerance":{"type":"number","default":3},"cluster":{"type":"boolean","default":false},"clusterRadius":{"type":"number","default":400},"clusterMaxZoom":{"type":"number"}},"source_video":{"type":{"required":true,"type":"enum","values":["video"]},"urls":{"required":true,"type":"array","value":"string"},"coordinates":{"required":true,"type":"array","length":4,"value":{"type":"array","length":2,"value":"number"}}},"source_image":{"type":{"required":true,"type":"enum","values":["image"]},"url":{"required":true,"type":"string"},"coordinates":{"required":true,"type":"array","length":4,"value":{"type":"array","length":2,"value":"number"}}},"layer":{"id":{"type":"string","required":true},"type":{"type":"enum","values":["fill","line","symbol","circle","raster","background"]},"metadata":{"type":"*"},"ref":{"type":"string"},"source":{"type":"string"},"source-layer":{"type":"string"},"minzoom":{"type":"number","minimum":0,"maximum":22},"maxzoom":{"type":"number","minimum":0,"maximum":22},"interactive":{"type":"boolean","default":false},"filter":{"type":"filter"},"layout":{"type":"layout"},"paint":{"type":"paint"},"paint.*":{"type":"paint"}},"layout":["layout_fill","layout_line","layout_circle","layout_symbol","layout_raster","layout_background"],"layout_background":{"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"layout_fill":{"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"layout_circle":{"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"layout_line":{"line-cap":{"type":"enum","function":"piecewise-constant","values":["butt","round","square"],"default":"butt"},"line-join":{"type":"enum","function":"piecewise-constant","values":["bevel","round","miter"],"default":"miter"},"line-miter-limit":{"type":"number","default":2,"function":"interpolated","requires":[{"line-join":"miter"}]},"line-round-limit":{"type":"number","default":1.05,"function":"interpolated","requires":[{"line-join":"round"}]},"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"layout_symbol":{"symbol-placement":{"type":"enum","function":"piecewise-constant","values":["point","line"],"default":"point"},"symbol-spacing":{"type":"number","default":250,"minimum":1,"function":"interpolated","units":"pixels","requires":[{"symbol-placement":"line"}]},"symbol-avoid-edges":{"type":"boolean","function":"piecewise-constant","default":false},"icon-allow-overlap":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["icon-image"]},"icon-ignore-placement":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["icon-image"]},"icon-optional":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["icon-image","text-field"]},"icon-rotation-alignment":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"viewport","requires":["icon-image"]},"icon-size":{"type":"number","default":1,"minimum":0,"function":"interpolated","requires":["icon-image"]},"icon-image":{"type":"string","function":"piecewise-constant","tokens":true},"icon-rotate":{"type":"number","default":0,"period":360,"function":"interpolated","units":"degrees","requires":["icon-image"]},"icon-padding":{"type":"number","default":2,"minimum":0,"function":"interpolated","units":"pixels","requires":["icon-image"]},"icon-keep-upright":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["icon-image",{"icon-rotation-alignment":"map"},{"symbol-placement":"line"}]},"icon-offset":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","requires":["icon-image"]},"text-rotation-alignment":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"viewport","requires":["text-field"]},"text-field":{"type":"string","function":"piecewise-constant","default":"","tokens":true},"text-font":{"type":"array","value":"string","function":"piecewise-constant","default":["Open Sans Regular","Arial Unicode MS Regular"],"requires":["text-field"]},"text-size":{"type":"number","default":16,"minimum":0,"units":"pixels","function":"interpolated","requires":["text-field"]},"text-max-width":{"type":"number","default":10,"minimum":0,"units":"em","function":"interpolated","requires":["text-field"]},"text-line-height":{"type":"number","default":1.2,"units":"em","function":"interpolated","requires":["text-field"]},"text-letter-spacing":{"type":"number","default":0,"units":"em","function":"interpolated","requires":["text-field"]},"text-justify":{"type":"enum","function":"piecewise-constant","values":["left","center","right"],"default":"center","requires":["text-field"]},"text-anchor":{"type":"enum","function":"piecewise-constant","values":["center","left","right","top","bottom","top-left","top-right","bottom-left","bottom-right"],"default":"center","requires":["text-field"]},"text-max-angle":{"type":"number","default":45,"units":"degrees","function":"interpolated","requires":["text-field",{"symbol-placement":"line"}]},"text-rotate":{"type":"number","default":0,"period":360,"units":"degrees","function":"interpolated","requires":["text-field"]},"text-padding":{"type":"number","default":2,"minimum":0,"units":"pixels","function":"interpolated","requires":["text-field"]},"text-keep-upright":{"type":"boolean","function":"piecewise-constant","default":true,"requires":["text-field",{"text-rotation-alignment":"map"},{"symbol-placement":"line"}]},"text-transform":{"type":"enum","function":"piecewise-constant","values":["none","uppercase","lowercase"],"default":"none","requires":["text-field"]},"text-offset":{"type":"array","value":"number","units":"ems","function":"interpolated","length":2,"default":[0,0],"requires":["text-field"]},"text-allow-overlap":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["text-field"]},"text-ignore-placement":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["text-field"]},"text-optional":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["text-field","icon-image"]},"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"layout_raster":{"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"filter":{"type":"array","value":"*"},"filter_operator":{"type":"enum","values":["==","!=",">",">=","<","<=","in","!in","all","any","none"]},"geometry_type":{"type":"enum","values":["Point","LineString","Polygon"]},"color_operation":{"type":"enum","values":["lighten","saturate","spin","fade","mix"]},"function":{"stops":{"type":"array","required":true,"value":"function_stop"},"base":{"type":"number","default":1,"minimum":0}},"function_stop":{"type":"array","minimum":0,"maximum":22,"value":["number","color"],"length":2},"paint":["paint_fill","paint_line","paint_circle","paint_symbol","paint_raster","paint_background"],"paint_fill":{"fill-antialias":{"type":"boolean","function":"piecewise-constant","default":true},"fill-opacity":{"type":"number","function":"interpolated","default":1,"minimum":0,"maximum":1,"transition":true},"fill-color":{"type":"color","default":"#000000","function":"interpolated","transition":true,"requires":[{"!":"fill-pattern"}]},"fill-outline-color":{"type":"color","function":"interpolated","transition":true,"requires":[{"!":"fill-pattern"},{"fill-antialias":true}]},"fill-translate":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","transition":true,"units":"pixels"},"fill-translate-anchor":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"map","requires":["fill-translate"]},"fill-pattern":{"type":"string","function":"piecewise-constant","transition":true}},"paint_line":{"line-opacity":{"type":"number","function":"interpolated","default":1,"minimum":0,"maximum":1,"transition":true},"line-color":{"type":"color","default":"#000000","function":"interpolated","transition":true,"requires":[{"!":"line-pattern"}]},"line-translate":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","transition":true,"units":"pixels"},"line-translate-anchor":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"map","requires":["line-translate"]},"line-width":{"type":"number","default":1,"minimum":0,"function":"interpolated","transition":true,"units":"pixels"},"line-gap-width":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels"},"line-offset":{"type":"number","default":0,"function":"interpolated","transition":true,"units":"pixels"},"line-blur":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels"},"line-dasharray":{"type":"array","value":"number","function":"piecewise-constant","minimum":0,"transition":true,"units":"line widths","requires":[{"!":"line-pattern"}]},"line-pattern":{"type":"string","function":"piecewise-constant","transition":true}},"paint_circle":{"circle-radius":{"type":"number","default":5,"minimum":0,"function":"interpolated","transition":true,"units":"pixels"},"circle-color":{"type":"color","default":"#000000","function":"interpolated","transition":true},"circle-blur":{"type":"number","default":0,"function":"interpolated","transition":true},"circle-opacity":{"type":"number","default":1,"minimum":0,"maximum":1,"function":"interpolated","transition":true},"circle-translate":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","transition":true,"units":"pixels"},"circle-translate-anchor":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"map","requires":["circle-translate"]}},"paint_symbol":{"icon-opacity":{"type":"number","default":1,"minimum":0,"maximum":1,"function":"interpolated","transition":true,"requires":["icon-image"]},"icon-color":{"type":"color","default":"#000000","function":"interpolated","transition":true,"requires":["icon-image"]},"icon-halo-color":{"type":"color","default":"rgba(0, 0, 0, 0)","function":"interpolated","transition":true,"requires":["icon-image"]},"icon-halo-width":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels","requires":["icon-image"]},"icon-halo-blur":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels","requires":["icon-image"]},"icon-translate":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","transition":true,"units":"pixels","requires":["icon-image"]},"icon-translate-anchor":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"map","requires":["icon-image","icon-translate"]},"text-opacity":{"type":"number","default":1,"minimum":0,"maximum":1,"function":"interpolated","transition":true,"requires":["text-field"]},"text-color":{"type":"color","default":"#000000","function":"interpolated","transition":true,"requires":["text-field"]},"text-halo-color":{"type":"color","default":"rgba(0, 0, 0, 0)","function":"interpolated","transition":true,"requires":["text-field"]},"text-halo-width":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels","requires":["text-field"]},"text-halo-blur":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels","requires":["text-field"]},"text-translate":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","transition":true,"units":"pixels","requires":["text-field"]},"text-translate-anchor":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"map","requires":["text-field","text-translate"]}},"paint_raster":{"raster-opacity":{"type":"number","default":1,"minimum":0,"maximum":1,"function":"interpolated","transition":true},"raster-hue-rotate":{"type":"number","default":0,"period":360,"function":"interpolated","transition":true,"units":"degrees"},"raster-brightness-min":{"type":"number","function":"interpolated","default":0,"minimum":0,"maximum":1,"transition":true},"raster-brightness-max":{"type":"number","function":"interpolated","default":1,"minimum":0,"maximum":1,"transition":true},"raster-saturation":{"type":"number","default":0,"minimum":-1,"maximum":1,"function":"interpolated","transition":true},"raster-contrast":{"type":"number","default":0,"minimum":-1,"maximum":1,"function":"interpolated","transition":true},"raster-fade-duration":{"type":"number","default":300,"minimum":0,"function":"interpolated","transition":true,"units":"milliseconds"}},"paint_background":{"background-color":{"type":"color","default":"#000000","function":"interpolated","transition":true,"requires":[{"!":"background-pattern"}]},"background-pattern":{"type":"string","function":"piecewise-constant","transition":true},"background-opacity":{"type":"number","default":1,"minimum":0,"maximum":1,"function":"interpolated","transition":true}},"transition":{"duration":{"type":"number","default":300,"minimum":0,"units":"milliseconds"},"delay":{"type":"number","default":0,"minimum":0,"units":"milliseconds"}}}
 },{}],78:[function(require,module,exports){
+module.exports={"$version":8,"$root":{"version":{"required":true,"type":"enum","values":[8]},"name":{"type":"string"},"metadata":{"type":"*"},"center":{"type":"array","value":"number"},"zoom":{"type":"number"},"bearing":{"type":"number","default":0,"period":360,"units":"degrees"},"pitch":{"type":"number","default":0,"units":"degrees"},"sources":{"required":true,"type":"sources"},"sprite":{"type":"string"},"glyphs":{"type":"string"},"transition":{"type":"transition"},"layers":{"required":true,"type":"array","value":"layer"}},"sources":{"*":{"type":"source"}},"source":["source_tile","source_geojson","source_video","source_image"],"source_tile":{"type":{"required":true,"type":"enum","values":["vector","raster"]},"url":{"type":"string"},"tiles":{"type":"array","value":"string"},"minzoom":{"type":"number","default":0},"maxzoom":{"type":"number","default":22},"tileSize":{"type":"number","default":512,"units":"pixels"},"*":{"type":"*"}},"source_geojson":{"type":{"required":true,"type":"enum","values":["geojson"]},"data":{"type":"*"},"maxzoom":{"type":"number","default":14},"buffer":{"type":"number","default":64},"tolerance":{"type":"number","default":3},"cluster":{"type":"boolean","default":false},"clusterRadius":{"type":"number","default":400},"clusterMaxZoom":{"type":"number"}},"source_video":{"type":{"required":true,"type":"enum","values":["video"]},"urls":{"required":true,"type":"array","value":"string"},"coordinates":{"required":true,"type":"array","length":4,"value":{"type":"array","length":2,"value":"number"}}},"source_image":{"type":{"required":true,"type":"enum","values":["image"]},"url":{"required":true,"type":"string"},"coordinates":{"required":true,"type":"array","length":4,"value":{"type":"array","length":2,"value":"number"}}},"layer":{"id":{"type":"string","required":true},"type":{"type":"enum","values":["fill","line","symbol","circle","raster","background"]},"metadata":{"type":"*"},"ref":{"type":"string"},"source":{"type":"string"},"source-layer":{"type":"string"},"minzoom":{"type":"number","minimum":0,"maximum":22},"maxzoom":{"type":"number","minimum":0,"maximum":22},"interactive":{"type":"boolean","default":false},"filter":{"type":"filter"},"layout":{"type":"layout"},"paint":{"type":"paint"},"paint.*":{"type":"paint"}},"layout":["layout_fill","layout_line","layout_circle","layout_symbol","layout_raster","layout_background"],"layout_background":{"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"layout_fill":{"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"layout_circle":{"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"layout_line":{"line-cap":{"type":"enum","function":"piecewise-constant","values":["butt","round","square"],"default":"butt"},"line-join":{"type":"enum","function":"piecewise-constant","values":["bevel","round","miter"],"default":"miter"},"line-miter-limit":{"type":"number","default":2,"function":"interpolated","requires":[{"line-join":"miter"}]},"line-round-limit":{"type":"number","default":1.05,"function":"interpolated","requires":[{"line-join":"round"}]},"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"layout_symbol":{"symbol-placement":{"type":"enum","function":"piecewise-constant","values":["point","line"],"default":"point"},"symbol-spacing":{"type":"number","default":250,"minimum":1,"function":"interpolated","units":"pixels","requires":[{"symbol-placement":"line"}]},"symbol-avoid-edges":{"type":"boolean","function":"piecewise-constant","default":false},"icon-allow-overlap":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["icon-image"]},"icon-ignore-placement":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["icon-image"]},"icon-optional":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["icon-image","text-field"]},"icon-rotation-alignment":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"viewport","requires":["icon-image"]},"icon-size":{"type":"number","default":1,"minimum":0,"function":"interpolated","requires":["icon-image"]},"icon-image":{"type":"string","function":"piecewise-constant","tokens":true},"icon-rotate":{"type":"number","default":0,"period":360,"function":"interpolated","units":"degrees","requires":["icon-image"]},"icon-padding":{"type":"number","default":2,"minimum":0,"function":"interpolated","units":"pixels","requires":["icon-image"]},"icon-keep-upright":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["icon-image",{"icon-rotation-alignment":"map"},{"symbol-placement":"line"}]},"icon-offset":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","requires":["icon-image"]},"text-rotation-alignment":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"viewport","requires":["text-field"]},"text-field":{"type":"string","function":"piecewise-constant","default":"","tokens":true},"text-font":{"type":"array","value":"string","function":"piecewise-constant","default":["Open Sans Regular","Arial Unicode MS Regular"],"requires":["text-field"]},"text-size":{"type":"number","default":16,"minimum":0,"units":"pixels","function":"interpolated","requires":["text-field"]},"text-max-width":{"type":"number","default":10,"minimum":0,"units":"em","function":"interpolated","requires":["text-field"]},"text-line-height":{"type":"number","default":1.2,"units":"em","function":"interpolated","requires":["text-field"]},"text-letter-spacing":{"type":"number","default":0,"units":"em","function":"interpolated","requires":["text-field"]},"text-justify":{"type":"enum","function":"piecewise-constant","values":["left","center","right"],"default":"center","requires":["text-field"]},"text-anchor":{"type":"enum","function":"piecewise-constant","values":["center","left","right","top","bottom","top-left","top-right","bottom-left","bottom-right"],"default":"center","requires":["text-field"]},"text-max-angle":{"type":"number","default":45,"units":"degrees","function":"interpolated","requires":["text-field",{"symbol-placement":"line"}]},"text-rotate":{"type":"number","default":0,"period":360,"units":"degrees","function":"interpolated","requires":["text-field"]},"text-padding":{"type":"number","default":2,"minimum":0,"units":"pixels","function":"interpolated","requires":["text-field"]},"text-keep-upright":{"type":"boolean","function":"piecewise-constant","default":true,"requires":["text-field",{"text-rotation-alignment":"map"},{"symbol-placement":"line"}]},"text-transform":{"type":"enum","function":"piecewise-constant","values":["none","uppercase","lowercase"],"default":"none","requires":["text-field"]},"text-offset":{"type":"array","value":"number","units":"ems","function":"interpolated","length":2,"default":[0,0],"requires":["text-field"]},"text-allow-overlap":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["text-field"]},"text-ignore-placement":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["text-field"]},"text-optional":{"type":"boolean","function":"piecewise-constant","default":false,"requires":["text-field","icon-image"]},"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"layout_raster":{"visibility":{"type":"enum","function":"piecewise-constant","values":["visible","none"],"default":"visible"}},"filter":{"type":"array","value":"*"},"filter_operator":{"type":"enum","values":["==","!=",">",">=","<","<=","in","!in","all","any","none"]},"geometry_type":{"type":"enum","values":["Point","LineString","Polygon"]},"color_operation":{"type":"enum","values":["lighten","saturate","spin","fade","mix"]},"function":{"stops":{"type":"array","required":true,"value":"function_stop"},"base":{"type":"number","default":1,"minimum":0}},"function_stop":{"type":"array","minimum":0,"maximum":22,"value":["number","color"],"length":2},"paint":["paint_fill","paint_line","paint_circle","paint_symbol","paint_raster","paint_background"],"paint_fill":{"fill-antialias":{"type":"boolean","function":"piecewise-constant","default":true},"fill-opacity":{"type":"number","function":"interpolated","default":1,"minimum":0,"maximum":1,"transition":true},"fill-color":{"type":"color","default":"#000000","function":"interpolated","transition":true,"requires":[{"!":"fill-pattern"}]},"fill-outline-color":{"type":"color","function":"interpolated","transition":true,"requires":[{"!":"fill-pattern"},{"fill-antialias":true}]},"fill-translate":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","transition":true,"units":"pixels"},"fill-translate-anchor":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"map","requires":["fill-translate"]},"fill-pattern":{"type":"string","function":"piecewise-constant","transition":true}},"paint_line":{"line-opacity":{"type":"number","function":"interpolated","default":1,"minimum":0,"maximum":1,"transition":true},"line-color":{"type":"color","default":"#000000","function":"interpolated","transition":true,"requires":[{"!":"line-pattern"}]},"line-translate":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","transition":true,"units":"pixels"},"line-translate-anchor":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"map","requires":["line-translate"]},"line-width":{"type":"number","default":1,"minimum":0,"function":"interpolated","transition":true,"units":"pixels"},"line-gap-width":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels"},"line-offset":{"type":"number","default":0,"function":"interpolated","transition":true,"units":"pixels"},"line-blur":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels"},"line-dasharray":{"type":"array","value":"number","function":"piecewise-constant","minimum":0,"transition":true,"units":"line widths","requires":[{"!":"line-pattern"}]},"line-pattern":{"type":"string","function":"piecewise-constant","transition":true}},"paint_circle":{"circle-radius":{"type":"number","default":5,"minimum":0,"function":"interpolated","transition":true,"units":"pixels"},"circle-color":{"type":"color","default":"#000000","function":"interpolated","transition":true},"circle-blur":{"type":"number","default":0,"function":"interpolated","transition":true},"circle-opacity":{"type":"number","default":1,"minimum":0,"maximum":1,"function":"interpolated","transition":true},"circle-translate":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","transition":true,"units":"pixels"},"circle-translate-anchor":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"map","requires":["circle-translate"]}},"paint_symbol":{"icon-opacity":{"type":"number","default":1,"minimum":0,"maximum":1,"function":"interpolated","transition":true,"requires":["icon-image"]},"icon-color":{"type":"color","default":"#000000","function":"interpolated","transition":true,"requires":["icon-image"]},"icon-halo-color":{"type":"color","default":"rgba(0, 0, 0, 0)","function":"interpolated","transition":true,"requires":["icon-image"]},"icon-halo-width":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels","requires":["icon-image"]},"icon-halo-blur":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels","requires":["icon-image"]},"icon-translate":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","transition":true,"units":"pixels","requires":["icon-image"]},"icon-translate-anchor":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"map","requires":["icon-image","icon-translate"]},"text-opacity":{"type":"number","default":1,"minimum":0,"maximum":1,"function":"interpolated","transition":true,"requires":["text-field"]},"text-color":{"type":"color","default":"#000000","function":"interpolated","transition":true,"requires":["text-field"]},"text-halo-color":{"type":"color","default":"rgba(0, 0, 0, 0)","function":"interpolated","transition":true,"requires":["text-field"]},"text-halo-width":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels","requires":["text-field"]},"text-halo-blur":{"type":"number","default":0,"minimum":0,"function":"interpolated","transition":true,"units":"pixels","requires":["text-field"]},"text-translate":{"type":"array","value":"number","length":2,"default":[0,0],"function":"interpolated","transition":true,"units":"pixels","requires":["text-field"]},"text-translate-anchor":{"type":"enum","function":"piecewise-constant","values":["map","viewport"],"default":"map","requires":["text-field","text-translate"]}},"paint_raster":{"raster-opacity":{"type":"number","default":1,"minimum":0,"maximum":1,"function":"interpolated","transition":true},"raster-hue-rotate":{"type":"number","default":0,"period":360,"function":"interpolated","transition":true,"units":"degrees"},"raster-brightness-min":{"type":"number","function":"interpolated","default":0,"minimum":0,"maximum":1,"transition":true},"raster-brightness-max":{"type":"number","function":"interpolated","default":1,"minimum":0,"maximum":1,"transition":true},"raster-saturation":{"type":"number","default":0,"minimum":-1,"maximum":1,"function":"interpolated","transition":true},"raster-contrast":{"type":"number","default":0,"minimum":-1,"maximum":1,"function":"interpolated","transition":true},"raster-fade-duration":{"type":"number","default":300,"minimum":0,"function":"interpolated","transition":true,"units":"milliseconds"}},"paint_background":{"background-color":{"type":"color","default":"#000000","function":"interpolated","transition":true,"requires":[{"!":"background-pattern"}]},"background-pattern":{"type":"string","function":"piecewise-constant","transition":true},"background-opacity":{"type":"number","default":1,"minimum":0,"maximum":1,"function":"interpolated","transition":true}},"transition":{"duration":{"type":"number","default":300,"minimum":0,"units":"milliseconds"},"delay":{"type":"number","default":0,"minimum":0,"units":"milliseconds"}}}
+},{}],79:[function(require,module,exports){
 'use strict';
 
 var featureFilter = require('feature-filter');
@@ -14460,7 +14509,7 @@ function ElementGroup(vertexStartIndex, elementStartIndex, secondElementStartInd
     this.secondElementLength = 0;
 }
 
-},{"../style/style_layer":124,"../util/struct_array":179,"../util/util":181,"./bucket/circle_bucket":79,"./bucket/fill_bucket":80,"./bucket/line_bucket":81,"./bucket/symbol_bucket":82,"./buffer":83,"feature-filter":30}],79:[function(require,module,exports){
+},{"../style/style_layer":125,"../util/struct_array":180,"../util/util":182,"./bucket/circle_bucket":80,"./bucket/fill_bucket":81,"./bucket/line_bucket":82,"./bucket/symbol_bucket":83,"./buffer":84,"feature-filter":31}],80:[function(require,module,exports){
 'use strict';
 
 var Bucket = require('../bucket');
@@ -14540,7 +14589,7 @@ CircleBucket.prototype.addFeature = function(feature) {
 
 };
 
-},{"../../util/util":181,"../bucket":78,"../load_geometry":85}],80:[function(require,module,exports){
+},{"../../util/util":182,"../bucket":79,"../load_geometry":86}],81:[function(require,module,exports){
 'use strict';
 
 var Bucket = require('../bucket');
@@ -14622,7 +14671,7 @@ FillBucket.prototype.addFill = function(vertices) {
     }
 };
 
-},{"../../util/util":181,"../bucket":78,"../load_geometry":85}],81:[function(require,module,exports){
+},{"../../util/util":182,"../bucket":79,"../load_geometry":86}],82:[function(require,module,exports){
 'use strict';
 
 var Bucket = require('../bucket');
@@ -15057,7 +15106,7 @@ LineBucket.prototype.addPieSliceVertex = function(currentVertex, distance, extru
     }
 };
 
-},{"../../util/util":181,"../bucket":78,"../load_geometry":85}],82:[function(require,module,exports){
+},{"../../util/util":182,"../bucket":79,"../load_geometry":86}],83:[function(require,module,exports){
 'use strict';
 
 var Point = require('point-geometry');
@@ -15620,7 +15669,7 @@ function SymbolInstance(anchor, line, shapedText, shapedIcon, layout, addToBuffe
     }
 }
 
-},{"../../symbol/anchor":134,"../../symbol/clip_line":136,"../../symbol/collision_feature":138,"../../symbol/get_anchors":140,"../../symbol/mergelines":143,"../../symbol/quads":144,"../../symbol/resolve_text":145,"../../symbol/shaping":146,"../../util/token":180,"../../util/util":181,"../bucket":78,"../load_geometry":85,"point-geometry":186}],83:[function(require,module,exports){
+},{"../../symbol/anchor":135,"../../symbol/clip_line":137,"../../symbol/collision_feature":139,"../../symbol/get_anchors":141,"../../symbol/mergelines":144,"../../symbol/quads":145,"../../symbol/resolve_text":146,"../../symbol/shaping":147,"../../util/token":181,"../../util/util":182,"../bucket":79,"../load_geometry":86,"point-geometry":187}],84:[function(require,module,exports){
 'use strict';
 
 module.exports = Buffer;
@@ -15729,7 +15778,7 @@ Buffer.ELEMENT_ATTRIBUTE_TYPE = 'Uint16';
  */
 Buffer.VERTEX_ATTRIBUTE_ALIGNMENT = 4;
 
-},{}],84:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 'use strict';
 
 var Point = require('point-geometry');
@@ -16030,7 +16079,7 @@ function offsetLine(rings, offset) {
     return newRings;
 }
 
-},{"../util/dictionary_coder":171,"../util/grid":174,"../util/intersection_tests":176,"../util/struct_array":179,"../util/util":181,"../util/vectortile_to_geojson":182,"./bucket":78,"./load_geometry":85,"feature-filter":30,"pbf":185,"point-geometry":186,"vector-tile":195}],85:[function(require,module,exports){
+},{"../util/dictionary_coder":172,"../util/grid":175,"../util/intersection_tests":177,"../util/struct_array":180,"../util/util":182,"../util/vectortile_to_geojson":183,"./bucket":79,"./load_geometry":86,"feature-filter":31,"pbf":186,"point-geometry":187,"vector-tile":196}],86:[function(require,module,exports){
 'use strict';
 
 var EXTENT = require('./bucket').EXTENT;
@@ -16056,7 +16105,7 @@ module.exports = function loadGeometry(feature) {
     return geometry;
 };
 
-},{"./bucket":78}],86:[function(require,module,exports){
+},{"./bucket":79}],87:[function(require,module,exports){
 'use strict';
 
 module.exports = Coordinate;
@@ -16135,7 +16184,7 @@ Coordinate.prototype = {
     }
 };
 
-},{}],87:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 'use strict';
 
 module.exports = LngLat;
@@ -16229,7 +16278,7 @@ LngLat.convert = function (input) {
     return input;
 };
 
-},{"../util/util":181}],88:[function(require,module,exports){
+},{"../util/util":182}],89:[function(require,module,exports){
 'use strict';
 
 module.exports = LngLatBounds;
@@ -16403,7 +16452,7 @@ LngLatBounds.convert = function (input) {
     return new LngLatBounds(input);
 };
 
-},{"./lng_lat":87}],89:[function(require,module,exports){
+},{"./lng_lat":88}],90:[function(require,module,exports){
 'use strict';
 
 var LngLat = require('./lng_lat'),
@@ -16817,7 +16866,7 @@ Transform.prototype = {
     }
 };
 
-},{"../util/interpolate":175,"../util/util":181,"./coordinate":86,"./lng_lat":87,"gl-matrix":40,"point-geometry":186}],90:[function(require,module,exports){
+},{"../util/interpolate":176,"../util/util":182,"./coordinate":87,"./lng_lat":88,"gl-matrix":41,"point-geometry":187}],91:[function(require,module,exports){
 'use strict';
 
 // Font data From Hershey Simplex Font
@@ -16950,7 +16999,7 @@ module.exports = function textVertices(text, left, baseline, scale) {
     return strokes;
 };
 
-},{}],91:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 'use strict';
 
 /**
@@ -16998,7 +17047,7 @@ Object.defineProperty(mapboxgl, 'accessToken', {
     set: function(token) { config.ACCESS_TOKEN = token; }
 });
 
-},{"./geo/lng_lat":87,"./geo/lng_lat_bounds":88,"./source/geojson_source":105,"./source/image_source":107,"./source/video_source":115,"./style/style":121,"./ui/control/attribution":149,"./ui/control/control":150,"./ui/control/geolocate":151,"./ui/control/navigation":152,"./ui/map":162,"./ui/popup":163,"./util/ajax":165,"./util/browser":166,"./util/config":170,"./util/evented":172,"./util/util":181,"point-geometry":186}],92:[function(require,module,exports){
+},{"./geo/lng_lat":88,"./geo/lng_lat_bounds":89,"./source/geojson_source":106,"./source/image_source":108,"./source/video_source":116,"./style/style":122,"./ui/control/attribution":150,"./ui/control/control":151,"./ui/control/geolocate":152,"./ui/control/navigation":153,"./ui/map":163,"./ui/popup":164,"./util/ajax":166,"./util/browser":167,"./util/config":171,"./util/evented":173,"./util/util":182,"point-geometry":187}],93:[function(require,module,exports){
 'use strict';
 
 var TilePyramid = require('../source/tile_pyramid');
@@ -17103,7 +17152,7 @@ function drawBackground(painter, source, layer) {
 }
 
 
-},{"../source/pixels_to_tile_units":108,"../source/tile_pyramid":113,"../util/util":181}],93:[function(require,module,exports){
+},{"../source/pixels_to_tile_units":109,"../source/tile_pyramid":114,"../util/util":182}],94:[function(require,module,exports){
 'use strict';
 
 var browser = require('../util/browser');
@@ -17173,7 +17222,7 @@ function drawCircles(painter, source, layer, coords) {
     }
 }
 
-},{"../util/browser":166,"../util/util":181}],94:[function(require,module,exports){
+},{"../util/browser":167,"../util/util":182}],95:[function(require,module,exports){
 'use strict';
 
 module.exports = drawCollisionDebug;
@@ -17218,7 +17267,7 @@ function drawCollisionDebug(painter, source, layer, coords) {
     }
 }
 
-},{}],95:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 'use strict';
 
 var textVertices = require('../lib/debugtext');
@@ -17275,7 +17324,7 @@ function drawDebugTile(painter, source, coord) {
     gl.drawArrays(gl.LINES, 0, vertices.length / painter.debugTextBuffer.itemSize);
 }
 
-},{"../data/bucket":78,"../lib/debugtext":90,"../util/browser":166,"gl-matrix":40}],96:[function(require,module,exports){
+},{"../data/bucket":79,"../lib/debugtext":91,"../util/browser":167,"gl-matrix":41}],97:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -17501,7 +17550,7 @@ function drawStroke(painter, source, layer, coord) {
     }
 }
 
-},{"../source/pixels_to_tile_units":108,"../util/util":181}],97:[function(require,module,exports){
+},{"../source/pixels_to_tile_units":109,"../util/util":182}],98:[function(require,module,exports){
 'use strict';
 
 var browser = require('../util/browser');
@@ -17695,7 +17744,7 @@ module.exports = function drawLine(painter, source, layer, coords) {
 
 };
 
-},{"../source/pixels_to_tile_units":108,"../util/browser":166,"../util/util":181,"gl-matrix":40}],98:[function(require,module,exports){
+},{"../source/pixels_to_tile_units":109,"../util/browser":167,"../util/util":182,"gl-matrix":41}],99:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -17832,7 +17881,7 @@ function getOpacities(tile, parentTile, layer, transform) {
     return opacity;
 }
 
-},{"../util/util":181}],99:[function(require,module,exports){
+},{"../util/util":182}],100:[function(require,module,exports){
 'use strict';
 
 var mat4 = require('gl-matrix').mat4;
@@ -18049,7 +18098,7 @@ function drawSymbol(painter, layer, posMatrix, tile, bucket, elementGroups, pref
     }
 }
 
-},{"../source/pixels_to_tile_units":108,"../util/browser":166,"../util/util":181,"./draw_collision_debug":94,"gl-matrix":40}],100:[function(require,module,exports){
+},{"../source/pixels_to_tile_units":109,"../util/browser":167,"../util/util":182,"./draw_collision_debug":95,"gl-matrix":41}],101:[function(require,module,exports){
 'use strict';
 
 module.exports = FrameHistory;
@@ -18117,7 +18166,7 @@ FrameHistory.prototype.record = function(zoom) {
     }
 };
 
-},{}],101:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 'use strict';
 
 var shaders = require('./shaders');
@@ -18241,7 +18290,7 @@ exports.extend = function(context) {
     return context;
 };
 
-},{"../util/util":181,"./shaders":104}],102:[function(require,module,exports){
+},{"../util/util":182,"./shaders":105}],103:[function(require,module,exports){
 'use strict';
 
 module.exports = LineAtlas;
@@ -18386,7 +18435,7 @@ LineAtlas.prototype.bind = function(gl) {
     }
 };
 
-},{}],103:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 'use strict';
 
 var glutil = require('./gl_util');
@@ -18804,7 +18853,7 @@ Painter.prototype.getTexture = function(size) {
     return textures && textures.length > 0 ? textures.pop() : null;
 };
 
-},{"../data/bucket":78,"../source/pixels_to_tile_units":108,"../source/tile_coord":112,"../source/tile_pyramid":113,"../util/browser":166,"./draw_background":92,"./draw_circle":93,"./draw_debug":95,"./draw_fill":96,"./draw_line":97,"./draw_raster":98,"./draw_symbol":99,"./frame_history":100,"./gl_util":101,"gl-matrix":40}],104:[function(require,module,exports){
+},{"../data/bucket":79,"../source/pixels_to_tile_units":109,"../source/tile_coord":113,"../source/tile_pyramid":114,"../util/browser":167,"./draw_background":93,"./draw_circle":94,"./draw_debug":96,"./draw_fill":97,"./draw_line":98,"./draw_raster":99,"./draw_symbol":100,"./frame_history":101,"./gl_util":102,"gl-matrix":41}],105:[function(require,module,exports){
 'use strict';
 
 
@@ -18862,7 +18911,7 @@ module.exports = {
     }
 };
 
-},{"path":183}],105:[function(require,module,exports){
+},{"path":184}],106:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -19096,7 +19145,7 @@ GeoJSONSource.prototype = util.inherit(Evented, /** @lends GeoJSONSource.prototy
     }
 });
 
-},{"../data/bucket":78,"../util/evented":172,"../util/util":181,"./source":110,"./tile_pyramid":113,"resolve-url":189}],106:[function(require,module,exports){
+},{"../data/bucket":79,"../util/evented":173,"../util/util":182,"./source":111,"./tile_pyramid":114,"resolve-url":190}],107:[function(require,module,exports){
 'use strict';
 
 var Point = require('point-geometry');
@@ -19165,7 +19214,7 @@ FeatureWrapper.prototype.bbox = function() {
 
 FeatureWrapper.prototype.toGeoJSON = VectorTileFeature.prototype.toGeoJSON;
 
-},{"../data/bucket":78,"point-geometry":186,"vector-tile":195}],107:[function(require,module,exports){
+},{"../data/bucket":79,"point-geometry":187,"vector-tile":196}],108:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -19328,7 +19377,7 @@ ImageSource.prototype = util.inherit(Evented, {
     }
 });
 
-},{"../data/bucket":78,"../geo/lng_lat":87,"../util/ajax":165,"../util/evented":172,"../util/util":181,"./tile":111,"./tile_coord":112,"point-geometry":186}],108:[function(require,module,exports){
+},{"../data/bucket":79,"../geo/lng_lat":88,"../util/ajax":166,"../util/evented":173,"../util/util":182,"./tile":112,"./tile_coord":113,"point-geometry":187}],109:[function(require,module,exports){
 'use strict';
 
 var Bucket = require('../data/bucket');
@@ -19353,7 +19402,7 @@ module.exports = function(tile, pixelValue, z) {
 };
 
 
-},{"../data/bucket":78}],109:[function(require,module,exports){
+},{"../data/bucket":79}],110:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -19473,7 +19522,7 @@ RasterTileSource.prototype = util.inherit(Evented, {
     }
 });
 
-},{"../util/ajax":165,"../util/evented":172,"../util/mapbox":178,"../util/util":181,"./source":110}],110:[function(require,module,exports){
+},{"../util/ajax":166,"../util/evented":173,"../util/mapbox":179,"../util/util":182,"./source":111}],111:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -19668,7 +19717,7 @@ exports.is = function(source) {
     return false;
 };
 
-},{"../util/ajax":165,"../util/browser":166,"../util/mapbox":178,"../util/util":181,"./geojson_source":105,"./image_source":107,"./raster_tile_source":109,"./tile_coord":112,"./tile_pyramid":113,"./vector_tile_source":114,"./video_source":115}],111:[function(require,module,exports){
+},{"../util/ajax":166,"../util/browser":167,"../util/mapbox":179,"../util/util":182,"./geojson_source":106,"./image_source":108,"./raster_tile_source":110,"./tile_coord":113,"./tile_pyramid":114,"./vector_tile_source":115,"./video_source":116}],112:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -19838,7 +19887,7 @@ function unserializeBuckets(input) {
     return output;
 }
 
-},{"../data/bucket":78,"../data/feature_index":84,"../symbol/collision_box":137,"../symbol/collision_tile":139,"../util/util":181,"../util/vectortile_to_geojson":182,"feature-filter":30,"pbf":185,"vector-tile":195}],112:[function(require,module,exports){
+},{"../data/bucket":79,"../data/feature_index":85,"../symbol/collision_box":138,"../symbol/collision_tile":140,"../util/util":182,"../util/vectortile_to_geojson":183,"feature-filter":31,"pbf":186,"vector-tile":196}],113:[function(require,module,exports){
 'use strict';
 
 var assert = require('assert');
@@ -20014,7 +20063,7 @@ TileCoord.cover = function(z, bounds, actualZ) {
     });
 };
 
-},{"../geo/coordinate":86,"assert":13}],113:[function(require,module,exports){
+},{"../geo/coordinate":87,"assert":14}],114:[function(require,module,exports){
 'use strict';
 
 var Tile = require('./tile');
@@ -20479,7 +20528,7 @@ function compareKeyZoom(a, b) {
     return (a % 32) - (b % 32);
 }
 
-},{"../data/bucket":78,"../geo/coordinate":86,"../util/lru_cache":177,"../util/util":181,"./tile":111,"./tile_coord":112,"point-geometry":186}],114:[function(require,module,exports){
+},{"../data/bucket":79,"../geo/coordinate":87,"../util/lru_cache":178,"../util/util":182,"./tile":112,"./tile_coord":113,"point-geometry":187}],115:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -20607,7 +20656,7 @@ VectorTileSource.prototype = util.inherit(Evented, {
     }
 });
 
-},{"../util/evented":172,"../util/mapbox":178,"../util/util":181,"./source":110}],115:[function(require,module,exports){
+},{"../util/evented":173,"../util/mapbox":179,"../util/util":182,"./source":111}],116:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -20798,7 +20847,7 @@ VideoSource.prototype = util.inherit(Evented, /** @lends VideoSource.prototype *
     }
 });
 
-},{"../data/bucket":78,"../geo/lng_lat":87,"../util/ajax":165,"../util/evented":172,"../util/util":181,"./tile":111,"./tile_coord":112,"point-geometry":186}],116:[function(require,module,exports){
+},{"../data/bucket":79,"../geo/lng_lat":88,"../util/ajax":166,"../util/evented":173,"../util/util":182,"./tile":112,"./tile_coord":113,"point-geometry":187}],117:[function(require,module,exports){
 'use strict';
 
 var Actor = require('../util/actor');
@@ -20973,7 +21022,7 @@ util.extend(Worker.prototype, {
     }
 });
 
-},{"../util/actor":164,"../util/ajax":165,"../util/util":181,"./geojson_wrapper":106,"./worker_tile":117,"geojson-rewind":32,"geojson-vt":35,"pbf":185,"supercluster":191,"vector-tile":195,"vt-pbf":199}],117:[function(require,module,exports){
+},{"../util/actor":165,"../util/ajax":166,"../util/util":182,"./geojson_wrapper":107,"./worker_tile":118,"geojson-rewind":33,"geojson-vt":36,"pbf":186,"supercluster":192,"vector-tile":196,"vt-pbf":200}],118:[function(require,module,exports){
 'use strict';
 
 var FeatureIndex = require('../data/feature_index');
@@ -21245,7 +21294,7 @@ function getTransferables(buckets) {
     return transferables;
 }
 
-},{"../data/bucket":78,"../data/feature_index":84,"../symbol/collision_box":137,"../symbol/collision_tile":139,"../util/dictionary_coder":171}],118:[function(require,module,exports){
+},{"../data/bucket":79,"../data/feature_index":85,"../symbol/collision_box":138,"../symbol/collision_tile":140,"../util/dictionary_coder":172}],119:[function(require,module,exports){
 'use strict';
 
 module.exports = AnimationLoop;
@@ -21277,7 +21326,7 @@ AnimationLoop.prototype.cancel = function(n) {
     });
 };
 
-},{}],119:[function(require,module,exports){
+},{}],120:[function(require,module,exports){
 'use strict';
 
 var Evented = require('../util/evented');
@@ -21358,7 +21407,7 @@ ImageSprite.prototype.getSpritePosition = function(name) {
     return new SpritePosition();
 };
 
-},{"../util/ajax":165,"../util/browser":166,"../util/evented":172,"../util/mapbox":178}],120:[function(require,module,exports){
+},{"../util/ajax":166,"../util/browser":167,"../util/evented":173,"../util/mapbox":179}],121:[function(require,module,exports){
 'use strict';
 
 var parseCSSColor = require('csscolorparser').parseCSSColor;
@@ -21406,7 +21455,7 @@ function colorDowngrade(color) {
 
 module.exports = parseColor;
 
-},{"../util/util":181,"csscolorparser":29}],121:[function(require,module,exports){
+},{"../util/util":182,"csscolorparser":30}],122:[function(require,module,exports){
 'use strict';
 
 var Evented = require('../util/evented');
@@ -21926,7 +21975,7 @@ Style.prototype = util.inherit(Evented, {
     }
 });
 
-},{"../render/line_atlas":102,"../symbol/glyph_source":142,"../symbol/sprite_atlas":147,"../util/ajax":165,"../util/browser":166,"../util/dispatcher":168,"../util/evented":172,"../util/mapbox":178,"../util/util":181,"./animation_loop":118,"./image_sprite":119,"./style_batch":122,"./style_layer":124,"./validate_style":133}],122:[function(require,module,exports){
+},{"../render/line_atlas":103,"../symbol/glyph_source":143,"../symbol/sprite_atlas":148,"../util/ajax":166,"../util/browser":167,"../util/dispatcher":169,"../util/evented":173,"../util/mapbox":179,"../util/util":182,"./animation_loop":119,"./image_sprite":120,"./style_batch":123,"./style_layer":125,"./validate_style":134}],123:[function(require,module,exports){
 'use strict';
 
 var Source = require('../source/source');
@@ -22171,7 +22220,7 @@ styleBatch.prototype = {
 
 module.exports = styleBatch;
 
-},{"../source/source":110,"../util/util":181,"./style_layer":124,"./style_spec":131,"./validate_style":133}],123:[function(require,module,exports){
+},{"../source/source":111,"../util/util":182,"./style_layer":125,"./style_spec":132,"./validate_style":134}],124:[function(require,module,exports){
 'use strict';
 
 var MapboxGLFunction = require('mapbox-gl-function');
@@ -22229,7 +22278,7 @@ function transitioned(calculate) {
     };
 }
 
-},{"./parse_color":120,"mapbox-gl-function":53}],124:[function(require,module,exports){
+},{"./parse_color":121,"mapbox-gl-function":54}],125:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -22521,7 +22570,7 @@ function getDeclarationValue(declaration) {
     return declaration.value;
 }
 
-},{"../util/evented":172,"../util/util":181,"./parse_color":120,"./style_declaration":123,"./style_layer/background_style_layer":125,"./style_layer/circle_style_layer":126,"./style_layer/fill_style_layer":127,"./style_layer/line_style_layer":128,"./style_layer/raster_style_layer":129,"./style_layer/symbol_style_layer":130,"./style_spec":131,"./style_transition":132,"./validate_style":133}],125:[function(require,module,exports){
+},{"../util/evented":173,"../util/util":182,"./parse_color":121,"./style_declaration":124,"./style_layer/background_style_layer":126,"./style_layer/circle_style_layer":127,"./style_layer/fill_style_layer":128,"./style_layer/line_style_layer":129,"./style_layer/raster_style_layer":130,"./style_layer/symbol_style_layer":131,"./style_spec":132,"./style_transition":133,"./validate_style":134}],126:[function(require,module,exports){
 'use strict';
 
 var util = require('../../util/util');
@@ -22535,7 +22584,7 @@ module.exports = BackgroundStyleLayer;
 
 BackgroundStyleLayer.prototype = util.inherit(StyleLayer, {});
 
-},{"../../util/util":181,"../style_layer":124}],126:[function(require,module,exports){
+},{"../../util/util":182,"../style_layer":125}],127:[function(require,module,exports){
 'use strict';
 
 var util = require('../../util/util');
@@ -22549,7 +22598,7 @@ module.exports = CircleStyleLayer;
 
 CircleStyleLayer.prototype = util.inherit(StyleLayer, {});
 
-},{"../../util/util":181,"../style_layer":124}],127:[function(require,module,exports){
+},{"../../util/util":182,"../style_layer":125}],128:[function(require,module,exports){
 'use strict';
 
 var util = require('../../util/util');
@@ -22563,7 +22612,7 @@ module.exports = FillStyleLayer;
 
 FillStyleLayer.prototype = util.inherit(StyleLayer, {});
 
-},{"../../util/util":181,"../style_layer":124}],128:[function(require,module,exports){
+},{"../../util/util":182,"../style_layer":125}],129:[function(require,module,exports){
 'use strict';
 
 var util = require('../../util/util');
@@ -22597,7 +22646,7 @@ LineStyleLayer.prototype = util.inherit(StyleLayer, {
     }
 });
 
-},{"../../util/util":181,"../style_layer":124}],129:[function(require,module,exports){
+},{"../../util/util":182,"../style_layer":125}],130:[function(require,module,exports){
 'use strict';
 
 var util = require('../../util/util');
@@ -22611,7 +22660,7 @@ module.exports = RasterStyleLayer;
 
 RasterStyleLayer.prototype = util.inherit(StyleLayer, {});
 
-},{"../../util/util":181,"../style_layer":124}],130:[function(require,module,exports){
+},{"../../util/util":182,"../style_layer":125}],131:[function(require,module,exports){
 'use strict';
 
 var util = require('../../util/util');
@@ -22651,12 +22700,12 @@ SymbolStyleLayer.prototype = util.inherit(StyleLayer, {
 
 });
 
-},{"../../util/util":181,"../style_layer":124}],131:[function(require,module,exports){
+},{"../../util/util":182,"../style_layer":125}],132:[function(require,module,exports){
 'use strict';
 
 module.exports = require('mapbox-gl-style-spec/reference/latest');
 
-},{"mapbox-gl-style-spec/reference/latest":74}],132:[function(require,module,exports){
+},{"mapbox-gl-style-spec/reference/latest":75}],133:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -22731,7 +22780,7 @@ function interpZoomTransitioned(from, to, t) {
     };
 }
 
-},{"../util/interpolate":175,"../util/util":181}],133:[function(require,module,exports){
+},{"../util/interpolate":176,"../util/util":182}],134:[function(require,module,exports){
 'use strict';
 
 module.exports = require('mapbox-gl-style-spec/lib/validate_style.min');
@@ -22747,7 +22796,7 @@ module.exports.emitErrors = function throwErrors(emitter, errors) {
     }
 };
 
-},{"mapbox-gl-style-spec/lib/validate_style.min":73}],134:[function(require,module,exports){
+},{"mapbox-gl-style-spec/lib/validate_style.min":74}],135:[function(require,module,exports){
 'use strict';
 
 var Point = require('point-geometry');
@@ -22770,7 +22819,7 @@ Anchor.prototype.clone = function() {
     return new Anchor(this.x, this.y, this.angle, this.segment);
 };
 
-},{"point-geometry":186}],135:[function(require,module,exports){
+},{"point-geometry":187}],136:[function(require,module,exports){
 'use strict';
 
 module.exports = checkMaxAngle;
@@ -22850,7 +22899,7 @@ function checkMaxAngle(line, anchor, labelLength, windowSize, maxAngle) {
     return true;
 }
 
-},{}],136:[function(require,module,exports){
+},{}],137:[function(require,module,exports){
 'use strict';
 
 var Point = require('point-geometry');
@@ -22924,7 +22973,7 @@ function clipLine(lines, x1, y1, x2, y2) {
     return clippedLines;
 }
 
-},{"point-geometry":186}],137:[function(require,module,exports){
+},{"point-geometry":187}],138:[function(require,module,exports){
 'use strict';
 
 var StructArrayType = require('../util/struct_array');
@@ -23005,7 +23054,7 @@ util.extendAll(CollisionBoxArray.prototype.StructType.prototype, {
     }
 });
 
-},{"../util/struct_array":179,"../util/util":181,"point-geometry":186}],138:[function(require,module,exports){
+},{"../util/struct_array":180,"../util/util":182,"point-geometry":187}],139:[function(require,module,exports){
 'use strict';
 
 module.exports = CollisionFeature;
@@ -23139,7 +23188,7 @@ CollisionFeature.prototype._addLineCollisionBoxes = function(collisionBoxArray, 
     return bboxes;
 };
 
-},{}],139:[function(require,module,exports){
+},{}],140:[function(require,module,exports){
 'use strict';
 
 var Point = require('point-geometry');
@@ -23440,7 +23489,7 @@ CollisionTile.prototype.insertCollisionFeature = function(collisionFeature, minP
     }
 };
 
-},{"../data/bucket":78,"../util/grid":174,"point-geometry":186}],140:[function(require,module,exports){
+},{"../data/bucket":79,"../util/grid":175,"point-geometry":187}],141:[function(require,module,exports){
 'use strict';
 
 var interpolate = require('../util/interpolate');
@@ -23544,7 +23593,7 @@ function resample(line, offset, spacing, angleWindowSize, maxAngle, labelLength,
     return anchors;
 }
 
-},{"../symbol/anchor":134,"../util/interpolate":175,"./check_max_angle":135}],141:[function(require,module,exports){
+},{"../symbol/anchor":135,"../util/interpolate":176,"./check_max_angle":136}],142:[function(require,module,exports){
 'use strict';
 
 var ShelfPack = require('shelf-pack');
@@ -23712,7 +23761,7 @@ GlyphAtlas.prototype.updateTexture = function(gl) {
     }
 };
 
-},{"shelf-pack":190}],142:[function(require,module,exports){
+},{"shelf-pack":191}],143:[function(require,module,exports){
 'use strict';
 
 var normalizeURL = require('../util/mapbox').normalizeGlyphsURL;
@@ -23854,7 +23903,7 @@ function glyphUrl(fontstack, range, url, subdomains) {
         .replace('{range}', range);
 }
 
-},{"../symbol/glyph_atlas":141,"../util/ajax":165,"../util/glyphs":173,"../util/mapbox":178,"pbf":185}],143:[function(require,module,exports){
+},{"../symbol/glyph_atlas":142,"../util/ajax":166,"../util/glyphs":174,"../util/mapbox":179,"pbf":186}],144:[function(require,module,exports){
 'use strict';
 
 module.exports = function (features, textFeatures, geometries) {
@@ -23945,7 +23994,7 @@ module.exports = function (features, textFeatures, geometries) {
     };
 };
 
-},{}],144:[function(require,module,exports){
+},{}],145:[function(require,module,exports){
 'use strict';
 
 var Point = require('point-geometry');
@@ -24198,7 +24247,7 @@ function getSegmentGlyphs(glyphs, anchor, offset, line, segment, forward) {
     return placementScale;
 }
 
-},{"point-geometry":186}],145:[function(require,module,exports){
+},{"point-geometry":187}],146:[function(require,module,exports){
 'use strict';
 
 var resolveTokens = require('../util/token');
@@ -24241,7 +24290,7 @@ function resolveText(features, layoutProperties, codepoints) {
     return textFeatures;
 }
 
-},{"../util/token":180}],146:[function(require,module,exports){
+},{"../util/token":181}],147:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -24422,7 +24471,7 @@ function PositionedIcon(image, top, bottom, left, right) {
     this.right = right;
 }
 
-},{}],147:[function(require,module,exports){
+},{}],148:[function(require,module,exports){
 'use strict';
 
 var ShelfPack = require('shelf-pack');
@@ -24656,7 +24705,7 @@ function AtlasImage(rect, width, height, sdf, pixelRatio) {
     this.pixelRatio = pixelRatio;
 }
 
-},{"../util/browser":166,"shelf-pack":190}],148:[function(require,module,exports){
+},{"../util/browser":167,"shelf-pack":191}],149:[function(require,module,exports){
 'use strict';
 
 var util = require('../util/util');
@@ -25425,7 +25474,7 @@ util.extend(Camera.prototype, /** @lends Map.prototype */{
     }
 });
 
-},{"../geo/lng_lat":87,"../geo/lng_lat_bounds":88,"../util/browser":166,"../util/interpolate":175,"../util/util":181,"point-geometry":186}],149:[function(require,module,exports){
+},{"../geo/lng_lat":88,"../geo/lng_lat_bounds":89,"../util/browser":167,"../util/interpolate":176,"../util/util":182,"point-geometry":187}],150:[function(require,module,exports){
 'use strict';
 
 var Control = require('./control');
@@ -25491,7 +25540,7 @@ Attribution.prototype = util.inherit(Control, {
     }
 });
 
-},{"../../util/dom":169,"../../util/util":181,"./control":150}],150:[function(require,module,exports){
+},{"../../util/dom":170,"../../util/util":182,"./control":151}],151:[function(require,module,exports){
 'use strict';
 
 module.exports = Control;
@@ -25542,7 +25591,7 @@ Control.prototype = {
     }
 };
 
-},{}],151:[function(require,module,exports){
+},{}],152:[function(require,module,exports){
 'use strict';
 
 var Control = require('./control');
@@ -25619,7 +25668,7 @@ Geolocate.prototype = util.inherit(Control, {
 });
 
 
-},{"../../util/browser":166,"../../util/dom":169,"../../util/util":181,"./control":150}],152:[function(require,module,exports){
+},{"../../util/browser":167,"../../util/dom":170,"../../util/util":182,"./control":151}],153:[function(require,module,exports){
 'use strict';
 
 var Control = require('./control');
@@ -25737,7 +25786,7 @@ function copyMouseEvent(e) {
 }
 
 
-},{"../../util/dom":169,"../../util/util":181,"./control":150}],153:[function(require,module,exports){
+},{"../../util/dom":170,"../../util/util":182,"./control":151}],154:[function(require,module,exports){
 'use strict';
 
 var DOM = require('../../util/dom'),
@@ -25913,7 +25962,7 @@ BoxZoomHandler.prototype = {
  * @property {EventData} data Original event data
  */
 
-},{"../../geo/lng_lat_bounds":88,"../../util/dom":169,"../../util/util":181}],154:[function(require,module,exports){
+},{"../../geo/lng_lat_bounds":89,"../../util/dom":170,"../../util/util":182}],155:[function(require,module,exports){
 'use strict';
 
 module.exports = DoubleClickZoomHandler;
@@ -25968,7 +26017,7 @@ DoubleClickZoomHandler.prototype = {
     }
 };
 
-},{}],155:[function(require,module,exports){
+},{}],156:[function(require,module,exports){
 'use strict';
 
 var DOM = require('../../util/dom'),
@@ -26198,7 +26247,7 @@ DragPanHandler.prototype = {
  * @property {EventData} data Original event data
  */
 
-},{"../../util/dom":169,"../../util/util":181}],156:[function(require,module,exports){
+},{"../../util/dom":170,"../../util/util":182}],157:[function(require,module,exports){
 'use strict';
 
 var DOM = require('../../util/dom'),
@@ -26442,7 +26491,7 @@ DragRotateHandler.prototype = {
  * @property {EventData} data Original event data
  */
 
-},{"../../util/dom":169,"../../util/util":181,"point-geometry":186}],157:[function(require,module,exports){
+},{"../../util/dom":170,"../../util/util":182,"point-geometry":187}],158:[function(require,module,exports){
 'use strict';
 
 module.exports = KeyboardHandler;
@@ -26566,7 +26615,7 @@ KeyboardHandler.prototype = {
     }
 };
 
-},{}],158:[function(require,module,exports){
+},{}],159:[function(require,module,exports){
 'use strict';
 
 var DOM = require('../../util/dom'),
@@ -26744,7 +26793,7 @@ ScrollZoomHandler.prototype = {
  * @property {EventData} data Original event data, if fired interactively
  */
 
-},{"../../util/browser":166,"../../util/dom":169,"../../util/util":181}],159:[function(require,module,exports){
+},{"../../util/browser":167,"../../util/dom":170,"../../util/util":182}],160:[function(require,module,exports){
 'use strict';
 
 var DOM = require('../../util/dom'),
@@ -26953,7 +27002,7 @@ TouchZoomRotateHandler.prototype = {
     }
 };
 
-},{"../../util/dom":169,"../../util/util":181}],160:[function(require,module,exports){
+},{"../../util/dom":170,"../../util/util":182}],161:[function(require,module,exports){
 'use strict';
 
 /*
@@ -27025,7 +27074,7 @@ Hash.prototype = {
     }
 };
 
-},{"../util/util":181}],161:[function(require,module,exports){
+},{"../util/util":182}],162:[function(require,module,exports){
 'use strict';
 
 var handlers = {
@@ -27352,7 +27401,7 @@ Interaction.prototype = {
  * @property {EventData} data Original event data, if fired interactively
  */
 
-},{"../util/dom":169,"../util/util":181,"./handler/box_zoom":153,"./handler/dblclick_zoom":154,"./handler/drag_pan":155,"./handler/drag_rotate":156,"./handler/keyboard":157,"./handler/scroll_zoom":158,"./handler/touch_zoom_rotate":159,"point-geometry":186}],162:[function(require,module,exports){
+},{"../util/dom":170,"../util/util":182,"./handler/box_zoom":154,"./handler/dblclick_zoom":155,"./handler/drag_pan":156,"./handler/drag_rotate":157,"./handler/keyboard":158,"./handler/scroll_zoom":159,"./handler/touch_zoom_rotate":160,"point-geometry":187}],163:[function(require,module,exports){
 'use strict';
 
 var Canvas = require('../util/canvas');
@@ -28390,7 +28439,7 @@ function removeNode(node) {
     }
 }
 
-},{"../geo/lng_lat":87,"../geo/lng_lat_bounds":88,"../geo/transform":89,"../render/painter":103,"../style/animation_loop":118,"../style/style":121,"../util/browser":166,"../util/canvas":167,"../util/dom":169,"../util/evented":172,"../util/util":181,"./camera":148,"./control/attribution":149,"./hash":160,"./interaction":161,"point-geometry":186}],163:[function(require,module,exports){
+},{"../geo/lng_lat":88,"../geo/lng_lat_bounds":89,"../geo/transform":90,"../render/painter":104,"../style/animation_loop":119,"../style/style":122,"../util/browser":167,"../util/canvas":168,"../util/dom":170,"../util/evented":173,"../util/util":182,"./camera":149,"./control/attribution":150,"./hash":161,"./interaction":162,"point-geometry":187}],164:[function(require,module,exports){
 'use strict';
 
 module.exports = Popup;
@@ -28598,7 +28647,7 @@ Popup.prototype = util.inherit(Evented, /** @lends Popup.prototype */{
     }
 });
 
-},{"../geo/lng_lat":87,"../util/dom":169,"../util/evented":172,"../util/util":181}],164:[function(require,module,exports){
+},{"../geo/lng_lat":88,"../util/dom":170,"../util/evented":173,"../util/util":182}],165:[function(require,module,exports){
 'use strict';
 
 module.exports = Actor;
@@ -28663,7 +28712,7 @@ Actor.prototype.postMessage = function(message, transferList) {
     this.target.postMessage(message, transferList);
 };
 
-},{}],165:[function(require,module,exports){
+},{}],166:[function(require,module,exports){
 'use strict';
 
 exports.getJSON = function(url, callback) {
@@ -28753,7 +28802,7 @@ exports.getVideo = function(urls, callback) {
     return video;
 };
 
-},{}],166:[function(require,module,exports){
+},{}],167:[function(require,module,exports){
 'use strict';
 
 var Canvas = require('./canvas');
@@ -28910,7 +28959,7 @@ webpImgTest.src = 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAQAAAAfQ//
 
 exports.supportsGeolocation = !!navigator.geolocation;
 
-},{"./canvas":167}],167:[function(require,module,exports){
+},{"./canvas":168}],168:[function(require,module,exports){
 'use strict';
 
 var util = require('../util');
@@ -28976,7 +29025,7 @@ Canvas.prototype.getElement = function() {
     return this.canvas;
 };
 
-},{"../util":181}],168:[function(require,module,exports){
+},{"../util":182}],169:[function(require,module,exports){
 'use strict';
 
 var Actor = require('../actor');
@@ -29020,7 +29069,7 @@ Dispatcher.prototype = {
     }
 };
 
-},{"../../source/worker":116,"../actor":164,"webworkify":231}],169:[function(require,module,exports){
+},{"../../source/worker":117,"../actor":165,"webworkify":232}],170:[function(require,module,exports){
 'use strict';
 
 var Point = require('point-geometry');
@@ -29095,7 +29144,7 @@ exports.touchPos = function (el, e) {
     return points;
 };
 
-},{"point-geometry":186}],170:[function(require,module,exports){
+},{"point-geometry":187}],171:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -29103,7 +29152,7 @@ module.exports = {
     REQUIRE_ACCESS_TOKEN: true
 };
 
-},{}],171:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 'use strict';
 
 module.exports = DictionaryCoder;
@@ -29126,7 +29175,7 @@ DictionaryCoder.prototype.decode = function(n) {
     return this._numberToString[n];
 };
 
-},{}],172:[function(require,module,exports){
+},{}],173:[function(require,module,exports){
 'use strict';
 
 var util = require('./util');
@@ -29231,7 +29280,7 @@ var Evented = {
 
 module.exports = Evented;
 
-},{"./util":181}],173:[function(require,module,exports){
+},{"./util":182}],174:[function(require,module,exports){
 'use strict';
 
 module.exports = Glyphs;
@@ -29266,7 +29315,7 @@ function readGlyph(tag, glyph, pbf) {
     else if (tag === 7) glyph.advance = pbf.readVarint();
 }
 
-},{}],174:[function(require,module,exports){
+},{}],175:[function(require,module,exports){
 'use strict';
 
 module.exports = Grid;
@@ -29418,7 +29467,7 @@ Grid.prototype.toArrayBuffer = function() {
     return array.buffer;
 };
 
-},{}],175:[function(require,module,exports){
+},{}],176:[function(require,module,exports){
 'use strict';
 
 module.exports = interpolate;
@@ -29459,7 +29508,7 @@ interpolate.array = function(from, to, t) {
     });
 };
 
-},{}],176:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -29625,7 +29674,7 @@ function polygonContainsPoint(ring, p) {
     return c;
 }
 
-},{}],177:[function(require,module,exports){
+},{}],178:[function(require,module,exports){
 'use strict';
 
 module.exports = LRUCache;
@@ -29750,7 +29799,7 @@ LRUCache.prototype.setMaxSize = function(max) {
     return this;
 };
 
-},{}],178:[function(require,module,exports){
+},{}],179:[function(require,module,exports){
 'use strict';
 
 var config = require('./config');
@@ -29831,7 +29880,7 @@ module.exports.normalizeTileURL = function(url, sourceUrl, tileSize) {
     return url.replace(/\.((?:png|jpg)\d*)(?=$|\?)/, browser.devicePixelRatio >= 2 || tileSize === 512 ? '@2x.' + extension : '.' + extension);
 };
 
-},{"./browser":166,"./config":170}],179:[function(require,module,exports){
+},{"./browser":167,"./config":171}],180:[function(require,module,exports){
 'use strict';
 
 // Note: all "sizes" are measured in bytes
@@ -30152,7 +30201,7 @@ StructArray.prototype._refreshViews = function() {
 };
 
 
-},{"assert":13}],180:[function(require,module,exports){
+},{"assert":14}],181:[function(require,module,exports){
 'use strict';
 
 module.exports = resolveTokens;
@@ -30171,7 +30220,7 @@ function resolveTokens(properties, text) {
     });
 }
 
-},{}],181:[function(require,module,exports){
+},{}],182:[function(require,module,exports){
 'use strict';
 
 var UnitBezier = require('unitbezier');
@@ -30662,7 +30711,7 @@ exports.arraysIntersect = function(a, b) {
     return false;
 };
 
-},{"../geo/coordinate":86,"unitbezier":192}],182:[function(require,module,exports){
+},{"../geo/coordinate":87,"unitbezier":193}],183:[function(require,module,exports){
 'use strict';
 
 var VectorTileFeature = require('vector-tile').VectorTileFeature;
@@ -30748,7 +30797,7 @@ function projectCoords(coords, extent, z, x, y) {
     return coords;
 }
 
-},{"vector-tile":195}],183:[function(require,module,exports){
+},{"vector-tile":196}],184:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -30977,7 +31026,7 @@ var substr = 'ab'.substr(-1) === 'b'
 
 }).call(this,require('_process'))
 
-},{"_process":187}],184:[function(require,module,exports){
+},{"_process":188}],185:[function(require,module,exports){
 'use strict';
 
 // lightweight Buffer shim for pbf browser build
@@ -31138,7 +31187,7 @@ function encodeString(str) {
     return bytes;
 }
 
-},{"ieee754":50}],185:[function(require,module,exports){
+},{"ieee754":51}],186:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -31569,7 +31618,7 @@ function writePackedSFixed64(arr, pbf) { for (var i = 0; i < arr.length; i++) pb
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./buffer":184}],186:[function(require,module,exports){
+},{"./buffer":185}],187:[function(require,module,exports){
 'use strict';
 
 module.exports = Point;
@@ -31702,7 +31751,7 @@ Point.convert = function (a) {
     return a;
 };
 
-},{}],187:[function(require,module,exports){
+},{}],188:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -31795,7 +31844,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],188:[function(require,module,exports){
+},{}],189:[function(require,module,exports){
 /*
  (c) 2015, Vladimir Agafonkin
  RBush, a JavaScript library for high-performance 2D spatial indexing of points and rectangles.
@@ -32418,7 +32467,7 @@ else window.rbush = rbush;
 
 })();
 
-},{}],189:[function(require,module,exports){
+},{}],190:[function(require,module,exports){
 // Copyright 2014 Simon Lydell
 // X11 (“MIT”) Licensed. (See LICENSE.)
 
@@ -32467,7 +32516,7 @@ void (function(root, factory) {
 
 }));
 
-},{}],190:[function(require,module,exports){
+},{}],191:[function(require,module,exports){
 'use strict';
 
 module.exports = ShelfPack;
@@ -32573,7 +32622,7 @@ Shelf.prototype = {
 };
 
 
-},{}],191:[function(require,module,exports){
+},{}],192:[function(require,module,exports){
 'use strict';
 
 var rbush = require('rbush');
@@ -32817,7 +32866,7 @@ function extend(dest, src) {
     return dest;
 }
 
-},{"rbush":188}],192:[function(require,module,exports){
+},{"rbush":189}],193:[function(require,module,exports){
 /*
  * Copyright (C) 2008 Apple Inc. All Rights Reserved.
  *
@@ -32924,14 +32973,14 @@ UnitBezier.prototype.solve = function(x, epsilon) {
     return this.sampleCurveY(this.solveCurveX(x, epsilon));
 };
 
-},{}],193:[function(require,module,exports){
+},{}],194:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],194:[function(require,module,exports){
+},{}],195:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -33522,12 +33571,12 @@ function hasOwnProperty(obj, prop) {
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./support/isBuffer":193,"_process":187,"inherits":51}],195:[function(require,module,exports){
+},{"./support/isBuffer":194,"_process":188,"inherits":52}],196:[function(require,module,exports){
 module.exports.VectorTile = require('./lib/vectortile.js');
 module.exports.VectorTileFeature = require('./lib/vectortilefeature.js');
 module.exports.VectorTileLayer = require('./lib/vectortilelayer.js');
 
-},{"./lib/vectortile.js":196,"./lib/vectortilefeature.js":197,"./lib/vectortilelayer.js":198}],196:[function(require,module,exports){
+},{"./lib/vectortile.js":197,"./lib/vectortilefeature.js":198,"./lib/vectortilelayer.js":199}],197:[function(require,module,exports){
 'use strict';
 
 var VectorTileLayer = require('./vectortilelayer');
@@ -33546,7 +33595,7 @@ function readTile(tag, layers, pbf) {
 }
 
 
-},{"./vectortilelayer":198}],197:[function(require,module,exports){
+},{"./vectortilelayer":199}],198:[function(require,module,exports){
 'use strict';
 
 var Point = require('point-geometry');
@@ -33720,7 +33769,7 @@ VectorTileFeature.prototype.toGeoJSON = function(x, y, z) {
     return result;
 };
 
-},{"point-geometry":186}],198:[function(require,module,exports){
+},{"point-geometry":187}],199:[function(require,module,exports){
 'use strict';
 
 var VectorTileFeature = require('./vectortilefeature.js');
@@ -33783,7 +33832,7 @@ VectorTileLayer.prototype.feature = function(i) {
     return new VectorTileFeature(this._pbf, end, this.extent, this._keys, this._values);
 };
 
-},{"./vectortilefeature.js":197}],199:[function(require,module,exports){
+},{"./vectortilefeature.js":198}],200:[function(require,module,exports){
 var Pbf = require('pbf')
 var vtpb = require('./vector-tile-pb')
 var GeoJSONWrapper = require('./lib/geojson_wrapper')
@@ -33938,7 +33987,7 @@ function wrapValue (value) {
   return result
 }
 
-},{"./lib/geojson_wrapper":200,"./vector-tile-pb":201,"pbf":185}],200:[function(require,module,exports){
+},{"./lib/geojson_wrapper":201,"./vector-tile-pb":202,"pbf":186}],201:[function(require,module,exports){
 'use strict'
 
 var Point = require('point-geometry')
@@ -34005,7 +34054,7 @@ FeatureWrapper.prototype.bbox = function () {
 
 FeatureWrapper.prototype.toGeoJSON = VectorTileFeature.prototype.toGeoJSON
 
-},{"point-geometry":186,"vector-tile":195}],201:[function(require,module,exports){
+},{"point-geometry":187,"vector-tile":196}],202:[function(require,module,exports){
 'use strict';
 
 // tile ========================================
@@ -34111,7 +34160,7 @@ function writeLayer(layer, pbf) {
     if (layer.extent !== undefined) pbf.writeVarintField(5, layer.extent);
 }
 
-},{}],202:[function(require,module,exports){
+},{}],203:[function(require,module,exports){
 var Vue // late bind
 var map = Object.create(null)
 var shimmed = false
@@ -34411,7 +34460,7 @@ function format (id) {
   return id.match(/[^\/]+\.vue$/)[0]
 }
 
-},{}],203:[function(require,module,exports){
+},{}],204:[function(require,module,exports){
 /**
  * Before Interceptor.
  */
@@ -34431,7 +34480,7 @@ module.exports = {
 
 };
 
-},{"../util":226}],204:[function(require,module,exports){
+},{"../util":227}],205:[function(require,module,exports){
 /**
  * Base client.
  */
@@ -34498,7 +34547,7 @@ function parseHeaders(str) {
     return headers;
 }
 
-},{"../../promise":219,"../../util":226,"./xhr":207}],205:[function(require,module,exports){
+},{"../../promise":220,"../../util":227,"./xhr":208}],206:[function(require,module,exports){
 /**
  * JSONP client.
  */
@@ -34548,7 +34597,7 @@ module.exports = function (request) {
     });
 };
 
-},{"../../promise":219,"../../util":226}],206:[function(require,module,exports){
+},{"../../promise":220,"../../util":227}],207:[function(require,module,exports){
 /**
  * XDomain client (Internet Explorer).
  */
@@ -34587,7 +34636,7 @@ module.exports = function (request) {
     });
 };
 
-},{"../../promise":219,"../../util":226}],207:[function(require,module,exports){
+},{"../../promise":220,"../../util":227}],208:[function(require,module,exports){
 /**
  * XMLHttp client.
  */
@@ -34639,7 +34688,7 @@ module.exports = function (request) {
     });
 };
 
-},{"../../promise":219,"../../util":226}],208:[function(require,module,exports){
+},{"../../promise":220,"../../util":227}],209:[function(require,module,exports){
 /**
  * CORS Interceptor.
  */
@@ -34678,7 +34727,7 @@ function crossOrigin(request) {
     return (requestUrl.protocol !== originUrl.protocol || requestUrl.host !== originUrl.host);
 }
 
-},{"../util":226,"./client/xdr":206}],209:[function(require,module,exports){
+},{"../util":227,"./client/xdr":207}],210:[function(require,module,exports){
 /**
  * Header Interceptor.
  */
@@ -34706,7 +34755,7 @@ module.exports = {
 
 };
 
-},{"../util":226}],210:[function(require,module,exports){
+},{"../util":227}],211:[function(require,module,exports){
 /**
  * Service for sending network requests.
  */
@@ -34806,7 +34855,7 @@ Http.headers = {
 
 module.exports = _.http = Http;
 
-},{"../promise":219,"../util":226,"./before":203,"./client":204,"./cors":208,"./header":209,"./interceptor":211,"./jsonp":212,"./method":213,"./mime":214,"./timeout":215}],211:[function(require,module,exports){
+},{"../promise":220,"../util":227,"./before":204,"./client":205,"./cors":209,"./header":210,"./interceptor":212,"./jsonp":213,"./method":214,"./mime":215,"./timeout":216}],212:[function(require,module,exports){
 /**
  * Interceptor factory.
  */
@@ -34853,7 +34902,7 @@ function when(value, fulfilled, rejected) {
     return promise.then(fulfilled, rejected);
 }
 
-},{"../promise":219,"../util":226}],212:[function(require,module,exports){
+},{"../promise":220,"../util":227}],213:[function(require,module,exports){
 /**
  * JSONP Interceptor.
  */
@@ -34873,7 +34922,7 @@ module.exports = {
 
 };
 
-},{"./client/jsonp":205}],213:[function(require,module,exports){
+},{"./client/jsonp":206}],214:[function(require,module,exports){
 /**
  * HTTP method override Interceptor.
  */
@@ -34892,7 +34941,7 @@ module.exports = {
 
 };
 
-},{}],214:[function(require,module,exports){
+},{}],215:[function(require,module,exports){
 /**
  * Mime Interceptor.
  */
@@ -34930,7 +34979,7 @@ module.exports = {
 
 };
 
-},{"../util":226}],215:[function(require,module,exports){
+},{"../util":227}],216:[function(require,module,exports){
 /**
  * Timeout Interceptor.
  */
@@ -34962,7 +35011,7 @@ module.exports = function () {
     };
 };
 
-},{}],216:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 /**
  * Install plugin.
  */
@@ -35017,7 +35066,7 @@ if (window.Vue) {
 
 module.exports = install;
 
-},{"./http":210,"./promise":219,"./resource":220,"./url":221,"./util":226}],217:[function(require,module,exports){
+},{"./http":211,"./promise":220,"./resource":221,"./url":222,"./util":227}],218:[function(require,module,exports){
 /**
  * Promises/A+ polyfill v1.1.4 (https://github.com/bramstein/promis)
  */
@@ -35198,7 +35247,7 @@ p.catch = function (onRejected) {
 
 module.exports = Promise;
 
-},{"../util":226}],218:[function(require,module,exports){
+},{"../util":227}],219:[function(require,module,exports){
 /**
  * URL Template v2.0.6 (https://github.com/bramstein/url-template)
  */
@@ -35350,7 +35399,7 @@ exports.encodeReserved = function (str) {
     }).join('');
 };
 
-},{}],219:[function(require,module,exports){
+},{}],220:[function(require,module,exports){
 /**
  * Promise adapter.
  */
@@ -35461,7 +35510,7 @@ p.always = function (callback) {
 
 module.exports = Promise;
 
-},{"./lib/promise":217,"./util":226}],220:[function(require,module,exports){
+},{"./lib/promise":218,"./util":227}],221:[function(require,module,exports){
 /**
  * Service for interacting with RESTful services.
  */
@@ -35573,7 +35622,7 @@ Resource.actions = {
 
 module.exports = _.resource = Resource;
 
-},{"./util":226}],221:[function(require,module,exports){
+},{"./util":227}],222:[function(require,module,exports){
 /**
  * Service for URL templating.
  */
@@ -35705,7 +35754,7 @@ function serialize(params, obj, scope) {
 
 module.exports = _.url = Url;
 
-},{"../util":226,"./legacy":222,"./query":223,"./root":224,"./template":225}],222:[function(require,module,exports){
+},{"../util":227,"./legacy":223,"./query":224,"./root":225,"./template":226}],223:[function(require,module,exports){
 /**
  * Legacy Transform.
  */
@@ -35753,7 +35802,7 @@ function encodeUriQuery(value, spaces) {
         replace(/%20/g, (spaces ? '%20' : '+'));
 }
 
-},{"../util":226}],223:[function(require,module,exports){
+},{"../util":227}],224:[function(require,module,exports){
 /**
  * Query Parameter Transform.
  */
@@ -35779,7 +35828,7 @@ module.exports = function (options, next) {
     return url;
 };
 
-},{"../util":226}],224:[function(require,module,exports){
+},{"../util":227}],225:[function(require,module,exports){
 /**
  * Root Prefix Transform.
  */
@@ -35797,7 +35846,7 @@ module.exports = function (options, next) {
     return url;
 };
 
-},{"../util":226}],225:[function(require,module,exports){
+},{"../util":227}],226:[function(require,module,exports){
 /**
  * URL Template (RFC 6570) Transform.
  */
@@ -35815,7 +35864,7 @@ module.exports = function (options) {
     return url;
 };
 
-},{"../lib/url-template":218}],226:[function(require,module,exports){
+},{"../lib/url-template":219}],227:[function(require,module,exports){
 /**
  * Utility functions.
  */
@@ -35939,7 +35988,7 @@ function merge(target, source, deep) {
     }
 }
 
-},{}],227:[function(require,module,exports){
+},{}],228:[function(require,module,exports){
 /*!
  * vue-router v0.7.13
  * (c) 2016 Evan You
@@ -38649,7 +38698,7 @@ function merge(target, source, deep) {
   return Router;
 
 }));
-},{}],228:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v1.0.21
@@ -48576,7 +48625,7 @@ setTimeout(function () {
 module.exports = Vue;
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"_process":187}],229:[function(require,module,exports){
+},{"_process":188}],230:[function(require,module,exports){
 exports.sync = function (store, router) {
   patchStore(store)
   store.router = router
@@ -48642,7 +48691,7 @@ function patchStore (store) {
   })
 }
 
-},{}],230:[function(require,module,exports){
+},{}],231:[function(require,module,exports){
 /*!
  * Vuex v0.6.3
  * (c) 2016 Evan You
@@ -49277,7 +49326,7 @@ function patchStore (store) {
   return index;
 
 }));
-},{}],231:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 var bundleFn = arguments[3];
 var sources = arguments[4];
 var cache = arguments[5];
@@ -49344,12 +49393,12 @@ module.exports = function (fn) {
     ));
 };
 
-},{}],232:[function(require,module,exports){
+},{}],233:[function(require,module,exports){
 module.exports.RADIUS = 6378137;
 module.exports.FLATTENING = 1/298.257223563;
 module.exports.POLAR_RADIUS = 6356752.3142;
 
-},{}]},{},[9])
+},{}]},{},[8])
 
 
 //# sourceMappingURL=app.js.map

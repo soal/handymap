@@ -31,7 +31,6 @@ export default {
 
   },
   ready() {
-    console.log(this.$children);
     M.accessToken = MAPBOX_ACCESS_TOKEN;
     var map = new M.Map({
         container: "map",
@@ -44,9 +43,6 @@ export default {
     });
 
     map.addControl(new M.Navigation());
-
-    // this.getFact();
-
   }
 };
 

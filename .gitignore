@@ -54,6 +54,5 @@ node_modules
 *npm-debug*
 
 # Generated static files
-handymap/client/static/js/*.js*
-handymap/client/static/css/*.css*
-
+static/js/*.js*
+static/css/*.css*

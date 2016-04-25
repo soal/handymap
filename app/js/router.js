@@ -23,7 +23,7 @@ router.map({
         // when /foo is matched. Using an inline component definition
         // here for convenience.
         component: {
-          template: '<p>Default sub view for Foo</p>'
+          template: "<p>Nothing to show yet</p>"
         }
       },
       "fact": {

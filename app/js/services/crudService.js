@@ -2,8 +2,8 @@
  * Helpers module
  */
 
-
-import store from "./storage/store";
+import cacheService from "./cacheService";
+import store from "../storage/store";
 
 var dispatch = store.dispatch;
 
@@ -30,19 +30,38 @@ class Crud {
          * @param  {Function} callback         Callback for custom behavior, called in success promise callback
          * @param  {Boolean}  preventDefaultAcion  If true, callback will be called and default action canceled. If not, method call dispatch() store method
          */
-        [`get${resourceName}`]({ dispatch }, id=null, callback=null, preventDefaultAcion=false) {
-          resource.get({ id }).then(
-            res => {
-              if (callback) {
-                res = callback({ dispatch }, res);
-              }
-              if (!preventDefaultAcion) {
-                dispatch(`SET_${id ? resourceName.toUpperCase() : resourceName.toUpperCase() + "S"}`, (res.data ? res.data : res));
-              }
+        [`get${resourceName}`]({ dispatch }, id=null, cache=true, callback=null, preventDefaultAcion=false) {
+          function mutate(response) {
+            if (callback) {
+              response = callback({ dispatch }, response);
+            }
+            if (!preventDefaultAcion) {
+              dispatch(`SET_${id ? resourceName.toUpperCase() : resourceName.toUpperCase() + "S"}`, (response.data ? response.data : response));
+            }
+          }
 
-            },
-            err => console.error(err)
-          );
+          var result = null;
+
+          if (cache) {
+            result = cacheService.getItem(`${resourceName}_${id}`);
+          } else {
+            result = resource.get({ id });
+          }
+          result
+            .then(cachedItem => {
+              if (cachedItem) {
+                mutate(cachedItem);
+              }
+              return cachedItem;
+            })
+            .then(cachedItem => {
+              if (cachedItem == null) {
+                resource.get({ id }).then(response => {
+                  mutate(response);
+                });
+              }
+            })
+            .catch( err => console.log(err) );
         },
         /**
          * Save item to server

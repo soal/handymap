@@ -1,6 +1,6 @@
 /** FactActions module */
 
-import {ResourceActions} from "../helpers";
+import {ResourceActions} from "../services/crudService";
 import {Fact} from "../api/resources";
 
 var actions = {
