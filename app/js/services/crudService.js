@@ -31,6 +31,12 @@ class Crud {
          * @param  {Boolean}  preventDefaultAcion  If true, callback will be called and default action canceled. If not, method call dispatch() store method
          */
         [`get${resourceName}`]({ dispatch }, id=null, cache=true, callback=null, preventDefaultAcion=false) {
+          // TODO: Add processing get params and getting elements from cache in case of ids list in params
+
+          /**
+           * Dispatch mutation event
+           * @param {Object||Array}   Responce object passed to dispatch function
+           */
           function mutate(response) {
             if (callback) {
               response = callback({ dispatch }, response);

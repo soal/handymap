@@ -3,7 +3,6 @@ import Vuex from "vuex";
 import cacheService from "../services/cacheService";
 import * as Mut from "./mutationTypes";
 import _ from "lodash";
-console.log(_)
 
 const debug = process.env.NODE_ENV !== "production";
 
@@ -19,17 +18,17 @@ const store =  new Vuex.Store({
     menu: [
       ["About", "/about"]
     ],
-    facts: [],
+    elements: [],
     user: {}
   },
   mutations: {
-    [Mut.SET_FACTS](state, data) {
-      state.facts = _.unionWith(state.facts, _.flatten([data]), (oldVal, newVal) => oldVal.id === newVal.id);
+    [Mut.SET_ELEMENTS](state, data) {
+      state.elements = _.unionWith(state.elements, _.flatten([data]), (oldVal, newVal) => oldVal.id === newVal.id);
     },
-    [Mut.SET_FACT](state, data) {
-      state.facts = _.unionWith(state.facts, _.flatten([data]), (oldVal, newVal) => oldVal.id === newVal.id);
-      for (let fact of _.flatten([data])) {
-        cacheService.setItem(`Fact_${fact.id}`, fact);
+    [Mut.SET_ELEMENT](state, data) {
+      state.elements = _.unionWith(state.elements, _.flatten([data]), (oldVal, newVal) => oldVal.id === newVal.id);
+      for (let element of _.flatten([data])) {
+        cacheService.setItem(`Element_${element.id}`, element);
       }
     }
   },

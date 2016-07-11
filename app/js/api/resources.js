@@ -12,11 +12,11 @@ Vue.http.headers.common["X-Requested-With"] = "XMLHttpRequest";
 Vue.http.headers.common["MimeType"] = "application/json";
 
 
-/** Fact resource for endpoint 'events/{id}' */
-export const Fact = Vue.resource(`${API_ROOT}/facts{/id}`);
+/** Fact resource for endpoint 'elements/{id}' */
+export const Element = Vue.resource(`${API_ROOT}/elements{/id}`);
+// export const Elements = Vue.resource(`${API_ROOT}/elements`);
+export const Dict = Vue.resource(`${API_ROOT}/dicts`);
 /** User resource resource for endpoint 'users/{id}'*/
 export const User = Vue.resource(`${API_ROOT}/users{/id}`);
 /** Profile resource for endpoint 'profile'*/
 export const Profile = Vue.resource(`${API_ROOT}/profile`);
-/** Process resource for endpoint 'processes/{id}'*/
-export const Process = Vue.resource(`${API_ROOT}/processes{/id}`);

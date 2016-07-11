@@ -23,8 +23,8 @@ router.map({
           template: "<p>Nothing to show yet</p>"
         }
       },
-      "fact": {
-        name: "fact",
+      "element": {
+        name: "element",
         component: InfoBox
       }
     }

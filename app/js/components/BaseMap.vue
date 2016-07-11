@@ -10,7 +10,7 @@
 
 <script>
 
-import factActions from "../actions/factActions";
+import elementsActions from "../actions/elementsActions";
 import InfoBox from "./InfoBox.vue";
 import M from "mapbox-gl";
 import {MAP_SOURCE, MAPBOX_ACCESS_TOKEN} from "../config";
@@ -23,7 +23,7 @@ export default {
   vuex: {
     getters: {},
     actions: Object.assign(
-      factActions,
+      elementsActions,
       {}
     )
   },

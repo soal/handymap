@@ -15,7 +15,7 @@
     <div class="tab-content">
       <div class="tab-pane active" role="tabpanel">
         <ul>
-          <li v-for="fact in facts"><b>{{fact.start_date}}</b>&nbsp;&nbsp;{{fact.label}}</li>
+          <li v-for="element in elements"><b>{{element.start_date}}</b>&nbsp;&nbsp;{{element.label}}</li>
         </ul>
       </div>
       <div class="tab-pane" role="tabpanel"></div>
@@ -26,21 +26,21 @@
 </template>
 
 <script>
-import factActions from "../actions/factActions";
+import elementsActions from "../actions/elementsActions";
 
 export default {
   name: "InfoBox",
   vuex: {
     getters: {
-      facts: state => state.facts
+      elements: state => state.elements
     },
     actions: Object.assign(
-      factActions,
+      elementsActions,
       {}
     )
   },
   ready() {
-    this.getFact(33);
+    this.getElement(33);
   }
 };
 </script>
