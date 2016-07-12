@@ -62,6 +62,9 @@ app.get("/elements/7/shapes", function (req, res) {
 app.get("/elements/1/shapes", function (req, res) {
   res.sendFile("test_data/shapes/roman_republic.geojson", options);
 });
+app.get("/elements", function (req, res) {
+  res.sendStatus(404);
+});
 
 app.use(fallback("index.html", { root }));
 

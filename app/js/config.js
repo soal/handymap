@@ -2,7 +2,7 @@ const API_VERSION = "0.1";
 
 export const API_ROOT = (process.env.NODE_ENV === "production")
       ? "https://handymap.com/api"
-      : `http://localhost:5000/api/v${API_VERSION}`;
+      : "http://localhost:8080";
 
 export const MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoic29hbCIsImEiOiJjaW1qZndnMmwwMDEzdzBtNHRxcGFrampqIn0.bpwowsJ4GLBdsPnnXuZboA";
 

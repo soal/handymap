@@ -1,10 +1,10 @@
-<template>
+<template lang="html">
   <div class="map-wrapper">
     <div id="map"></div>
   </div>
-  <div class="infobox">
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
+  <info-box></info-box>
+  <timeline></timeline>
 </template>
 
 
@@ -12,13 +12,17 @@
 
 import elementsActions from "../actions/elementsActions";
 import InfoBox from "./InfoBox.vue";
+import BaseElement from "./BaseElement.vue";
+import Timeline from "./Timeline.vue";
 import M from "mapbox-gl";
 import {MAP_SOURCE, MAPBOX_ACCESS_TOKEN} from "../config";
 
 export default {
   name: "BaseMap",
   components: {
-    infoBox: InfoBox
+    infoBox: InfoBox,
+    timeline: Timeline,
+    baseElement: BaseElement
   },
   vuex: {
     getters: {},
@@ -26,9 +30,6 @@ export default {
       elementsActions,
       {}
     )
-  },
-  activate() {
-
   },
   ready() {
     M.accessToken = MAPBOX_ACCESS_TOKEN;
