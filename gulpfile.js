@@ -13,7 +13,7 @@ var gulp       = require("gulp"),
     sourcemaps = require("gulp-sourcemaps"),
     cleanCSS   = require("gulp-clean-css"),
     plumber    = require("gulp-plumber"),
-    hoganify   = require("hoganify"),
+    vueify     = require("vueify"),
     karma      = require("karma"),
     nodemon    = require("gulp-nodemon");
 
@@ -21,7 +21,7 @@ var staticDir = "static",
     stylesDir = "app/styles",
 
     jsDir = "app/js",
-    jsAppFile = `${jsDir}/app.js`;
+    jsAppFile = `${jsDir}/main.js`;
 
 
 var production = false;
@@ -60,7 +60,7 @@ function compileJS(sourceFilePath, sourceFileName, destinationDir, watch) {
     browserify(sourceFilePath, {
       debug: true
     })
-    .transform(hoganify, { live: true, ext: ".mustache" })
+    .transform(vueify)
     .transform(babel, { presets: [ "es2015" ] })
   );
 
@@ -113,7 +113,7 @@ gulp.task("test", done => {
 gulp.task("server", ()=> {
   return nodemon({
     script: "server.js",
-    tasks: ["watchJS"]
+    tasks: ["watchJS", "styles"]
   });
 });
 

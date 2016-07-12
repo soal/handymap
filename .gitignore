@@ -20,6 +20,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+hm_env
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -55,4 +56,5 @@ node_modules
 *npm-debug*
 
 # Generated static files
-static
+static/js
+static/css

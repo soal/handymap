@@ -3,11 +3,11 @@
     "sources": {
         "mapbox": {
             "type": "vector",
-            "tiles": ["http://192.168.0.73/{z}/{x}/{y}.pbf"],
+            "tiles": ["http://127.0.0.1:8090/{z}/{x}/{y}.pbf"],
             "maxzoom": 6
         }
     },
-    "glyphs": "./fonts/mapfonts/Open Sans Regular/{range}.pbf",
+    "glyphs": "./fonts/Open Sans Regular/{range}.pbf",
     "layers": [{
         "id": "background",
         "type": "background",
