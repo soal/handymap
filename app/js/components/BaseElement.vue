@@ -4,6 +4,8 @@
 </template>
 
 <script>
+import store from "./storage/store";
+import {Dicts} from "./api/resources";
 import elementsActions from "../actions/elementsActions";
 import InfoBox from "./InfoBox.vue";
 
@@ -15,6 +17,7 @@ export default {
   vuex: {
     getters: {
       currentElement: state => state.currentElement,
+      defaultElement: state => state.defaultElement,
       elements: state => state.elements
     },
     actions: Object.assign(
@@ -23,10 +26,15 @@ export default {
     )
   },
   ready() {
-    this.getElement(100, function({dispatch}, response) {
-      dispatch("SET_CURRENT_ELEMENT", response);
-      return response;
-    });
+    Dicts.get()
+      .then((dicts) => {
+        store.dispatch("SET_DICTS", dicts);
+        store.dispatch("SET_DEFAULT_ELEMENT", dicts.default);
+      });
+    // this.getElement(100, function({dispatch}, response) {
+    //   dispatch("SET_CURRENT_ELEMENT", response);
+    //   return response;
+    // });
   }
 };
 </script>

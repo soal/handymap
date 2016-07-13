@@ -18,7 +18,9 @@ const store =  new Vuex.Store({
     menu: [
       ["About", "/about"]
     ],
+    dicts: {},
     currentElement: {},
+    defaultElement: null,
     elements: {},
     user: {}
   },
@@ -34,6 +36,12 @@ const store =  new Vuex.Store({
     },
     [Mut.SET_CURRENT_ELEMENT](state, data) {
       state.currentElement = Object.assign({}, data);
+    },
+    [Mut.SET_DEFAULT_ELEMENT](state, data) {
+      store.defaultElement = data;
+    },
+    [Mut.SET_DICTS](state, data) {
+      state.dicts = Object.assign({}, state.dicts, data);
     }
   },
   modules: {},
