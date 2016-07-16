@@ -30,7 +30,7 @@ class Crud {
          * @param  {Function} callback         Callback for custom behavior, called in success promise callback
          * @param  {Boolean}  preventDefaultAcion  If true, callback will be called and default action canceled. If not, method call dispatch() store method
          */
-        [`get${resourceName}`]({ dispatch }, id=null, cache=true, callback=null, preventDefaultAcion=false) {
+        [`get${resourceName}`]({ dispatch }, id=null, callback=null, cache=true, preventDefaultAcion=false) {
           // TODO: Add processing get params and getting elements from cache in case of ids list in params
 
           /**

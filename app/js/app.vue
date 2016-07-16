@@ -8,8 +8,7 @@
     <nav v-show="menuShowed" class="navbar navbar-dark bg-primary">
       <ul class="nav navbar-nav">
         <li class="nav-item"><a href="/about" class="nav-link">О нас</a></li>
-        <li class="nav-item"><a href="javascript:;" v-link="{ name: 'element' }" class="nav-link">Мои карты</a></li>
-        <li class="nav-item"></li>
+        <li class="nav-item"><a href="javascript:;" v-link="{ path: 'second_punic_war' }" class="nav-link">Мои карты</a></li>
         <li class="nav-item pull-xs-right"><a href="#" v-link="login" class="nav-link">Войти</a></li>
       </ul>
 
@@ -46,6 +45,9 @@ export default {
     };
   },
   methods: {
+  },
+  ready() {
+
   }
 };
 

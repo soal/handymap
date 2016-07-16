@@ -16,7 +16,7 @@ Vue.http.headers.common["MimeType"] = "application/json";
 export const Element = Vue.resource(`${API_ROOT}/elements{/id}`);
 export const Shape = Vue.resource(`${API_ROOT}/shapes{/id}`);
 
-export const Dict = Vue.resource(`${API_ROOT}/dicts`);
+export const Dicts = Vue.resource(`${API_ROOT}/dicts`);
 /** User resource resource for endpoint 'users/{id}'*/
 export const User = Vue.resource(`${API_ROOT}/users{/id}`);
 /** Profile resource for endpoint 'profile'*/

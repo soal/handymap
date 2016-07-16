@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import cacheService from "../services/cacheService";
 import * as Mut from "./mutationTypes";
-import _ from "lodash";
+// import _ from "lodash";
 
 const debug = process.env.NODE_ENV !== "production";
 
@@ -18,18 +18,30 @@ const store =  new Vuex.Store({
     menu: [
       ["About", "/about"]
     ],
-    elements: [],
+    dicts: {},
+    currentElement: {},
+    defaultElement: null,
+    elements: {},
     user: {}
   },
   mutations: {
     [Mut.SET_ELEMENTS](state, data) {
-      state.elements = _.unionWith(state.elements, _.flatten([data]), (oldVal, newVal) => oldVal.id === newVal.id);
+      let newElements = {};
+      data.forEach((element) => newElements[element.id] = element);
+      state.elemelements = Object.assign({}, state.elements, newElements);
     },
     [Mut.SET_ELEMENT](state, data) {
-      state.elements = _.unionWith(state.elements, _.flatten([data]), (oldVal, newVal) => oldVal.id === newVal.id);
-      for (let element of _.flatten([data])) {
-        cacheService.setItem(`Element_${element.id}`, element);
-      }
+      state.elements = Object.assign({}, state.elements, { [data.id]: data });
+      cacheService.setItem(`Element_${data.id}`, data);
+    },
+    [Mut.SET_CURRENT_ELEMENT](state, data) {
+      state.currentElement = Object.assign({}, data);
+    },
+    [Mut.SET_DEFAULT_ELEMENT](state, data) {
+      store.defaultElement = data;
+    },
+    [Mut.SET_DICTS](state, data) {
+      state.dicts = Object.assign({}, state.dicts, data);
     }
   },
   modules: {},
