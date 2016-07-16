@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import store from "./storage/store";
-import {Dicts} from "./api/resources";
+import store from "../storage/store";
+import {Dicts} from "../api/resources";
 import elementsActions from "../actions/elementsActions";
 import InfoBox from "./InfoBox.vue";
 
@@ -31,10 +31,10 @@ export default {
         store.dispatch("SET_DICTS", dicts);
         store.dispatch("SET_DEFAULT_ELEMENT", dicts.default);
       });
-    // this.getElement(100, function({dispatch}, response) {
-    //   dispatch("SET_CURRENT_ELEMENT", response);
-    //   return response;
-    // });
+    this.getElement(100, function({dispatch}, response) {
+      dispatch("SET_CURRENT_ELEMENT", response);
+      return response;
+    });
   }
 };
 </script>
