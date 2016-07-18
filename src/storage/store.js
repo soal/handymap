@@ -27,7 +27,7 @@ const store =  new Vuex.Store({
   mutations: {
     [Mut.SET_ELEMENTS](state, data) {
       let newElements = {};
-      data.forEach((element) => newElements[element.id] = element);
+      data.forEach(function(element) { newElements[element.id] = element; });
       state.elemelements = Object.assign({}, state.elements, newElements);
     },
     [Mut.SET_ELEMENT](state, data) {

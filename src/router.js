@@ -17,7 +17,7 @@ var router = new Router({
 router.map({
   "/": {
     name: "main",
-    component: BaseMap,
+    component: BaseElement,
     subRoutes: {
       "/": {
         component: {

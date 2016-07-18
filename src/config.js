@@ -1,11 +1,11 @@
 export const API_VERSION = "v1";
 
-const fakeAPI = "https://handymap-fake-api.herokuapp.com/api/";
-const localFakeAPI = "localhost:9000/api";
+const fakeAPI = "https://handymap-fake-api.herokuapp.com/api";
+const localFakeAPI = "http://localhost:9000/api";
 
 export const API_ROOT = (process.env.NODE_ENV === "production")
       ? "https://handymap.com/api"
-      : fakeAPI;
+      : localFakeAPI;
 
 export const MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoic29hbCIsImEiOiJjaW1qZndnMmwwMDEzdzBtNHRxcGFrampqIn0.bpwowsJ4GLBdsPnnXuZboA";
 
