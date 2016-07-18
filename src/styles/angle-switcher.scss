@@ -22,9 +22,9 @@
       @extend .#{$fa-css-prefix}-angle-double-down;
       color: black
     }
-    i {
-      @extend .#{$fa-css-prefix};
-    }
+  }
+  i {
+    @extend .#{$fa-css-prefix};
   }
 
 }
