@@ -1,48 +1,24 @@
-# Handymap
-Geo service for visualize historical events and processes
+# handymap
 
-##Setting up project for development
+> Make overview of space and time easy
 
-###Requrements
-* Node JS 4.x
+## Build Setup
 
-###Setting up
-####Installing dependencies on Fedora linux
-#####Install node 4 repository:
-```
-sudo dnf install https://rpm.nodesource.com/pub_4.x/fc/23/x86_64/nodesource-release-fc23-1.noarch.rpm
-```
-#####Nodejs and system dependencies for it:
-```
-sudo dnf check-update
-sudo dnf install nodejs gcc gcc-c++ make glibc-headers
-```
-#####Install project NodeJS dependencies:
-```
-sudo npm install -g gulp-cli
+``` bash
+# install dependencies
 npm install
-```
-Take a break while npm working on =)
 
+# serve with hot reload at localhost:8080
+npm run dev
 
-##Development server
-Use `gulp` for start dev server and serving frontend files:
+# build for production with minification
+npm run build
+
+# lint all *.js and *.vue files
+npm run lint
+
+# run unit tests
+npm test
 ```
-gulp
-```
-To only build frontend files and not watch for changes:
-```
-gulp buildDev
-```
-To start all tests use:
-```
-gulp test
-```
-To start only backend tests:
-```
-gulp testServer
-```
-To start only frontend tests:
-```
-gulp testClient
-```
+
+For more information see the [docs for vueify](https://github.com/vuejs/vueify).

@@ -23,6 +23,34 @@
 </div>
 </template>
 
+<style lang="scss">
+  #top-menu {
+    margin: 0;
+    position: relative;
+    z-index: 2;
+
+    .fixed-logo {
+      position: absolute;
+      left: .85rem;
+      top: .85rem;
+      z-index: 9999;
+    }
+
+    .main-logo {
+      // font-size: $font-size-h3;
+    }
+
+
+    .navbar {
+      padding-left: 10rem;
+    }
+
+    form {
+      text-align: center;
+    }
+  }
+</style>
+
 <script>
 
 import store from "./storage/store";

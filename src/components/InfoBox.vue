@@ -30,6 +30,25 @@
   </div>
 </template>
 
+
+<style lang="scss">
+.infobox {
+  background: white;
+  height: 80vh;
+  display: block;
+  margin-top: 5rem;
+  overflow: scroll;
+  position: absolute;
+  top: 0;
+  z-index: 9999999;
+
+  .factbox {
+    width: 30vw;
+  }
+}
+</style>
+
+
 <script>
 import elementsActions from "../actions/elementsActions";
 

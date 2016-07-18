@@ -4,7 +4,7 @@ import localforage from "localforage";
 
 import store from "./storage/store";
 import router from "./router";
-import App from "./app.vue";
+import App from "./App.vue";
 
 Vue.config.debug = true;
 
@@ -12,6 +12,6 @@ localforage.setDriver([localforage.INDEXEDDB, localforage.WEBSQL, localforage.LO
 
 sync(store, router);
 
-router.start(App, "#app");
+router.start(App, "app");
 
 window.Vue = Vue;

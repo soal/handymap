@@ -9,12 +9,12 @@ export default Vue.directive("angle-switcher", {
 
     const updateButton = (showed) => {
       if (showed) {
-          this.el.classList.remove("down");
-          this.el.classList.add("up");
-        } else {
-          this.el.classList.remove("up");
-          this.el.classList.add("down");
-        }
+        this.el.classList.remove("down");
+        this.el.classList.add("up");
+      } else {
+        this.el.classList.remove("up");
+        this.el.classList.add("down");
+      }
     };
     updateButton(this.params.showed);
 
@@ -27,5 +27,7 @@ export default Vue.directive("angle-switcher", {
     };
     this.el.addEventListener("click", this.handler);
   },
-  unbibd: function() { this.el.removeEventListener("click", this.handler); }
+  unbibd: function() {
+    this.el.removeEventListener("click", this.handler);
+  }
 });

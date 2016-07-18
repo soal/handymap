@@ -3,6 +3,15 @@
   </div>
 </template>
 
+<style lang="scss">
+#base-element {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  /*z-index: 49*/
+}
+</style>
+
 <script>
 import store from "../storage/store";
 import {Dicts} from "../api/resources";
