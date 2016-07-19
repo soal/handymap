@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { sync } from "vuex-router-sync";
+import {sync} from "vuex-router-sync";
 import localforage from "localforage";
 
 import store from "./storage/store";
@@ -8,8 +8,12 @@ import App from "./App.vue";
 
 Vue.config.debug = true;
 
-localforage.setDriver([localforage.INDEXEDDB, localforage.WEBSQL, localforage.LOCALSTORAGE]);
-
+localforage.config({
+  driver: [localforage.INDEXEDDB,
+           localforage.WEBSQL,
+           localforage.LOCALSTORAGE],
+  name: "handymap"
+});
 sync(store, router);
 
 router.start(App, "app");
