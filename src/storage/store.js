@@ -28,17 +28,18 @@ const store =  new Vuex.Store({
     [Mut.SET_ELEMENTS](state, data) {
       let newElements = {};
       data.forEach(function(element) { newElements[element.id] = element; });
-      state.elemelements = Object.assign({}, state.elements, newElements);
+      state.elements = Object.assign({}, state.elements, newElements);
+      cacheService.setItems("Element", data);
     },
     [Mut.SET_ELEMENT](state, data) {
       state.elements = Object.assign({}, state.elements, { [data.id]: data });
-      cacheService.setItem(`Element_${data.id}`, data);
+      cacheService.setItem("Element", data);
     },
     [Mut.SET_CURRENT_ELEMENT](state, data) {
       state.currentElement = Object.assign({}, data);
     },
     [Mut.SET_DEFAULT_ELEMENT](state, data) {
-      store.defaultElement = data;
+      state.defaultElement = data;
     },
     [Mut.SET_DICTS](state, data) {
       state.dicts = Object.assign({}, state.dicts, data);

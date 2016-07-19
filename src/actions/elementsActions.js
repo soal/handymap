@@ -4,7 +4,12 @@ import {ResourceActions} from "../services/crudService";
 import {Element} from "../api/resources";
 
 var actions = {
-  /** Elements actions */
+  getChildren({dispatch}, element) {
+    this.getElements({ids: element.children_ids.map((el) => el.id)});
+  },
+  getConnections({dispatch}, element) {
+    this.getElements({ids: element.connections_ids.map((el) => el.id)});
+  }
 };
 actions = new ResourceActions(Element, "Element", actions).actions;
 

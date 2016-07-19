@@ -15,12 +15,17 @@
 
       <div class="tab-content">
         <div class="tab-pane active" role="tabpanel">
-          <ul>
+          <b>{{currentElement.start_date}}&ndash;{{currentElement.end_date}}</b>
+          <b>{{currentElement.label}}</b>
+          <p>
+            {{currentElement.description}}
+          </p>
+          <!-- <ul>
             <li v-for="element of elements">
               <b>{{element.start_date}}&mdash;{{element.end_date}}&nbsp;&nbsp;{{element.label}}</b>
               <p>{{element.description}}<p>
               </li>
-            </ul>
+            </ul> -->
           </div>
           <div class="tab-pane" role="tabpanel"></div>
           <div class="tab-pane" role="tabpanel">...</div>
@@ -30,25 +35,6 @@
   </div>
 </template>
 
-
-<style lang="scss">
-.infobox {
-  background: white;
-  height: 80vh;
-  display: block;
-  margin-top: 5rem;
-  overflow: scroll;
-  position: absolute;
-  top: 0;
-  z-index: 9999999;
-
-  .factbox {
-    width: 30vw;
-  }
-}
-</style>
-
-
 <script>
 import elementsActions from "../actions/elementsActions";
 
@@ -56,6 +42,7 @@ export default {
   name: "InfoBox",
   vuex: {
     getters: {
+      currentElement: state => state.currentElement,
       elements: state => state.elements
     },
     actions: Object.assign(
@@ -64,7 +51,24 @@ export default {
     )
   },
   ready() {
-    this.getElement(100);
+    // this.getElement(100);
   }
 };
 </script>
+
+<style lang="scss">
+  .infobox {
+    background: white;
+    height: 80vh;
+    display: block;
+    margin-top: 5rem;
+    overflow: scroll;
+    position: absolute;
+    top: 0;
+    z-index: 9999999;
+
+    .factbox {
+      width: 30vw;
+    }
+  }
+</style>
