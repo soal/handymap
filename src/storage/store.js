@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import cacheService from "../services/cacheService";
 import * as Mut from "./mutationTypes";
+import _ from "lodash";
 
 const debug = process.env.NODE_ENV !== "production";
 
@@ -19,19 +20,26 @@ const store =  new Vuex.Store({
     ],
     dicts: {},
     currentElement: {},
-    defaultElement: {},
-    elements: {},
+    defaultElement: null,
+    elements: [],
     user: {}
   },
   mutations: {
     [Mut.SET_ELEMENTS](state, data) {
-      let newElements = {};
-      data.forEach(function(element) { newElements[element.id] = element; });
-      state.elements = Object.assign({}, state.elements, newElements);
+      // let newElements = {};
+      // data.forEach(function(element) { newElements[element.id] = element; });
+      // state.elements = Object.assign({}, state.elements, newElements);
+      state.elements = _.unionWith(state.elements, data, (currentItem, newItem) => currentItem.id === newItem.id);
       cacheService.setItems("Element", data);
     },
     [Mut.SET_ELEMENT](state, data) {
-      state.elements = Object.assign({}, state.elements, { [data.id]: data });
+      let elementToSet = state.elements.find((item) => item.id === data.id);
+      if (elementToSet) {
+        Object.assign(elementToSet, data);
+      } else {
+        state.elements.push(data);
+      }
+      // state.elements = Object.assign({}, state.elements, { [data.id]: data });
       cacheService.setItem("Element", data);
     },
     [Mut.SET_CURRENT_ELEMENT](state, data) {
