@@ -32,9 +32,9 @@ export default {
     )
   },
   ready() {
-    store.watch(state => state.defaultElement, (df) => {
-      if (df) {
-        this.getElement(df, function({dispatch}, response) {
+    store.watch(state => state.defaultElement, (defaultElementId) => {
+      if (defaultElementId) {
+        this.getElement(defaultElementId, function({dispatch}, response) {
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
           return response;
         });

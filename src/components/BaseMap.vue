@@ -26,7 +26,7 @@ export default {
       zoom: 3,
       hash: true
     });
-    
+
     map.addControl(new M.Navigation());
   }
 };

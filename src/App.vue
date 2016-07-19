@@ -21,7 +21,8 @@ export default {
   },
   vuex: {
     getters: {
-      title: state => state.title
+      title: state => state.title,
+      elements: state => state.elements
     }
   },
   methods: {
@@ -34,6 +35,9 @@ export default {
           store.dispatch("SET_DEFAULT_ELEMENT", dicts.data.data.default_element);
         }
       });
+    // store.watch(state => state.elements, () => {
+    //   store.dispatch("SET_ELEMENTS_DEPS");
+    // });
   }
 };
 
