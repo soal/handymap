@@ -1,7 +1,12 @@
 <template lang="html">
   <div id="base-element">
     <base-map></base-map>
-    <info-box></info-box>
+    <info-box :current-element="currentElement"
+              :children="children"
+              :connections="connections"
+              :element-collections="elementCollections"
+              :element-ordered-collections="elementOrderedCollections">
+    </info-box>
     <timeline></timeline>
   </div>
 </template>
@@ -24,12 +29,44 @@ export default {
     getters: {
       currentElement: state => state.currentElement,
       defaultElement: state => state.defaultElement,
-      elements: state => state.elements
+      elements: state => state.elements,
+      collections: state => state.collections,
+      orderedCollections: state => state.orderedCollections
     },
     actions: Object.assign(
       elementsActions,
       {}
     )
+  },
+  computed: {
+    children: function() {
+      return this.elements.filter(
+        (item) => {
+          return this.currentElement.children_ids.map((child) => child.id).includes(item.id);
+        }
+      );
+    },
+    connections: function() {
+      return this.elements.filter(
+        (item) => {
+          return this.currentElement.connections_ids.map((connection) => connection.id).includes(item.id);
+        }
+      );
+    },
+    elementCollections: function() {
+      return this.collections.filter(
+        (item) => {
+          return this.currentElement.collections_ids.map((coll) => coll.id).includes(item.id);
+        }
+      );
+    },
+    elementOrderedCollections: function() {
+      return this.orderedCollections.filter(
+        (item) => {
+          return this.currentElement.ordered_collections_ids.map((ocoll) => ocoll.id).includes(item.id);
+        }
+      );
+    }
   },
   ready() {
     store.watch(state => state.defaultElement, (defaultElementId) => {
@@ -50,10 +87,10 @@ export default {
 </script>
 
 <style lang="scss">
-#base-element {
-  // position: absolute;
-  // width: 100%;
-  // height: 100vh;
-  /*z-index: 49*/
-}
+  #base-element {
+    // position: absolute;
+    // width: 100%;
+    // height: 100vh;
+    /*z-index: 49*/
+  }
 </style>

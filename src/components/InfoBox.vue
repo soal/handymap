@@ -20,12 +20,11 @@
           <p>
             {{currentElement.description}}
           </p>
-          <!-- <ul>
-            <li v-for="element of elements">
-              <b>{{element.start_date}}&mdash;{{element.end_date}}&nbsp;&nbsp;{{element.label}}</b>
-              <p>{{element.description}}<p>
+          <ul>
+            <li v-for="element of children">
+              <b>{{element.label}}</b>
               </li>
-            </ul> -->
+            </ul>
           </div>
           <div class="tab-pane" role="tabpanel"></div>
           <div class="tab-pane" role="tabpanel">...</div>
@@ -41,15 +40,18 @@ import elementsActions from "../actions/elementsActions";
 export default {
   name: "InfoBox",
   vuex: {
-    getters: {
-      currentElement: state => state.currentElement,
-      elements: state => state.elements
-    },
     actions: Object.assign(
       elementsActions,
       {}
     )
   },
+  props: [
+    "currentElement",
+    "children",
+    "connections",
+    "elementCollections",
+    "elementOrderedCollections"
+  ],
   ready() {
     // this.getElement(100);
   }
