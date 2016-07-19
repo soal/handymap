@@ -22,27 +22,27 @@ class Crud {
     this.resourceName = resourceName;
 
 
-    function methods(dispatch, resource, resourceName) {
+    function methods(dispatch, resource, resoutrailrceName) {
       return {
-        /** Get data from server
-         * @param  {Object}   options.dispatch Service object from Vue
-         * @param  {String||Number}   id       Id of odject to get. If not presented, method will return list of objects
-         * @param  {Function} callback         Callback for custom behavior, called in success promise callback
-         * @param  {Boolean}  preventDefaultAcion  If true, callback will be called and default action canceled. If not, method call dispatch() store method
-         */
+        /** Get single data elment from server
+        * @param  {Object}   options.dispatch Service object from Vue
+        * @param  {String||Number}   id       Id of odject to get. If not presented, method will return list of objects
+        * @param  {Function} callback         Callback for custom behavior, called in success promise callback
+        * @param  {Boolean}  cache            Use cache or not
+        * @param  {Boolean}  preventDefaultAcion  If true, callback will be called and default action canceled. If not, method call dispatch() store method
+        */
         [`get${resourceName}`]({ dispatch }, id=null, callback=null, cache=true, preventDefaultAcion=false) {
-          // TODO: Add processing get params and getting elements from cache in case of ids list in params
 
           /**
            * Dispatch mutation event
-           * @param {Object||Array}   Responce object passed to dispatch function
+           * @param {Object||Array}   Response object passed to dispatch function
            */
           function mutate(response) {
             if (callback) {
               response = callback({ dispatch }, response);
             }
             if (!preventDefaultAcion) {
-              dispatch(`SET_${id ? resourceName.toUpperCase() : resourceName.toUpperCase() + "S"}`, (response.data ? response.data : response));
+              dispatch(`SET_${resourceName.toUpperCase()}`, (response.data ? response.data : response));
             }
           }
 
@@ -68,6 +68,63 @@ class Crud {
               }
             })
             .catch(err => console.log(err));
+        },
+
+        /** Get single data elment from server
+         * @param  {Object}   options.dispatch        Service object from Vue
+         * @param  {Object}   params                  Params for get request {[param_name]: [param_value]}
+         * @param  {Function} callback                Callback for custom behavior, called in success promise callback
+         * @param  {Boolean}  cache                   Use cache or not
+         * @param  {Boolean}  preventDefaultAcion     If true, callback will be called and default action canceled. If not, method call dispatch() store method
+         */
+        [`get${resourceName}s`]({ dispatch }, params=null, callback=null, cache=true, preventDefaultAcion=false) {
+          /**
+           * Dispatch mutation event
+           * @param {Object||Array}   Response object passed to dispatch function
+           */
+          function mutate(response) {
+            if (!preventDefaultAcion) {
+              dispatch(`SET_${resourceName.toUpperCase() + "S"}`, response);
+            }
+            if (callback) {
+              response = callback({ dispatch }, response);
+            }
+          }
+
+          var items = [];
+          // Empty promise for unify code for ids and other params
+          var filteredIds = new Promise(() => {});
+          var result = null;
+
+          // If we get list of objects by ids and need check cache, we need to do some weird stuff
+          if (params.ids) {
+            if (cache) {
+              // Convert plain ids to ids for in-browser storage, e.g id "1" to "Element_1"
+              var cacheKeys = params.ids.map((key) => `${resourceName}_${key}`);
+              filteredIds = cacheService.getItems(cacheKeys)
+                .then(function(cachedItems) {
+                  // Add items from cache
+                  items.concat(cachedItems);
+                  // Filter list of ids to get from server, removing ids of items we already got from cache
+                  params.ids = params.ids.filter(
+                    (itemId) => {
+                      return !(cachedItems.map((item) => item.id).includes(itemId));
+                    })
+                    .join(",");
+                  return params.ids;
+                });
+            }
+          }
+          filteredIds.then(function(ids) {
+            result = resource.get({ ids });
+            result
+              .then(response => {
+                // Adding items from server response to items from cache and mutate state
+                mutate(items.concat(response.data.data ? response.data.data : response));
+                return response;
+              })
+              .catch(err => console.log(err));
+          });
         },
         /**
          * Save item to server
