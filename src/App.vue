@@ -11,6 +11,7 @@
 import store from "./storage/store";
 import BaseElement from "./components/BaseElement.vue";
 import TopMenu from "./components/TopMenu.vue";
+import {Dicts} from "./api/resources";
 
 export default {
   store,
@@ -26,7 +27,13 @@ export default {
   methods: {
   },
   ready() {
-
+    Dicts.get()
+      .then((dicts) => {
+        store.dispatch("SET_DICTS", dicts.data);
+        if (dicts.data.data.default_element) {
+          store.dispatch("SET_DEFAULT_ELEMENT", dicts.data.data.default_element);
+        }
+      });
   }
 };
 

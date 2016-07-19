@@ -1,6 +1,5 @@
 <template lang="html">
   <div id="base-element">
-    <!-- <router-view></router-view> -->
     <base-map></base-map>
     <info-box></info-box>
     <timeline></timeline>
@@ -9,7 +8,6 @@
 
 <script>
 import store from "../storage/store";
-import {Dicts} from "../api/resources";
 import elementsActions from "../actions/elementsActions";
 import InfoBox from "./InfoBox.vue";
 import BaseMap from "./BaseMap.vue";
@@ -34,14 +32,18 @@ export default {
     )
   },
   ready() {
-    Dicts.get()
-      .then((dicts) => {
-        store.dispatch("SET_DICTS", dicts);
-        store.dispatch("SET_DEFAULT_ELEMENT", dicts.default);
-      });
-    this.getElement(this.defaultElement, function({dispatch}, response) {
-      dispatch("SET_CURRENT_ELEMENT", response);
-      return response;
+    store.watch(state => state.defaultElement, (df) => {
+      if (df) {
+        this.getElement(df, function({dispatch}, response) {
+          dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
+          return response;
+        });
+      }
+    });
+    store.watch(state => state.currentElement, (newEl) => {
+      if (newEl) {
+        this.getChildren(newEl);
+      }
     });
   }
 };
