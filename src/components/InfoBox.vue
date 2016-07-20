@@ -1,6 +1,7 @@
 <template>
   <div class="infobox">
       <div class="block">
+        <h1>{{currentElement.id}}</h1>
         <b>{{currentElement.start_date}}&ndash;{{currentElement.end_date}}</b>
         <b>{{currentElement.label}}</b>
         <p>
@@ -10,7 +11,7 @@
       <div class="block">
         <ul>
           <li v-for="element of children">
-            <Sub-element :element="element"></Sub-element>            
+            <sub-element :element="element"></sub-element>
           </li>
         </ul>
       </div>
@@ -38,14 +39,7 @@ export default {
     "connections",
     "elementCollections",
     "elementOrderedCollections"
-  ],
-  methods: {
-    toggleSubelement(event) {
-      // event.target.
-    }
-  },
-  ready() {
-  }
+  ]
 };
 </script>
 

@@ -1,6 +1,11 @@
 import Vue from "vue";
 import {sync} from "vuex-router-sync";
 import localforage from "localforage";
+import {StateManager} from "voie";
+
+// const st = new StateManager({ el: "app" });
+// console.log(st);
+
 
 import store from "./storage/store";
 import router from "./router";

@@ -25,10 +25,27 @@ export default {
     BaseMap,
     Timeline
   },
+  route: {
+    data({ to }) {
+      if (to.name === "main") {
+        return this.getElement(100, function({dispatch}, response) {
+          dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
+          return response;
+        });
+      }
+      if (this.elements.map((item) => item.name).includes(to.params.element)) {
+        return this.getElement(this.elements.find((item) => item.name === to.params.element).id, function({dispatch}, response) {
+          dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
+          return response;
+        });
+      }
+    }
+  },
   vuex: {
     getters: {
       currentElement: state => state.currentElement,
       defaultElement: state => state.defaultElement,
+      currentElementId: state => state.currentElementId,
       elements: state => state.elements,
       collections: state => state.collections,
       orderedCollections: state => state.orderedCollections
@@ -41,46 +58,48 @@ export default {
   computed: {
     children: function() {
       // TODO: move to actions for using in WebWorker
-      return this.elements.filter(
-        (item) => {
-          return this.currentElement.children_ids.map((child) => child.id).includes(item.id);
-        }
-      );
+      if (this.currentElement.children_ids) {
+        return this.elements.filter(
+          (item) => {
+            return this.currentElement.children_ids.map((child) => child.id).includes(item.id);
+          }
+        );
+      }
     },
     connections: function() {
-      return this.elements.filter(
-        (item) => {
-          return this.currentElement.connections_ids.map((connection) => connection.id).includes(item.id);
-        }
-      );
+      if (this.currentElement.connections_ids) {
+        return this.elements.filter(
+          (item) => {
+            return this.currentElement.connections_ids.map((connection) => connection.id).includes(item.id);
+          }
+        );
+      }
     },
     elementCollections: function() {
-      return this.collections.filter(
-        (item) => {
-          return this.currentElement.collections_ids.map((coll) => coll.id).includes(item.id);
-        }
-      );
+      if (this.currentElement.collections_ids) {
+        return this.collections.filter(
+          (item) => {
+            return this.currentElement.collections_ids.map((coll) => coll.id).includes(item.id);
+          }
+        );
+      }
     },
     elementOrderedCollections: function() {
-      return this.orderedCollections.filter(
-        (item) => {
-          return this.currentElement.ordered_collections_ids.map((ocoll) => ocoll.id).includes(item.id);
-        }
-      );
+      if (this.currentElement.ordered_collections_ids) {
+        return this.orderedCollections.filter(
+          (item) => {
+            return this.currentElement.ordered_collections_ids.map((ocoll) => ocoll.id).includes(item.id);
+          }
+        );
+      }
     }
   },
   ready() {
-    store.watch(state => state.defaultElement, (defaultElementId) => {
-      if (defaultElementId) {
-        this.getElement(defaultElementId, function({dispatch}, response) {
-          dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
-          return response;
-        });
-      }
-    });
     store.watch(state => state.currentElement, (newEl) => {
       if (newEl) {
-        this.getChildren(newEl);
+        if (newEl.children_ids) {
+          this.getChildren(newEl);
+        }
       }
     });
   }

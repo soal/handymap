@@ -53,7 +53,7 @@ class Crud {
           } else {
             result = resource.get({ id });
           }
-          result
+          return result
             .then(cachedItem => {
               if (cachedItem) {
                 mutate(cachedItem);
@@ -115,7 +115,7 @@ class Crud {
                 });
             }
           }
-          filteredIds.then(function(ids) {
+          return filteredIds.then(function(ids) {
             result = resource.get({ ids });
             result
               .then(response => {
@@ -124,7 +124,7 @@ class Crud {
                 return response;
               })
               .catch(err => console.log(err));
-          });
+          }).catch(err => console.log(err));
         },
         /**
          * Save item to server

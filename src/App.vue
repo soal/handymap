@@ -32,7 +32,7 @@ export default {
       .then((dicts) => {
         store.dispatch("SET_DICTS", dicts.data);
         if (dicts.data.data.default_element) {
-          store.dispatch("SET_DEFAULT_ELEMENT", dicts.data.data.default_element);
+          store.dispatch("SET_DEFAULT_ELEMENT_ID", dicts.data.data.default_element);
         }
       });
     // store.watch(state => state.elements, () => {

@@ -3,7 +3,7 @@ import Router from "vue-router";
 import BaseMap from "./components/BaseMap.vue";
 import InfoBox from "./components/InfoBox.vue";
 import BaseElement from "./components/BaseElement.vue";
-
+import store from "./storage/store";
 
 Vue.use(Router);
 
@@ -25,16 +25,12 @@ router.map({
         }
       },
       ":element": {
+        name: "element",
         component: BaseElement,
         subRoutes: {
           "/": {
             component: {
               template: "<p>Nothing to show yet</p>"
-            }
-          },
-          ":subelement": {
-            component: {
-              template: "<span>Nested component</span>"
             }
           }
         }

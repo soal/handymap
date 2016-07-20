@@ -20,7 +20,8 @@ const store =  new Vuex.Store({
     ],
     dicts: {},
     currentElement: {},
-    defaultElement: null,
+    currentElementId: null,
+    defaultElementId: null,
     elements: [],
     collections: [],
     orderedCollections: [],
@@ -41,9 +42,13 @@ const store =  new Vuex.Store({
       cacheService.setItem("Element", data);
     },
     [Mut.SET_CURRENT_ELEMENT](state, data) {
+      state.currentElementId = data.id;
       state.currentElement = Object.assign({}, data);
     },
-    [Mut.SET_DEFAULT_ELEMENT](state, data) {
+    [Mut.SET_CURRENT_ELEMENT_ID](state, id) {
+      state.currentElementId = id;
+    },
+    [Mut.SET_DEFAULT_ELEMENT_ID](state, data) {
       state.defaultElement = data;
     },
     [Mut.SET_DICTS](state, data) {
