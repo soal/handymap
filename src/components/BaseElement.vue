@@ -33,8 +33,9 @@ export default {
           return response;
         });
       }
-      if (this.elements.map((item) => item.name).includes(to.params.element)) {
-        return this.getElement(this.elements.find((item) => item.name === to.params.element).id, function({dispatch}, response) {
+      let storedElement = this.elements.find((item) => item.name === to.params.element);
+      if (storedElement) {
+        return this.getElement(storedElement.id, function({dispatch}, response) {
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
           return response;
         });

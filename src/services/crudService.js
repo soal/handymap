@@ -116,7 +116,11 @@ class Crud {
             }
           }
           return filteredIds.then(function(ids) {
-            result = resource.get({ ids });
+            let query = {};
+            if (ids.length) {
+              query.ids = ids;
+            }
+            result = resource.get(query);
             result
               .then(response => {
                 // Adding items from server response to items from cache and mutate state
