@@ -49,7 +49,7 @@ const store =  new Vuex.Store({
       state.currentElementId = id;
     },
     [Mut.SET_DEFAULT_ELEMENT_ID](state, data) {
-      state.defaultElement = data;
+      state.defaultElementId = data;
     },
     [Mut.SET_DICTS](state, data) {
       state.dicts = Object.assign({}, state.dicts, data);

@@ -15,6 +15,7 @@ export const Element = Vue.resource(`${API_ROOT}/elements{/id}`);
 export const Collection = Vue.resource(`${API_ROOT}/collections{/id}`);
 export const OrderedCollection = Vue.resource(`${API_ROOT}/ordered_collections{/id}`);
 export const Shape = Vue.resource(`${API_ROOT}/shapes{/id}`);
+export const Search = Vue.resource(`${API_ROOT}/search{/dataType}`);
 
 export const Dicts = Vue.resource(`${API_ROOT}/dicts`);
 export const User = Vue.resource(`${API_ROOT}/users{/id}`);

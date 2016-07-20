@@ -14,6 +14,7 @@
 <script>
 import store from "../storage/store";
 import elementsActions from "../actions/elementsActions";
+import searchActions from "../actions/searchActions";
 import InfoBox from "./InfoBox.vue";
 import BaseMap from "./BaseMap.vue";
 import Timeline from "./Timeline.vue";
@@ -26,16 +27,37 @@ export default {
     Timeline
   },
   route: {
+    activate({ to, next }) {
+      if (to.name === "main" && !store.state.defaultElementId) {
+        return new Promise((resolve) => {
+          let timer = setInterval(() => {
+            if (store.state.defaultElementId) {
+              clearInterval(timer);
+              resolve(store.state.defaultElementId);
+            }
+          }, 10);
+        });
+      }
+      if (to.name === "element" && !store.state.currentElement) {
+        this.search({ dataType: "element", name: to.params.element },
+          function({dispatch}, response) {
+            dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
+            dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
+            dispatch("SET_ELEMENT", (response.data ? response.data : response));
+          });
+      }
+      next();
+    },
     data({ to }) {
       if (to.name === "main") {
-        return this.getElement(100, function({dispatch}, response) {
+        return this.getElement(this.defaultElementId, null, function({dispatch}, response) {
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
           return response;
         });
       }
       let storedElement = this.elements.find((item) => item.name === to.params.element);
       if (storedElement) {
-        return this.getElement(storedElement.id, function({dispatch}, response) {
+        return this.getElement(storedElement.id, null, function({dispatch}, response) {
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
           return response;
         });
@@ -45,7 +67,7 @@ export default {
   vuex: {
     getters: {
       currentElement: state => state.currentElement,
-      defaultElement: state => state.defaultElement,
+      defaultElementId: state => state.defaultElementId,
       currentElementId: state => state.currentElementId,
       elements: state => state.elements,
       collections: state => state.collections,
@@ -53,6 +75,7 @@ export default {
     },
     actions: Object.assign(
       elementsActions,
+      searchActions,
       {}
     )
   },

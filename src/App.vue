@@ -22,12 +22,13 @@ export default {
   vuex: {
     getters: {
       title: state => state.title,
-      elements: state => state.elements
+      elements: state => state.elements,
+      defaultElementId: state => state.defaultElementId
     }
   },
   methods: {
   },
-  ready() {
+  init() {
     Dicts.get()
       .then((dicts) => {
         store.dispatch("SET_DICTS", dicts.data);
@@ -35,9 +36,6 @@ export default {
           store.dispatch("SET_DEFAULT_ELEMENT_ID", dicts.data.data.default_element);
         }
       });
-    // store.watch(state => state.elements, () => {
-    //   store.dispatch("SET_ELEMENTS_DEPS");
-    // });
   }
 };
 

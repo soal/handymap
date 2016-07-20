@@ -31,7 +31,7 @@ class Crud {
         * @param  {Boolean}  cache            Use cache or not
         * @param  {Boolean}  preventDefaultAcion  If true, callback will be called and default action canceled. If not, method call dispatch() store method
         */
-        [`get${resourceName}`]({ dispatch }, id=null, callback=null, cache=true, preventDefaultAcion=false) {
+        [`get${resourceName}`]({ dispatch }, id=null, params=null, callback=null, cache=true, preventDefaultAcion=false) {
 
           /**
            * Dispatch mutation event
