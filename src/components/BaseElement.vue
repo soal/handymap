@@ -61,6 +61,8 @@ export default {
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
           return response;
         });
+      } else {
+        return this.getCurrentElementByName(to.params.element);
       }
     }
   },
