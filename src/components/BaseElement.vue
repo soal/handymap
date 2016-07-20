@@ -40,6 +40,7 @@ export default {
   },
   computed: {
     children: function() {
+      // TODO: move to actions for using in WebWorker
       return this.elements.filter(
         (item) => {
           return this.currentElement.children_ids.map((child) => child.id).includes(item.id);

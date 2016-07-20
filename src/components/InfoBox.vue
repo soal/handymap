@@ -1,44 +1,31 @@
 <template>
   <div class="infobox">
-    <div class="factbox">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">События</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Описание</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Ссылки</a>
-        </li>
-      </ul>
-
-      <div class="tab-content">
-        <div class="tab-pane active" role="tabpanel">
-          <b>{{currentElement.start_date}}&ndash;{{currentElement.end_date}}</b>
-          <b>{{currentElement.label}}</b>
-          <p>
-            {{currentElement.description}}
-          </p>
-          <ul>
-            <li v-for="element of children">
-              <b>{{element.label}}</b>
-              </li>
-            </ul>
-          </div>
-          <div class="tab-pane" role="tabpanel"></div>
-          <div class="tab-pane" role="tabpanel">...</div>
-          <div class="tab-pane" role="tabpanel">...</div>
-        </div>
+      <div class="block">
+        <b>{{currentElement.start_date}}&ndash;{{currentElement.end_date}}</b>
+        <b>{{currentElement.label}}</b>
+        <p>
+          {{currentElement.description}}
+        </p>
+      </div>
+      <div class="block">
+        <ul>
+          <li v-for="element of children">
+            <Sub-element :element="element"></Sub-element>            
+          </li>
+        </ul>
       </div>
   </div>
 </template>
 
 <script>
 import elementsActions from "../actions/elementsActions";
+import SubElement from "./SubElement.vue";
 
 export default {
   name: "InfoBox",
+  components: {
+    SubElement
+  },
   vuex: {
     actions: Object.assign(
       elementsActions,
@@ -52,8 +39,12 @@ export default {
     "elementCollections",
     "elementOrderedCollections"
   ],
+  methods: {
+    toggleSubelement(event) {
+      // event.target.
+    }
+  },
   ready() {
-    // this.getElement(100);
   }
 };
 </script>
@@ -67,10 +58,16 @@ export default {
     overflow: scroll;
     position: absolute;
     top: 0;
+    width: 50vw;
     z-index: 9999999;
-
-    .factbox {
-      width: 30vw;
+    
+    .hidden {
+      display: none;
+    }
+    .block {
+      padding: 1em;
+      float: left;
+      width: 50%;
     }
   }
 </style>
