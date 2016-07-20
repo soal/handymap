@@ -8,7 +8,7 @@ export default {
   getItems(keysToGet) {
     var promises = keysToGet.map((key) => localforage.getItem(key));
     return Promise.all(promises)
-      .then(function(result) { return result.filter((item) => item != null); });
+      .then(function(result) { return result.filter((item) => item !== null); });
   },
 
   setItem(type, item) {

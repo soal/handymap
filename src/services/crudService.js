@@ -104,7 +104,7 @@ class Crud {
               filteredIds = cacheService.getItems(cacheKeys)
                 .then(function(cachedItems) {
                   // Add items from cache
-                  items.concat(cachedItems);
+                  items = items.concat(cachedItems);
                   // Filter list of ids to get from server, removing ids of items we already got from cache
                   params.ids = params.ids.filter(
                     (itemId) => {
@@ -130,6 +130,9 @@ class Crud {
                 return response;
               })
               .catch(err => console.log(err));
+            } else {
+              // If all items got from cache, just mutate state without requsting data from server
+              mutate(items);
             }
           }).catch(err => console.log(err));
         },

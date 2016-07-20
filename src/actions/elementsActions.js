@@ -1,6 +1,7 @@
 /** ElementsActions module */
 
 import {ResourceActions} from "../services/crudService";
+import {searchActions} from "./searchActions.js";
 import {Element} from "../api/resources";
 
 var actions = {
@@ -11,11 +12,12 @@ var actions = {
     return this.getElements({ids: element.connections_ids.map((el) => el.id)});
   },
   getCurrentElementByName({dispatch}, elementName) {
-    return this.search({ dataType: "element", name: elementName },
+    if (!this.search) throw new Error("searchActions.search action not found in component. Check for searchActions component->vuex->actions");
+    return this.search({ dataType: "elements", name: elementName },
       function({dispatch}, response) {
-        dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
-        dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
         dispatch("SET_ELEMENT", (response.data ? response.data : response));
+        dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
+        dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
       });
   }
 };

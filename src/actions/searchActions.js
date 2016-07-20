@@ -2,7 +2,7 @@ import {Search} from "../api/resources";
 
 var actions = {
   search({ dispatch }, params, callback=false) {
-    return Search.get({ params })
+    return Search.get({ ...params })
       .then((response) => {
         if (callback) {
           callback({dispatch}, response);

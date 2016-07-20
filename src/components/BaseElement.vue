@@ -57,12 +57,12 @@ export default {
       }
       let storedElement = this.elements.find((item) => item.name === to.params.element);
       if (storedElement) {
-        return this.getElement(storedElement.id, null, function({dispatch}, response) {
+        this.getElement(storedElement.id, null, function({dispatch}, response) {
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
           return response;
         });
       } else {
-        return this.getCurrentElementByName(to.params.element);
+        this.getCurrentElementByName(to.params.element);
       }
     }
   },
