@@ -7,6 +7,9 @@
         <p>
           {{currentElement.description}}
         </p>
+        <p>
+          {{currentElement.text}}
+        </p>
       </div>
       <div class="block">
         <ul>
@@ -61,7 +64,11 @@ export default {
     .block {
       padding: 1em;
       float: left;
-      width: 50%;
+      width: 40%;
+      
+      &:first-of-type {
+        width: 60%;
+      }
     }
   }
 </style>

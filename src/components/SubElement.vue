@@ -2,9 +2,11 @@
   <div class="subelement">
     <h3><a href="javascript:;" @click="toggleDesc">{{element.label}}</a></h3>
     <div v-show="descShowed" class="description">
-      {{ element.description }}
-      <br>
       <a href="javascript:;" @click="setCurrentElement(event, element.id)" v-link="{ name: 'element', params: { element: element.name } }">Перейти</a>
+      <p>
+        {{ element.description }}
+      </p>
+      <br>
     </div>
   </div>
 </template>

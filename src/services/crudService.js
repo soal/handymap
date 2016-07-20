@@ -22,7 +22,7 @@ class Crud {
     this.resourceName = resourceName;
 
 
-    function methods(dispatch, resource, resoutrailrceName) {
+    function methods(dispatch, resource, resourceName) {
       return {
         /** Get single data elment from server
         * @param  {Object}   options.dispatch Service object from Vue
@@ -111,23 +111,26 @@ class Crud {
                       return !(cachedItems.map((item) => item.id).includes(itemId));
                     })
                     .join(",");
-                  return params.ids;
+                  return params;
                 });
             }
           }
-          return filteredIds.then(function(ids) {
-            let query = {};
-            if (ids.length) {
-              query.ids = ids;
+          // TODO: Processing all types of Params
+          return filteredIds.then(function(params) {
+            if (!params.ids.length) {
+              delete params.ids;
             }
-            result = resource.get(query);
-            result
+            // FIXME: Prevent requesting if params empty
+            if (Object.keys(params).length) {
+              result = resource.get(params);
+              result
               .then(response => {
                 // Adding items from server response to items from cache and mutate state
                 mutate(items.concat(response.data.data ? response.data.data : response));
                 return response;
               })
               .catch(err => console.log(err));
+            }
           }).catch(err => console.log(err));
         },
         /**
