@@ -1,7 +1,6 @@
 /** ElementsActions module */
 
 import {ResourceActions} from "../services/crudService";
-import {searchActions} from "./searchActions.js";
 import {Element} from "../api/resources";
 
 var actions = {

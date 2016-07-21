@@ -90,7 +90,7 @@ class Crud {
               response = callback({ dispatch }, response);
             }
           }
-
+          // TODO: Use async from ECMAScript 2017 already for all this?
           var items = [];
           // Empty promise for unify code for ids and other params
           var filteredIds = new Promise(() => {});

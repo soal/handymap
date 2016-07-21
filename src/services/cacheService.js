@@ -1,5 +1,5 @@
 import localforage from "localforage";
-
+// TODO: move here all cache working
 export default {
   getItem(id) {
     return localforage.getItem(id);
