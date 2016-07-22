@@ -28,6 +28,7 @@ export default {
   },
   route: {
     activate({ to, next }) {
+      // NOTE: need refactor
       if (to.name === "main" && !store.state.defaultElementId) {
         return new Promise((resolve) => {
           let timer = setInterval(() => {
@@ -38,27 +39,23 @@ export default {
           }, 10);
         });
       }
-      if (to.name === "element" && !store.state.currentElement) {
-        this.search({ dataType: "element", name: to.params.element },
-          function({dispatch}, response) {
-            dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
-            dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
-            dispatch("SET_ELEMENT", (response.data ? response.data : response));
-          });
-      }
       next();
     },
     data({ to }) {
       if (to.name === "main") {
         return this.getElement(this.defaultElementId, null, function({dispatch}, response) {
+          dispatch("SET_ELEMENT", (response.data ? response.data : response));
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
+          dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
           return response;
         });
       }
       let storedElement = this.elements.find((item) => item.name === to.params.element);
       if (storedElement) {
         this.getElement(storedElement.id, null, function({dispatch}, response) {
+          dispatch("SET_ELEMENT", (response.data ? response.data : response));
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
+          dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
           return response;
         });
       } else {

@@ -11,7 +11,7 @@ var actions = {
     return this.getElements({ids: element.connections_ids.map((el) => el.id)});
   },
   getCurrentElementByName({dispatch}, elementName) {
-    if (!this.search) throw new Error("searchActions.search action not found in component. Check for searchActions component->vuex->actions");
+    if (!this.search) throw new Error("searchActions.search action not found in component. Check for searchActions in component->vuex->actions");
     return this.search({ dataType: "elements", name: elementName },
       function({dispatch}, response) {
         dispatch("SET_ELEMENT", (response.data ? response.data : response));
