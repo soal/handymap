@@ -1,11 +1,6 @@
 import workify from "webworkify";
-import values from "lodash/values";
-import localforage from "localforage";
-import {API_ROOT} from "../config";
 
 const dataService = {
-  worker: null,
-
   initWorker() {
     if (window.Worker) {
       // console.log(workerFunction);
@@ -28,7 +23,6 @@ const dataService = {
     return new Promise((resolve, reject) => {
       worker.postMessage(["networkHandler", `${type}`, options]);
       worker.onmessage = (result) => {
-        console.log("IN SERVICE", result);
         return resolve(result.data);
       };
       worker.onerror = (err) => reject(err);

@@ -46,40 +46,10 @@ class Crud {
               dispatch(`SET_${resourceName.toUpperCase()}`, (response.data ? response.data : response));
             }
           }
-
-          return new Promise((resolve, reject) => {
-            dataService.fetch("get", resourceName, id, params, cache);
-            dataService.onmessage = function(message) {
-              console.log("IN CRUD", message);
-              mutate(message);
-              resolve(message);
-            };
-            dataService.onerror = function(err) {
-              reject(err);
-            };
-          });
-          // var result = null;
-
-          // if (cache) {
-          //   result = cacheService.getItem(`${resourceName}_${id}`);
-          // } else {
-          //   result = resource.get({ id });
-          // }
-          // return result
-          //   .then(cachedItem => {
-          //     if (cachedItem) {
-          //       mutate(cachedItem);
-          //     }
-          //     return cachedItem;
-          //   })
-          //   .then(cachedItem => {
-          //     if (cachedItem == null) {
-          //       resource.get({ id }).then(response => {
-          //         mutate(response);
-          //       });
-          //     }
-          //   })
-          //   .catch(err => console.log(err));
+          dataService.fetch("get", resourceName, id, params, cache)
+              .then(response => {
+                mutate(response);
+              }).catch(err => console.log(err));
         },
 
         /** Get single data elment from server
@@ -102,17 +72,11 @@ class Crud {
               response = callback({ dispatch }, response);
             }
           }
-          return new Promise((resolve, reject) => {
-            dataService.fetch("get", resourceName, null, params, cache);
-            dataService.onmessage = function(message) {
-              mutate(message);
-              resolve(message);
-            };
-            dataService.onerror = function(err) {
-              reject(err);
-            };
-          });
-        },
+          dataService.fetch("get", resourceName, null, params, cache)
+            .then(response => {
+              mutate(response);
+            }).catch(err => console.log(err));
+        }
         /**
          * Save item to server
          * @param  {Object}   options.dispatch Service object from Vue

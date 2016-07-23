@@ -3,6 +3,13 @@ module.exports = function(self) {
   var config = require("../config");
   var values = require("lodash/values");
 
+  localforage.config({
+    driver: [localforage.INDEXEDDB,
+             localforage.WEBSQL,
+             localforage.LOCALSTORAGE],
+    name: "handymap"
+  });
+
   var handlers = {
     cacheHandler: {
       getItem(id) {
@@ -37,7 +44,7 @@ module.exports = function(self) {
     networkHandler: {
       get({ resource, id, data, cache }) {
         var params = null;
-        var result = new Promise(resolve => {});
+        var result = new Promise(() => {});
         var items = [];
         if (cache && id) {
           result = handlers.cacheHandler.getItem(`${resource}_${id}`);
@@ -52,7 +59,7 @@ module.exports = function(self) {
             return {res: localData, done: true};
           }
           if (localData instanceof Array) {
-            items.concat(localData);
+            items = items.concat(localData);
             if (items.length) {
               data.ids = data.ids.filter(
                 (itemId) => {
@@ -78,10 +85,8 @@ module.exports = function(self) {
                 }
               });
             }
-            console.log(`${config.API_ROOT}/${resource}${ id ? "/" + id : ""}${ params ? params : ""}`);
-            fetch(`${config.API_ROOT}/${resource}s${ id ? "/" + id : ""}${ params ? params : ""}`)
+            return fetch(`${config.API_ROOT}/${resource}s${ id ? "/" + id : ""}${ params ? params : ""}`)
               .then(response => {
-                console.log("PYSH");
                 var contentType = response.headers.get("content-type");
                 if (contentType.includes("json")) {
                   return response.json();
@@ -95,19 +100,13 @@ module.exports = function(self) {
                 return response;
               })
               .then(proceded => {
-                console.log("PROCEDDED: ", proceded);
                 var responseData = proceded.data ? proceded.data : proceded;
-                console.log("RD: ", responseData);
-                debugger
                 if (responseData instanceof Array) {
-                  items.concat(responseData);
-                  console.log("RD1: ", responseData);
+                  items = items.concat(responseData);
                   handlers.cacheHandler.setItems(resource, items);
                   return items;
                 } else {
                   handlers.cacheHandler.setItem(resource, responseData);
-
-                  console.log("RD2: ", responseData);
                   return responseData;
                 }
               })
@@ -142,10 +141,9 @@ module.exports = function(self) {
     if (result instanceof Promise) {
       result
         .then(res => {
-          console.log("IN WORKER", res);
           self.postMessage(res);
         })
-        .catch(err => self.postMessage(err));
+        .catch(err => console.log(err));
     } else {
       postMessage(result);
     }
