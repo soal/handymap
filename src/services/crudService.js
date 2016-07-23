@@ -2,7 +2,6 @@
  * CRUD service module
  */
 
-import cacheService from "./cacheService";
 import store from "../storage/store";
 import dataService from "./dataService";
 import capitalize from "lodash/capitalize";
@@ -46,7 +45,7 @@ class Crud {
               dispatch(`SET_${resourceName.toUpperCase()}`, (response.data ? response.data : response));
             }
           }
-          dataService.fetch("get", resourceName, id, params, cache)
+          dataService.fetch("get", `${resourceName}s`, id, params, cache)
               .then(response => {
                 mutate(response);
               }).catch(err => console.log(err));
@@ -72,7 +71,7 @@ class Crud {
               response = callback({ dispatch }, response);
             }
           }
-          dataService.fetch("get", resourceName, null, params, cache)
+          dataService.fetch("get", `${resourceName}s`, null, params, cache)
             .then(response => {
               mutate(response);
             }).catch(err => console.log(err));

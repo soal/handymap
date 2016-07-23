@@ -44,7 +44,6 @@ export default {
     data({ to }) {
       if (to.name === "main") {
         return this.getElement(this.defaultElementId, null, function({dispatch}, response) {
-          dispatch("SET_ELEMENT", (response.data ? response.data : response));
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
           dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
           return response;
@@ -53,7 +52,6 @@ export default {
       let storedElement = this.elements.find((item) => item.name === to.params.element);
       if (storedElement) {
         this.getElement(storedElement.id, null, function({dispatch}, response) {
-          dispatch("SET_ELEMENT", (response.data ? response.data : response));
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
           dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
           return response;

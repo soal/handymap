@@ -3,11 +3,7 @@ import workify from "webworkify";
 const dataService = {
   initWorker() {
     if (window.Worker) {
-      // console.log(workerFunction);
-      // var workerBlob = window.URL.createObjectURL(new Blob([workerFunction], { type: "application/javascript" }));
-      // console.log(workerBlob);
       this.worker = workify(require("./dataWorker.js"));
-      // this.worker = new Worker(workerBlob);
     }
     return this.worker;
   },

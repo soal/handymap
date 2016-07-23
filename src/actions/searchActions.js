@@ -1,14 +1,16 @@
+import dataService from "../services/dataService";
+
 var actions = {
   search({ dispatch }, params, callback=false) {
-    return Search.get({ ...params })
-      .then((response) => {
+    return dataService.fetch("get", "search", null, params, false)
+      .then(response => {
         if (callback) {
           callback({dispatch}, response);
         } else {
           dispatch("SET_SEARCH_RESULTS", (response.data ? response.data : response));
         }
         return response;
-      });
+      }).catch(err => console.log(err));
   }
 };
 

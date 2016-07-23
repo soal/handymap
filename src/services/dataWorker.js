@@ -23,12 +23,12 @@ module.exports = function(self) {
       },
 
       setItem(type, item) {
-        return localforage.setItem(`${type}_${item.id}`, item).then(res => res);
+        return localforage.setItem(`${type}_${item.id}`, item).then(res => res).catch(err => console.log(err));
       },
 
       setItems(type, items) {
         for (let item of items) {
-          localforage.setItem(`${type}_${item.id}`, item);
+          localforage.setItem(`${type}_${item.id}`, item).catch(err => console.log(err));
         }
       },
 
@@ -44,7 +44,7 @@ module.exports = function(self) {
     networkHandler: {
       get({ resource, id, data, cache }) {
         var params = null;
-        var result = new Promise(() => {});
+        var result = new Promise(resolve => resolve());
         var items = [];
         if (cache && id) {
           result = handlers.cacheHandler.getItem(`${resource}_${id}`);
@@ -53,7 +53,6 @@ module.exports = function(self) {
           var cacheKeys = data.ids.map((key) => `${resource}_${key}`);
           result = handlers.cacheHandler.getItems(cacheKeys);
         }
-
         result.then(localData => {
           if (localData && localData.id) {
             return {res: localData, done: true};
@@ -76,6 +75,10 @@ module.exports = function(self) {
         });
 
         return result.then((answer) => {
+          if (data && data.dataType) {
+            var dataType = data.dataType;
+            delete data.dataType;
+          }
           if (!answer || !answer.done) {
             if (data && values(data).length) {
               params = "?";
@@ -85,7 +88,7 @@ module.exports = function(self) {
                 }
               });
             }
-            return fetch(`${config.API_ROOT}/${resource}s${ id ? "/" + id : ""}${ params ? params : ""}`)
+            return fetch(`${config.API_ROOT}/${resource}${ dataType ? "/" + dataType : ""}${ id ? "/" + id : ""}${ params ? params : ""}`)
               .then(response => {
                 var contentType = response.headers.get("content-type");
                 if (contentType.includes("json")) {
@@ -103,10 +106,14 @@ module.exports = function(self) {
                 var responseData = proceded.data ? proceded.data : proceded;
                 if (responseData instanceof Array) {
                   items = items.concat(responseData);
-                  handlers.cacheHandler.setItems(resource, items);
+                  if (resource === "elements" || resource === "collections" || resource === "ordered_collections") {
+                    handlers.cacheHandler.setItems(resource, items);
+                  }
                   return items;
                 } else {
-                  handlers.cacheHandler.setItem(resource, responseData);
+                  if (resource === "elements" || resource === "collections" || resource === "ordered_collections") {
+                    handlers.cacheHandler.setItem(resource, responseData);
+                  }
                   return responseData;
                 }
               })
@@ -137,7 +144,6 @@ module.exports = function(self) {
     };
 
     var result = handlers[commands.handler][commands.method](commands.options);
-
     if (result instanceof Promise) {
       result
         .then(res => {

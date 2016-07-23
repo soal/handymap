@@ -7,6 +7,7 @@ import dataService from "./services/dataService";
 import App from "./App.vue";
 
 Vue.config.debug = true;
+dataService.initWorker();
 
 sync(store, router);
 
@@ -14,4 +15,3 @@ router.start(App, "app");
 
 window.Vue = Vue;
 
-dataService.initWorker();
