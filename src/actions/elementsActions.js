@@ -1,7 +1,6 @@
 /** ElementsActions module */
 
 import {ResourceActions} from "../services/crudService";
-import {Element} from "../api/resources";
 
 var actions = {
   getChildren({dispatch}, element) {
@@ -20,7 +19,7 @@ var actions = {
       });
   }
 };
-actions = new ResourceActions(Element, "Element", actions).actions;
+actions = new ResourceActions("element", actions).actions;
 
 /** Actions for Element resource including CRUD actions */
 export default actions;

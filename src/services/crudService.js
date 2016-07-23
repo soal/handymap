@@ -4,6 +4,8 @@
 
 import cacheService from "./cacheService";
 import store from "../storage/store";
+import dataService from "./dataService";
+import capitalize from "lodash/capitalize";
 
 var dispatch = store.dispatch;
 
@@ -17,12 +19,11 @@ class Crud {
    * @param  {Object} resource     Resource object from vue-resource
    * @param  {String} resourceName Name of the resource
    */
-  constructor(resource, resourceName) {
-    this.resource = resource;
+  constructor(resourceName) {
     this.resourceName = resourceName;
 
 
-    function methods(dispatch, resource, resourceName) {
+    function methods(dispatch, resourceName) {
       return {
         /** Get single data elment from server
         * @param  {Object}   options.dispatch Service object from Vue
@@ -31,7 +32,7 @@ class Crud {
         * @param  {Boolean}  cache            Use cache or not
         * @param  {Boolean}  preventDefaultAcion  If true, callback will be called and default action canceled. If not, method call dispatch() store method
         */
-        [`get${resourceName}`]({ dispatch }, id=null, params=null, callback=null, cache=true, preventDefaultAcion=false) {
+        [`get${capitalize(resourceName)}`]({ dispatch }, id=null, params=null, callback=null, cache=true, preventDefaultAcion=false) {
 
           /**
            * Dispatch mutation event
@@ -46,28 +47,39 @@ class Crud {
             }
           }
 
-          var result = null;
+          return new Promise((resolve, reject) => {
+            dataService.fetch("get", resourceName, id, params, cache);
+            dataService.onmessage = function(message) {
+              console.log("IN CRUD", message);
+              mutate(message);
+              resolve(message);
+            };
+            dataService.onerror = function(err) {
+              reject(err);
+            };
+          });
+          // var result = null;
 
-          if (cache) {
-            result = cacheService.getItem(`${resourceName}_${id}`);
-          } else {
-            result = resource.get({ id });
-          }
-          return result
-            .then(cachedItem => {
-              if (cachedItem) {
-                mutate(cachedItem);
-              }
-              return cachedItem;
-            })
-            .then(cachedItem => {
-              if (cachedItem == null) {
-                resource.get({ id }).then(response => {
-                  mutate(response);
-                });
-              }
-            })
-            .catch(err => console.log(err));
+          // if (cache) {
+          //   result = cacheService.getItem(`${resourceName}_${id}`);
+          // } else {
+          //   result = resource.get({ id });
+          // }
+          // return result
+          //   .then(cachedItem => {
+          //     if (cachedItem) {
+          //       mutate(cachedItem);
+          //     }
+          //     return cachedItem;
+          //   })
+          //   .then(cachedItem => {
+          //     if (cachedItem == null) {
+          //       resource.get({ id }).then(response => {
+          //         mutate(response);
+          //       });
+          //     }
+          //   })
+          //   .catch(err => console.log(err));
         },
 
         /** Get single data elment from server
@@ -77,7 +89,7 @@ class Crud {
          * @param  {Boolean}  cache                   Use cache or not
          * @param  {Boolean}  preventDefaultAcion     If true, callback will be called and default action canceled. If not, method call dispatch() store method
          */
-        [`get${resourceName}s`]({ dispatch }, params=null, callback=null, cache=true, preventDefaultAcion=false) {
+        [`get${capitalize(resourceName)}s`]({ dispatch }, params=null, callback=null, cache=true, preventDefaultAcion=false) {
           /**
            * Dispatch mutation event
            * @param {Object||Array}   Response object passed to dispatch function
@@ -90,51 +102,16 @@ class Crud {
               response = callback({ dispatch }, response);
             }
           }
-          // TODO: Use async from ECMAScript 2017 already for all this?
-          var items = [];
-          // Empty promise for unify code for ids and other params
-          var filteredIds = new Promise(() => {});
-          var result = null;
-
-          // If we get list of objects by ids and need check cache, we need to do some weird stuff
-          if (params.ids) {
-            if (cache) {
-              // Convert plain ids to ids for in-browser storage, e.g id "1" to "Element_1"
-              var cacheKeys = params.ids.map((key) => `${resourceName}_${key}`);
-              filteredIds = cacheService.getItems(cacheKeys)
-                .then(function(cachedItems) {
-                  // Add items from cache
-                  items = items.concat(cachedItems);
-                  // Filter list of ids to get from server, removing ids of items we already got from cache
-                  params.ids = params.ids.filter(
-                    (itemId) => {
-                      return !(cachedItems.map((item) => item.id).includes(itemId));
-                    })
-                    .join(",");
-                  return params;
-                });
-            }
-          }
-          // TODO: Processing all types of Params
-          return filteredIds.then(function(params) {
-            if (!params.ids.length) {
-              delete params.ids;
-            }
-            // FIXME: Prevent requesting if params empty
-            if (Object.keys(params).length) {
-              result = resource.get(params);
-              result
-              .then(response => {
-                // Adding items from server response to items from cache and mutate state
-                mutate(items.concat(response.data.data ? response.data.data : response));
-                return response;
-              })
-              .catch(err => console.log(err));
-            } else {
-              // If all items got from cache, just mutate state without requsting data from server
-              mutate(items);
-            }
-          }).catch(err => console.log(err));
+          return new Promise((resolve, reject) => {
+            dataService.fetch("get", resourceName, null, params, cache);
+            dataService.onmessage = function(message) {
+              mutate(message);
+              resolve(message);
+            };
+            dataService.onerror = function(err) {
+              reject(err);
+            };
+          });
         },
         /**
          * Save item to server
@@ -144,19 +121,19 @@ class Crud {
          * @param  {Function} callback         Callback for custom behavior, called in success promise callback
          * @param  {Boolean}  preventDefaultAcion          If true, callback will be called and default action canceled. If not, method call dispatch() store method
          */
-        [`create${resourceName}`]({ dispatch }, id=null, item={}, callback=null, preventDefaultAcion=false) {
-          resource.save({ id, item }).then(
-            res => {
-              if (callback) {
-                res = callback({ dispatch }, res);
-              }
-              if (!preventDefaultAcion) {
-                dispatch(`CREATED_${resourceName.toUpperCase()}`, (res.data ? res.data : res));
-              }
-            },
-            err => console.error(err)
-          );
-        },
+        // [`create${capitalize(resourceName)}`]({ dispatch }, id=null, item={}, callback=null, preventDefaultAcion=false) {
+        //   resource.save({ id, item }).then(
+        //     res => {
+        //       if (callback) {
+        //         res = callback({ dispatch }, res);
+        //       }
+        //       if (!preventDefaultAcion) {
+        //         dispatch(`CREATED_${resourceName.toUpperCase()}`, (res.data ? res.data : res));
+        //       }
+        //     },
+        //     err => console.error(err)
+        //   );
+        // },
         /**
          * Save item to server
          * @param  {Object}   options.dispatch Service object from Vue
@@ -164,19 +141,19 @@ class Crud {
          * @param  {Function} callback         Callback for custom behavior, called in success promise callback
          * @param  {Boolean}  preventDefaultAcion          If true, callback will be called and default action canceled. If not, method call dispatch() store method
          */
-        [`update${resourceName}`]({ dispatch }, id=null, item={}, callback=null, preventDefaultAcion=false) {
-          resource.update({ id, item }).then(
-            res => {
-              if (callback) {
-                res = callback({ dispatch }, res);
-              }
-              if (!preventDefaultAcion) {
-                dispatch(`UPDATED_${resourceName.toUpperCase()}`, (res.data ? res.data : res));
-              }
-            },
-            err => console.error(err)
-          );
-        },
+        // [`update${capitalize(resourceName)}`]({ dispatch }, id=null, item={}, callback=null, preventDefaultAcion=false) {
+        //   resource.update({ id, item }).then(
+        //     res => {
+        //       if (callback) {
+        //         res = callback({ dispatch }, res);
+        //       }
+        //       if (!preventDefaultAcion) {
+        //         dispatch(`UPDATED_${resourceName.toUpperCase()}`, (res.data ? res.data : res));
+        //       }
+        //     },
+        //     err => console.error(err)
+        //   );
+        // },
         /**
          * Delete object from server
          * @param  {Object}   options.dispatch Service object from Vue. In component.actions it pass to function implicitly, so we need it here
@@ -184,26 +161,26 @@ class Crud {
          * @param  {Function} callback         Callback for custom behavior, called in success promise callback
          * @param  {Boolean}  preventDefaultAcion          If true, callback will be called and default action canceled. If not, method call dispatch() store method
          */
-        [`remove${resourceName}`]({ dispatch }, id=null, callback=null, preventDefaultAcion=false) {
-          resource.save({ id }).then(
-            res => {
-              if (callback) {
-                res = callback({ dispatch }, res);
-              }
-              if (!preventDefaultAcion) {
-                dispatch(`DELETED_${resourceName.toUpperCase()}`, (res.data ? res.data : res));
-              }
-            },
-            err => console.error(err)
-          );
-        }
+        // [`remove${capitalize(resourceName)}`]({ dispatch }, id=null, callback=null, preventDefaultAcion=false) {
+        //   resource.save({ id }).then(
+        //     res => {
+        //       if (callback) {
+        //         res = callback({ dispatch }, res);
+        //       }
+        //       if (!preventDefaultAcion) {
+        //         dispatch(`DELETED_${resourceName.toUpperCase()}`, (res.data ? res.data : res));
+        //       }
+        //     },
+        //     err => console.error(err)
+        //   );
+        // }
       };
     }
     /**
      * Object of initialized Crud methods. Should be called in component
      * @return {Object} Object contains methods for adding to "actions" property of component
      */
-    this.actions = methods(dispatch, this.resource, this.resourceName);
+    this.actions = methods(dispatch, this.resourceName);
   }
 }
 
@@ -221,9 +198,8 @@ class ResourceActions extends Crud {
    * @param  {Object}       [resourceActions={}]  Object of actions for this resource
    * @return {ResourceActions}                    ResourceActions object
    */
-  constructor(resource, resourceName, resourceActions={}) {
-    var crud = super(resource, resourceName);
-    this.resource = resource;
+  constructor(resourceName, resourceActions={}) {
+    var crud = super(resourceName);
     this.resourceName = resourceName;
     this.actions = Object.assign(
       crud.actions,

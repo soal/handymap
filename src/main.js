@@ -2,12 +2,13 @@ import Vue from "vue";
 import {sync} from "vuex-router-sync";
 import localforage from "localforage";
 
-
 import store from "./storage/store";
 import router from "./router";
+import dataService from "./services/dataService";
 import App from "./App.vue";
 
 Vue.config.debug = true;
+
 
 localforage.config({
   driver: [localforage.INDEXEDDB,
@@ -20,3 +21,5 @@ sync(store, router);
 router.start(App, "app");
 
 window.Vue = Vue;
+
+dataService.initWorker();

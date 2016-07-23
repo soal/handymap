@@ -1,5 +1,3 @@
-import {Search} from "../api/resources";
-
 var actions = {
   search({ dispatch }, params, callback=false) {
     return Search.get({ ...params })

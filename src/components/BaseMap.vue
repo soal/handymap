@@ -16,18 +16,18 @@ export default {
     getters: {}
   },
   ready() {
-    M.accessToken = MAPBOX_ACCESS_TOKEN;
-    var map = new M.Map({
-      container: "map",
-      style: MAP_SOURCE,
-      center: [8.3221, 46.5928],
-      maxZoom: 6,
-      minZoom: 1.76,
-      zoom: 3,
-      hash: true
-    });
+    // M.accessToken = MAPBOX_ACCESS_TOKEN;
+    // var map = new M.Map({
+    //   container: "map",
+    //   style: MAP_SOURCE,
+    //   center: [8.3221, 46.5928],
+    //   maxZoom: 6,
+    //   minZoom: 1.76,
+    //   zoom: 3,
+    //   hash: true
+    // });
 
-    map.addControl(new M.Navigation());
+    // map.addControl(new M.Navigation());
   }
 };
 

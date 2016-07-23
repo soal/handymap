@@ -17,3 +17,5 @@ const localSource = "mapstyle.json";
  */
 export const MAP_SOURCE = mapboxSource;
 // export const MAP_SOURCE = localSource;
+
+// module.exports = API_ROOT;
