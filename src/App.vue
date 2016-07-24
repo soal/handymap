@@ -32,8 +32,8 @@ export default {
     Dicts.get()
       .then((dicts) => {
         store.dispatch("SET_DICTS", dicts.data);
-        if (dicts.data.data.default_element) {
-          store.dispatch("SET_DEFAULT_ELEMENT_ID", dicts.data.data.default_element);
+        if (dicts.data.default_element) {
+          store.dispatch("SET_DEFAULT_ELEMENT_ID", dicts.data.default_element);
         }
       });
   }
@@ -46,23 +46,23 @@ export default {
   margin: 0;
   position: relative;
   z-index: 2;
-  
+
   .fixed-logo {
     position: absolute;
     left: .85rem;
     top: .85rem;
     z-index: 9999;
   }
-  
+
   .main-logo {
     // font-size: $font-size-h3;
   }
-  
-  
+
+
   .navbar {
     padding-left: 10rem;
   }
-  
+
   form {
     text-align: center;
   }
