@@ -4,14 +4,14 @@ import {ResourceActions} from "../services/crudService";
 
 var actions = {
   getChildren({dispatch}, element) {
-    return this.getElements({ids: element.children_ids.map((el) => el.id)});
+    return this.getElements({ query: { ids: element.children_ids.map((el) => el.id) } });
   },
   getConnections({dispatch}, element) {
-    return this.getElements({ids: element.connections_ids.map((el) => el.id)});
+    return this.getElements({ query: { ids: element.connections_ids.map((el) => el.id) } });
   },
   getCurrentElementByName({dispatch}, elementName) {
     if (!this.search) throw new Error("searchActions.search action not found in component. Check for searchActions in component->vuex->actions");
-    this.search({ dataType: "elements", name: elementName },
+    this.search({ path: ["elements"], query: { name: elementName } },
       function({dispatch}, response) {
         dispatch("SET_ELEMENT", (response[0].data ? response[0].data : response[0]));
         dispatch("SET_CURRENT_ELEMENT_ID", (response[0].data ? response[0].data.id : response[0].id));

@@ -1,5 +1,5 @@
 /**
- * CRUD service module
+ * @module CRUD service module
  */
 
 import store from "../storage/store";
@@ -10,7 +10,7 @@ var dispatch = store.dispatch;
 
 /**
  * @class Crud — helper class that realize common interface for CRUD requests.
- * Provides CRUD actions by pattern: "<action> + <Resourse name>" e.g. getFact, updateFact, createFact, removeFact
+ * Provides CRUD actions by pattern: "<action> + <Resourse name>" e.g. getElement, getElements, updateElement, createElement, removeElement
  */
 class Crud {
   /**
@@ -48,7 +48,9 @@ class Crud {
           dataService.fetch("getOne", `${resourceName}s`, { path: [id], query: params }, null, cache)
               .then(response => {
                 mutate(response);
-              }).catch(err => console.log(err));
+              },
+              err => console.log(err)
+              );
         },
 
         /** Get single data elment from server
@@ -71,11 +73,12 @@ class Crud {
               response = callback({ dispatch }, response);
             }
           }
-          dataService.fetch("getSome", `${resourceName}s`, null, params, cache)
+          dataService.fetch("getSome", `${resourceName}s`, { path: null, query: params }, null, cache)
             .then(response => {
               console.log(response);
               mutate(response.data ? response.data : response);
-            }).catch(err => console.log(err));
+            },
+            err => console.log(err));
         }
         /**
          * Save item to server

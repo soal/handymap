@@ -71,8 +71,8 @@ export default {
       orderedCollections: state => state.orderedCollections
     },
     actions: Object.assign(
-      elementsActions,
       searchActions,
+      elementsActions,
       {}
     )
   },

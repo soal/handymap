@@ -1,7 +1,13 @@
+/**
+ * @module dataWorker Functions for handling data operations, workin in WebWorker
+ */
+
+
 module.exports = function(self) {
   var localforage = require("localforage");
   var config = require("../config");
-  var values = require("lodash/values");
+  // var values = require("lodash/values");
+  var has = require("lodash/has");
   var waterfall = require("async/waterfall");
   var urlService = require("./urlService");
 
@@ -13,64 +19,187 @@ module.exports = function(self) {
   });
 
   var resourcesToCache = ["elements", "collections", "ordered_collections"];
+  var handlers = {};
 
-  var handlers = {
-    cacheHandler: {
-      getItem(id) {
-        return localforage.getItem(id);
-      },
+  var handlersList = {
+    /** Functions for working with IndexedDB | WebSQL | localStorage */
+    cacheHandler(orderId) {
+      return {
 
-      getItems(keysToGet) {
-        var promises = keysToGet.map((key) => localforage.getItem(key));
-        return Promise.all(promises)
-          .then(function(result) { return result.filter((item) => item !== null); });
-      },
+        /**
+         * Get single item from local storage
+         *
+         * @param   {string | number } id Id of element to get
+         * @returns {Promise}
+         *
+         */
+        getItem(id) {
+          return localforage.getItem(id);
+        },
+        /**
+         * Get list of items from local storage
+         *
+         * @param {number[]} keysToGet
+         * @returns {Promise}
+         */
+        getItems(keysToGet) {
+          var promises = keysToGet.map((key) => localforage.getItem(key));
+          return Promise.all(promises)
+            .then(function(result) { return result.filter((item) => item !== null); });
+        },
 
-      setItem(type, item) {
-        return localforage.setItem(`${type}_${item.id}`, item).then(res => res).catch(err => console.log(err));
-      },
+        /**
+         * Set single item to local storage
+         *
+         * @param {string}          type  Type of item, uses to create item id in local storage
+         * @param {number | string} item  Item to set
+         * @returns
+         */
+        setItem(type, item) {
+          return localforage.setItem(`${type}_${item.id}`, item).then(res => res, err => console.log(err));
+        },
 
-      setItems(type, items) {
-        for (let item of items) {
-          localforage.setItem(`${type}_${item.id}`, item).catch(err => console.log(err));
+        /**
+         * Set list of items to local storage
+         *
+         * @param {string}   type   Type of items, uses to create item id in local storage
+         * @param {Object[]} items  List of items to set
+         */
+        setItems(type, items) {
+          for (let item of items) {
+            localforage.setItem(`${type}_${item.id}`, item).catch(err => console.log(err));
+          }
+        },
+
+        /**
+         * Remove single from storage by id
+         *
+         * @param {string}          type  Type of item, uses to create item id in local storage
+         * @param {number | string} id    Item id
+         */
+        removeItem(type, id) {
+          localforage.removeItem(`${type}_${id}`);
+        },
+
+        /**
+         *  Delete all items in local storage
+         */
+        clearStorage() {
+          localforage.clearStorage();
         }
-      },
-
-      removeItem(id) {
-        localforage.removeItem(id);
-      },
-
-      clearStorage() {
-        localforage.clearStorage();
-      }
+      };
     },
 
-    networkHandler: {
-      getOne({ resource, params, cache }) {
+    networkHandler(orderId) {
+      return {
         /**
-         * async waterfall: http://caolan.github.io/async/docs.html#.waterfall. Functions pass they results to callback, and they become arguments for next function in waterfall
+         * Get single item from server or cache by item's id. Call postMessage(response) to send data to main thread
+         *
+         * @param {Object}  { resource, params, cache }
+         * @param {string}  { resource, params, cache }.resource Resource to get. Using as part of url, e.g. "elements" in "/api/elements/2"
+         * @param {Object}  { resource, params, cache }.params   Parameters for request. Format: { path: [...params], query: { key: value }
+         * @param {Boolean} { resource, params, cache }.cache    Cache policy. If true, items can be taken from browser cache (IndexedDB | WebSQL | localStorage)
          */
-        return waterfall([
-          function(callback) {
-            if (cache) {
-              handlers.cacheHandler.getItem(params.path.id)
-                .then(cached => {
-                  if (cached) {
-                    callback(null, cached);
-                  } else {
-                    callback(null, null);
-                  }
-                });
-            } else {
-              callback(null, null);
+        getOne({ resource, params, cache }) {
+          /**
+           * async waterfall: http://caolan.github.io/async/docs.html#.waterfall. Functions pass they results to callback, and they become arguments for next function in waterfall
+           */
+          waterfall([
+            function(callback) {
+              if (cache) {
+                handlers.cacheHandler.getItem(params.path.id)
+                  .then(cached => {
+                    if (cached) {
+                      callback(null, cached);
+                    } else {
+                      callback(null, null);
+                    }
+                  });
+              } else {
+                callback(null, null);
+              }
+            },
+            function(cached, callback) {
+              if (cached) {
+                callback(null, cached);
+              } else {
+                fetch(`${config.API_ROOT}/${resource}${urlService.processParams(params)}`)
+                  .then(response => {
+                    var contentType = response.headers.get("content-type");
+                    if (contentType.includes("json")) {
+                      return response.json();
+                    }
+                    if (contentType.includes("image" || "pdf")) {
+                      return response.blob();
+                    }
+                    if (contentType.includes("text")) {
+                      return response.text();
+                    }
+                    return response;
+                  })
+                  .then(proceded => {
+                    var responseData = proceded.data ? proceded.data : proceded;
+                    if (resourcesToCache.includes(resource)) {
+                      handlers.cacheHandler.setItem(resource, responseData);
+                    }
+                    callback(null, proceded);
+                  },
+                  err => console.log(err));
+              }
             }
-          },
-          function(cached, callback) {
-            if (cached) {
-              callback(null, cached);
+          ], function(error, result) {
+            if (error) {
+              console.log(error);
+              return false;
             } else {
-              console.log(`${config.API_ROOT}/${resource}${urlService.processParams(params)}`);
-              fetch(`${config.API_ROOT}/${resource}${urlService.processParams(params)}`)
+              console.log("BEFORE_POST: ", orderId);
+              self.postMessage([orderId, result]);
+            }
+          });
+
+        },
+
+
+        /**
+         * Get list of items from server or cache, filtered by ids and other params. Call postMessage(response) to send data to main thread
+         *
+         * @param {Object}  { resource, params, cache }
+         * @param {string}  {}.resource Resource to get. Using as part of url, e.g. "elements" in "/api/elements/2"
+         * @param {Object}  {}.params   Parameters for request. Format: { path: [...params], query: { key: value }
+         * @param {Boolean} {}.cache    Cache policy. If true, items can be taken from browser cache (IndexedDB | WebSQL | localStorage)
+         */
+        getSome({ resource, params, cache }) {
+          waterfall([
+
+            function(callback) {
+              if (cache && resourcesToCache.includes(resource) && has(params, "query.ids") && params.query.ids.length) {
+                localforage.keys((err, keys) => {
+                  if (err) callback(null);
+                  callback(keys);
+                });
+              }
+            },
+            function (keysFromCache, callback) {
+              if (keysFromCache && keysFromCache.length) {
+                params.query.ids = params.query.ids.filter(itemId => !keysFromCache.includes(itemId));
+                handlers.cacheHandler.getItems(keysFromCache)
+                  .then(cached => {
+                    callback(null, cached);
+                  },
+                  err => console.log(err));
+              } else {
+                callback(null);
+              }
+            },
+
+            function(cached, callback) {
+              // TODO: What if we need filter objects from list of ids by other params?
+              if (has(params, "query.ids") && !params.query.ids.length) {
+                callback(null, cached);
+              }
+              // var params = urlService.processParams(params);
+
+              fetch(`${config.API_ROOT}/${resource}${ urlService.processParams(params) }`)
                 .then(response => {
                   var contentType = response.headers.get("content-type");
                   if (contentType.includes("json")) {
@@ -85,127 +214,102 @@ module.exports = function(self) {
                   return response;
                 })
                 .then(proceded => {
-                  var responseData = proceded.data ? proceded.data : proceded;
+                  let items = [];
+                  if (cached) {
+                    items = items.concat(cached, proceded.data ? proceded.data : proceded);
+                  } else {
+                    items = items.concat(proceded.data ? proceded.data : proceded);
+                  }
                   if (resourcesToCache.includes(resource)) {
-                    handlers.cacheHandler.setItem(resource, responseData);
+                    handlers.cacheHandler.setItems(resource, items);
                   }
-                  callback(null, proceded);
-                  return;
-                })
-              .catch(err => console.log(err));
+                  callback(null, items);
+                },
+                err => console.log(err));
             }
-          }
-        ], function(error, result) {
-          if (error) {
-            console.log(error);
-            return false;
-          } else {
-            self.postMessage(result);
-          }
-        });
 
-      },
-
-
-      getSome({ resource, data, cache }) {
-        var items = [];
-        waterfall([
-
-          function(callback) {
-            if (cache && data && values(data.ids).length) {
-              var cacheKeys = data.ids.map((key) => `${resource}_${key}`);
-
-              handlers.cacheHandler.getItems(cacheKeys)
-                .then(cached => {
-                  if (cached.length) {
-                    items = items.concat(cached);
-                    data.ids = data.ids.filter(
-                      itemId => {
-                        return !(cached.map((item) => item.id).includes(itemId));
-                      });
-                    callback(null, data);
-                  }
-                });
+          ], function(error, result) {
+            if (error) {
+              console.log(error);
+              return false;
             } else {
-              callback(null, data);
+              console.log("BEFORE_POST: ", orderId);
+              self.postMessage([orderId, result]);
             }
-          },
+          });
 
-          function(data, callback) {
-            var dataType = null;
-            if (data && data.dataType) {
-              dataType = "" + data.dataType;
-              delete data.dataType;
-            }
-            callback(null, data, dataType);
-            return;
-          },
+        },
 
-          function(data, dataType, callback) {
-            // console.log(values(data).length);
-            // debugger
-            if (data && !values(data).length) {
-              callback(null, items);
-              return;
-            }
-            var params = urlService.processParams(data);
+        /**
+         * Create item with given type on the server. Call postMessage(response) to send data to main thread
+         *
+         * @param {Object} { resource, data }
+         * @param {string} {}.resource          Resource to set. Using as part of url, e.g. "elements" in "/api/elements/2"
+         * @param {Object} {}.data              New item's data
+         */
+        create({ resource, data }) {},
 
-            fetch(`${config.API_ROOT}/${resource}${ dataType ? "/" + dataType : ""}${ params ? params : ""}`)
-              .then(response => {
-                var contentType = response.headers.get("content-type");
-                if (contentType.includes("json")) {
-                  return response.json();
-                }
-                if (contentType.includes("image" || "pdf")) {
-                  return response.blob();
-                }
-                if (contentType.includes("text")) {
-                  return response.text();
-                }
-                return response;
-              })
-              .then(proceded => {
-                items = items.concat(proceded.data ? proceded.data : proceded );
-                console.log("ITEMS: ", items);
-                if (resourcesToCache.includes(resource)) {
-                  handlers.cacheHandler.setItems(resource, items);
-                }
-                // debugger
-                callback(null, items);
-              })
-              .catch(err => console.log(err));
-          }
+        /**
+         * Update item with given type and id on the server. Call postMessage(response) to send data to main thread
+         *
+         * @param {Object} { resource, id, data }
+         * @param {string} {}.resource          Resource to update. Using as part of url, e.g. "elements" in "/api/elements/2"
+         * @param {string | number} {}.id       Item's id
+         * @param {Object} {}.data              New item's data
+         */
+        update({ resource, id, data }) {},
 
-        ], function(error, result) {
-          if (error) {
-            console.log(error);
-            return false;
-          } else {
-            self.postMessage(result);
-          }
-        });
-
-      },
-
-      create({ resource, data }) {},
-
-      update({ resource, id, data }) {},
-
-      remove({ resource, id }) {}
+        /**
+         * Delete item with given type and id on the server. Call postMessage(response) to send data to main thread
+         *
+         * @param {Object} { resource, id }
+         * @param {string} {}.resource          Resource to delete. Using as part of url, e.g. "elements" in "/api/elements/2"
+         * @param {string | number} {}.id       Item's id
+         */
+        remove({ resource, id }) {}
+      };
     },
 
-    depsHandler: {
-
+    depsHandler(orderId) {
+      return {};
     }
   };
+  const orders = [];
+
+  function processOrder(order) {
+    console.log("PROCESS: ", order.orderId);
+    handlers[order.handler][order.method](order.options);
+  }
+
+  // function workCicle() {
+  //   var counter = 0;
+  //   setTimeout(function() {
+  //     while (orders.length) {
+  //       orders.forEach(order => {
+  //         processOrder(order);
+  //         orders.shift();
+  //         counter++;
+  //         console.log(counter);
+  //       });
+  //     }
+  //   }, 100);
+  // }
 
   self.onmessage = function(message) {
-    var commands = {
+    console.log(message);
+    orders.push(message);
+    var order = {
       handler: message.data[0],
       method: message.data[1],
-      options: message.data[2]
+      options: message.data[2],
+      orderId: message.data[3]
     };
-
-    handlers[commands.handler][commands.method](commands.options);
+    handlers = {
+      cacheHandler: handlersList.cacheHandler(order.orderId),
+      networkHandler: handlersList.networkHandler(order.orderId),
+      depsHandler: handlersList.depsHandler(order.orderId)
+    };
+    processOrder(order);
   };
+  // workCicle();
 };
