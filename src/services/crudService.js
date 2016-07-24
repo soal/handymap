@@ -73,7 +73,7 @@ class Crud {
               response = callback({ dispatch }, response);
             }
           }
-          dataService.fetch("getSome", `${resourceName}s`, { path: null, query: params }, null, cache)
+          dataService.fetch("getSome", `${resourceName}s`, params, null, cache)
             .then(response => {
               console.log(response);
               mutate(response.data ? response.data : response);

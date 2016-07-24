@@ -32,8 +32,8 @@ module.exports = {
   processParams(paramsObj) {
     var urlString = "";
     if (values(paramsObj).length) {
-      if (paramsObj.path.length) urlString += this.processPathParams(paramsObj.path);
-      if (values(paramsObj.query).length) urlString += this.processQueryString(paramsObj.query);
+      if (paramsObj.path && paramsObj.path.length) urlString += this.processPathParams(paramsObj.path);
+      if (paramsObj.query && values(paramsObj.query).length) urlString += this.processQueryString(paramsObj.query);
     }
     return urlString;
   }

@@ -175,7 +175,7 @@ module.exports = function(self) {
               if (cache && resourcesToCache.includes(resource) && has(params, "query.ids") && params.query.ids.length) {
                 localforage.keys((err, keys) => {
                   if (err) callback(null);
-                  callback(keys);
+                  callback(null, keys);
                 });
               }
             },
@@ -230,8 +230,8 @@ module.exports = function(self) {
 
           ], function(error, result) {
             if (error) {
+              console.log("ERROR!");
               console.log(error);
-              return false;
             } else {
               console.log("BEFORE_POST: ", orderId);
               self.postMessage([orderId, result]);

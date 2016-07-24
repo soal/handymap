@@ -8,9 +8,27 @@ const dataService = {
   initWorker() {
     if (window.Worker) {
       this.worker = workify(require("./dataWorker.js"));
-      console.log(this.worker);
+      // console.log(this.worker);
     }
-    return this.worker;
+
+    this.worker.onmessage = message => {
+      console.log("MESSAGE_ID: ", message.data[0]);
+      console.log("MESSAGE_BODY: ", message.data[1]);
+      var workerEvent = new CustomEvent("dataWorkerMessage", {
+        detail: { message }
+      });
+      document.dispatchEvent(workerEvent);
+      // if (message.data[0] === orderId) {
+      //   resolve(message.data[1]);
+      // }
+    };
+
+    this.worker.onerror = error => {
+      var workerErrorEvent = new CustomEvent("dataWorkerError", {
+        detail: { error }
+      });
+      document.dispatchEvent(workerErrorEvent);
+    };
   },
   /**
    * Make network request in Data WebWorker
@@ -24,6 +42,7 @@ const dataService = {
    * @param  {Boolean}   cache            Cache policy. If true, items can be taken from browser cache (IndexedDB | WebSQL | localStorage)
    * @return {Promise}                    Returns Promise that resolves when recieved message from WebWorker
    */
+
   fetch(type, resource, params={ path: null, query: null }, data, cache=true) {
     var options = {
       resource,
@@ -37,14 +56,14 @@ const dataService = {
       let orderId = Math.random().toString(36);
       console.log("ORIGINAL_ORDER_ID: ", orderId);
       worker.postMessage(["networkHandler", `${type}`, options, orderId]);
-      worker.onmessage = (message) => {
-        console.log("MESSAGE_ID: ", message.data[0]);
-        console.log("MESSAGE_BODY: ", message.data[1]);
-        if (message.data[0] === orderId) {
-          resolve(message.data[1]);
+
+      document.addEventListener("dataWorkerMessage", (event) => {
+        console.log("MESSAGE_IN_PROMISE_ID: ", event.detail.message.data[0]);
+        console.log("MESSAGE_IN_PROMISE_BODY: ", event.detail.message.data[1]);
+        if (event.detail.message.data[0] === orderId) {
+          resolve(event.detail.message.data[1]);
         }
-      };
-      worker.onerror = (err) => reject(err);
+      });
     });
   }
 };
