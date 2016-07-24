@@ -12,4 +12,5 @@ dist/.*
 *.tern-*
 *.vscode
 *.imdone
+*.jsconfig.json
 typings
