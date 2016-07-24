@@ -11,7 +11,7 @@
 import store from "./storage/store";
 import BaseElement from "./components/BaseElement.vue";
 import TopMenu from "./components/TopMenu.vue";
-import {Dicts} from "./api/resources";
+import dataService from "./services/dataService";
 
 export default {
   store,
@@ -28,14 +28,15 @@ export default {
   },
   methods: {
   },
-  init() {
-    Dicts.get()
-      .then((dicts) => {
-        store.dispatch("SET_DICTS", dicts.data);
-        if (dicts.data.data.default_element) {
-          store.dispatch("SET_DEFAULT_ELEMENT_ID", dicts.data.data.default_element);
+  ready() {
+    dataService.fetch("getOne", "dicts", null, null, false)
+      .then(dicts => {
+        console.log("DICTS: ", dicts);
+        store.dispatch("SET_DICTS", dicts);
+        if (dicts.default_element) {
+          store.dispatch("SET_DEFAULT_ELEMENT_ID", dicts.default_element);
         }
-      });
+      }).catch(err => console.log(err));
   }
 };
 
@@ -46,23 +47,23 @@ export default {
   margin: 0;
   position: relative;
   z-index: 2;
-  
+
   .fixed-logo {
     position: absolute;
     left: .85rem;
     top: .85rem;
     z-index: 9999;
   }
-  
+
   .main-logo {
     // font-size: $font-size-h3;
   }
-  
-  
+
+
   .navbar {
     padding-left: 10rem;
   }
-  
+
   form {
     text-align: center;
   }

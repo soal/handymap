@@ -2,6 +2,8 @@ module.exports = function(self) {
   var localforage = require("localforage");
   var config = require("../config");
   var values = require("lodash/values");
+  var waterfall = require("async/waterfall");
+  var urlService = require("./urlService");
 
   localforage.config({
     driver: [localforage.INDEXEDDB,
@@ -9,6 +11,8 @@ module.exports = function(self) {
              localforage.LOCALSTORAGE],
     name: "handymap"
   });
+
+  var resourcesToCache = ["elements", "collections", "ordered_collections"];
 
   var handlers = {
     cacheHandler: {
@@ -42,53 +46,111 @@ module.exports = function(self) {
     },
 
     networkHandler: {
-      get({ resource, id, data, cache }) {
-        var params = null;
-        var result = new Promise(resolve => resolve());
-        var items = [];
-        if (cache && id) {
-          result = handlers.cacheHandler.getItem(`${resource}_${id}`);
-        }
-        if (cache && !id && data.ids && values(data.ids)) {
-          var cacheKeys = data.ids.map((key) => `${resource}_${key}`);
-          result = handlers.cacheHandler.getItems(cacheKeys);
-        }
-        result.then(localData => {
-          if (localData && localData.id) {
-            return {res: localData, done: true};
-          }
-          if (localData instanceof Array) {
-            items = items.concat(localData);
-            if (items.length) {
-              data.ids = data.ids.filter(
-                (itemId) => {
-                  return !(localData.map((item) => item.id).includes(itemId));
+      getOne({ resource, params, cache }) {
+        /**
+         * async waterfall: http://caolan.github.io/async/docs.html#.waterfall. Functions pass they results to callback, and they become arguments for next function in waterfall
+         */
+        return waterfall([
+          function(callback) {
+            if (cache) {
+              handlers.cacheHandler.getItem(params.path.id)
+                .then(cached => {
+                  if (cached) {
+                    callback(null, cached);
+                  } else {
+                    callback(null, null);
+                  }
                 });
-            }
-            if (data.ids.length) {
-              return { res: items, done: false};
             } else {
-              return { res: items, done: true };
+              callback(null, null);
+            }
+          },
+          function(cached, callback) {
+            if (cached) {
+              callback(null, cached);
+            } else {
+              console.log(`${config.API_ROOT}/${resource}${urlService.processParams(params)}`);
+              fetch(`${config.API_ROOT}/${resource}${urlService.processParams(params)}`)
+                .then(response => {
+                  var contentType = response.headers.get("content-type");
+                  if (contentType.includes("json")) {
+                    return response.json();
+                  }
+                  if (contentType.includes("image" || "pdf")) {
+                    return response.blob();
+                  }
+                  if (contentType.includes("text")) {
+                    return response.text();
+                  }
+                  return response;
+                })
+                .then(proceded => {
+                  var responseData = proceded.data ? proceded.data : proceded;
+                  if (resourcesToCache.includes(resource)) {
+                    handlers.cacheHandler.setItem(resource, responseData);
+                  }
+                  callback(null, proceded);
+                  return;
+                })
+              .catch(err => console.log(err));
             }
           }
-          return { res: items, done: false };
+        ], function(error, result) {
+          if (error) {
+            console.log(error);
+            return false;
+          } else {
+            self.postMessage(result);
+          }
         });
 
-        return result.then((answer) => {
-          if (data && data.dataType) {
-            var dataType = data.dataType;
-            delete data.dataType;
-          }
-          if (!answer || !answer.done) {
-            if (data && values(data).length) {
-              params = "?";
-              Object.keys(data).forEach((key, index) => {
-                if (data[key] && data[key].length) {
-                  params += `${key}=${data[key] instanceof Array ? data[key].join(",") : data[key]}${ index === data.length - 1 ? "&" : ""}`;
-                }
-              });
+      },
+
+
+      getSome({ resource, data, cache }) {
+        var items = [];
+        waterfall([
+
+          function(callback) {
+            if (cache && data && values(data.ids).length) {
+              var cacheKeys = data.ids.map((key) => `${resource}_${key}`);
+
+              handlers.cacheHandler.getItems(cacheKeys)
+                .then(cached => {
+                  if (cached.length) {
+                    items = items.concat(cached);
+                    data.ids = data.ids.filter(
+                      itemId => {
+                        return !(cached.map((item) => item.id).includes(itemId));
+                      });
+                    callback(null, data);
+                  }
+                });
+            } else {
+              callback(null, data);
             }
-            return fetch(`${config.API_ROOT}/${resource}${ dataType ? "/" + dataType : ""}${ id ? "/" + id : ""}${ params ? params : ""}`)
+          },
+
+          function(data, callback) {
+            var dataType = null;
+            if (data && data.dataType) {
+              dataType = "" + data.dataType;
+              delete data.dataType;
+            }
+            callback(null, data, dataType);
+            return;
+          },
+
+          function(data, dataType, callback) {
+            // console.log(values(data).length);
+            // debugger
+            if (data && !values(data).length) {
+              callback(null, items);
+              return;
+            }
+            var params = urlService.processParams(data);
+
+            fetch(`${config.API_ROOT}/${resource}${ dataType ? "/" + dataType : ""}${ params ? params : ""}`)
               .then(response => {
                 var contentType = response.headers.get("content-type");
                 if (contentType.includes("json")) {
@@ -103,25 +165,26 @@ module.exports = function(self) {
                 return response;
               })
               .then(proceded => {
-                var responseData = proceded.data ? proceded.data : proceded;
-                if (responseData instanceof Array) {
-                  items = items.concat(responseData);
-                  if (resource === "elements" || resource === "collections" || resource === "ordered_collections") {
-                    handlers.cacheHandler.setItems(resource, items);
-                  }
-                  return items;
-                } else {
-                  if (resource === "elements" || resource === "collections" || resource === "ordered_collections") {
-                    handlers.cacheHandler.setItem(resource, responseData);
-                  }
-                  return responseData;
+                items = items.concat(proceded.data ? proceded.data : proceded );
+                console.log("ITEMS: ", items);
+                if (resourcesToCache.includes(resource)) {
+                  handlers.cacheHandler.setItems(resource, items);
                 }
+                // debugger
+                callback(null, items);
               })
-              .catch(err => err);
+              .catch(err => console.log(err));
+          }
+
+        ], function(error, result) {
+          if (error) {
+            console.log(error);
+            return false;
           } else {
-            return answer.res;
+            self.postMessage(result);
           }
         });
+
       },
 
       create({ resource, data }) {},
@@ -143,15 +206,6 @@ module.exports = function(self) {
       options: message.data[2]
     };
 
-    var result = handlers[commands.handler][commands.method](commands.options);
-    if (result instanceof Promise) {
-      result
-        .then(res => {
-          self.postMessage(res);
-        })
-        .catch(err => console.log(err));
-    } else {
-      postMessage(result);
-    }
+    handlers[commands.handler][commands.method](commands.options);
   };
 };

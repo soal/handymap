@@ -11,11 +11,11 @@ var actions = {
   },
   getCurrentElementByName({dispatch}, elementName) {
     if (!this.search) throw new Error("searchActions.search action not found in component. Check for searchActions in component->vuex->actions");
-    return this.search({ dataType: "elements", name: elementName },
+    this.search({ dataType: "elements", name: elementName },
       function({dispatch}, response) {
-        dispatch("SET_ELEMENT", (response.data ? response.data : response));
-        dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
-        dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
+        dispatch("SET_ELEMENT", (response[0].data ? response[0].data : response[0]));
+        dispatch("SET_CURRENT_ELEMENT_ID", (response[0].data ? response[0].data.id : response[0].id));
+        dispatch("SET_CURRENT_ELEMENT", (response[0].data ? response[0].data : response[0]));
       });
   }
 };
