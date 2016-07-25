@@ -45,7 +45,8 @@ class Crud {
               dispatch(`SET_${resourceName.toUpperCase()}`, (response.data ? response.data : response));
             }
           }
-          dataService.fetch("getOne", `${resourceName}s`, { path: [id], query: params }, null, cache)
+          var answer = dataService.fetch("getOne", `${resourceName}s`, { path: [id], query: params }, null, cache);
+          answer
               .then(response => {
                 mutate(response);
               },
@@ -73,9 +74,10 @@ class Crud {
               response = callback({ dispatch }, response);
             }
           }
-          dataService.fetch("getSome", `${resourceName}s`, params, null, cache)
-            .then(response => {
-              console.log(response);
+          var answer = dataService.fetch("getSome", `${resourceName}s`, params, null, cache);
+          // dataService.fetch("getSome", `${resourceName}s`, params, null, cache)
+            answer.then(response => {
+              // console.log(response);
               mutate(response.data ? response.data : response);
             },
             err => console.log(err));

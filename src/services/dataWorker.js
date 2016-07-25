@@ -23,9 +23,7 @@ module.exports = function(self) {
 
   var handlersList = {
     /** Functions for working with IndexedDB | WebSQL | localStorage */
-    cacheHandler(orderId) {
-      return {
-
+    cacheHandler: {
         /**
          * Get single item from local storage
          *
@@ -87,7 +85,6 @@ module.exports = function(self) {
         clearStorage() {
           localforage.clearStorage();
         }
-      };
     },
 
     networkHandler(orderId) {
@@ -152,7 +149,7 @@ module.exports = function(self) {
               console.log(error);
               return false;
             } else {
-              console.log("BEFORE_POST: ", orderId);
+              // console.log("BEFORE_POST: ", orderId);
               self.postMessage([orderId, result]);
             }
           });
@@ -169,75 +166,83 @@ module.exports = function(self) {
          * @param {Boolean} {}.cache    Cache policy. If true, items can be taken from browser cache (IndexedDB | WebSQL | localStorage)
          */
         getSome({ resource, params, cache }) {
+          // console.log("GET_SOME: ", orderId);
           waterfall([
 
             function(callback) {
+              // console.log("GET_SOME_CACHE_KEYS: ", orderId);
               if (cache && resourcesToCache.includes(resource) && has(params, "query.ids") && params.query.ids.length) {
                 localforage.keys((err, keys) => {
-                  if (err) callback(null);
+                  if (err) callback(err);
                   callback(null, keys);
                 });
+              } else {
+                callback(null, null);
               }
             },
             function (keysFromCache, callback) {
+              // console.log("GET_SOME_CACHE: ", orderId);
               if (keysFromCache && keysFromCache.length) {
+                var keysToGet = params.query.ids.filter(itemId => keysFromCache.includes(itemId));
                 params.query.ids = params.query.ids.filter(itemId => !keysFromCache.includes(itemId));
-                handlers.cacheHandler.getItems(keysFromCache)
+                handlers.cacheHandler.getItems(keysToGet)
                   .then(cached => {
                     callback(null, cached);
                   },
                   err => console.log(err));
               } else {
-                callback(null);
+                callback(null, null);
               }
             },
 
             function(cached, callback) {
               // TODO: What if we need filter objects from list of ids by other params?
+              // console.log(params.query.ids);
               if (has(params, "query.ids") && !params.query.ids.length) {
                 callback(null, cached);
+              } else {
+                // console.log("GET_SOME_FETCH: ", orderId);
+                fetch(`${config.API_ROOT}/${resource}${ urlService.processParams(params) }`)
+                  .then(response => {
+                    var contentType = response.headers.get("content-type");
+                    if (contentType.includes("json")) {
+                      return response.json();
+                    }
+                    if (contentType.includes("image" || "pdf")) {
+                      return response.blob();
+                    }
+                    if (contentType.includes("text")) {
+                      return response.text();
+                    }
+                    return response;
+                  })
+                  .then(proceded => {
+                    let items = [];
+                    if (cached) {
+                      items = items.concat(cached, proceded.data ? proceded.data : proceded);
+                    } else {
+                      items = items.concat(proceded.data ? proceded.data : proceded);
+                    }
+                    if (resourcesToCache.includes(resource)) {
+                      handlers.cacheHandler.setItems(resource, items);
+                    }
+                    callback(null, items);
+                  },
+                  err => console.log(err));
               }
-              // var params = urlService.processParams(params);
-
-              fetch(`${config.API_ROOT}/${resource}${ urlService.processParams(params) }`)
-                .then(response => {
-                  var contentType = response.headers.get("content-type");
-                  if (contentType.includes("json")) {
-                    return response.json();
-                  }
-                  if (contentType.includes("image" || "pdf")) {
-                    return response.blob();
-                  }
-                  if (contentType.includes("text")) {
-                    return response.text();
-                  }
-                  return response;
-                })
-                .then(proceded => {
-                  let items = [];
-                  if (cached) {
-                    items = items.concat(cached, proceded.data ? proceded.data : proceded);
-                  } else {
-                    items = items.concat(proceded.data ? proceded.data : proceded);
-                  }
-                  if (resourcesToCache.includes(resource)) {
-                    handlers.cacheHandler.setItems(resource, items);
-                  }
-                  callback(null, items);
-                },
-                err => console.log(err));
             }
 
           ], function(error, result) {
             if (error) {
-              console.log("ERROR!");
+              // console.log("ERROR!");
               console.log(error);
             } else {
-              console.log("BEFORE_POST: ", orderId);
-              self.postMessage([orderId, result]);
+              if (result) {
+                // console.log("BEFORE_POST: ", orderId);
+                self.postMessage([orderId, result]);
+              }
             }
           });
-
         },
 
         /**
@@ -274,10 +279,15 @@ module.exports = function(self) {
       return {};
     }
   };
-  const orders = [];
+  // const orders = [];
 
   function processOrder(order) {
-    console.log("PROCESS: ", order.orderId);
+    // console.log("PROCESS: ", order.orderId);
+    handlers = {
+      cacheHandler: handlersList.cacheHandler,
+      networkHandler: handlersList.networkHandler(order.orderId),
+      depsHandler: handlersList.depsHandler(order.orderId)
+    };
     handlers[order.handler][order.method](order.options);
   }
 
@@ -296,18 +306,13 @@ module.exports = function(self) {
   // }
 
   self.onmessage = function(message) {
-    console.log(message);
-    orders.push(message);
+    // console.log(message);
+    // orders.push(message);
     var order = {
       handler: message.data[0],
       method: message.data[1],
       options: message.data[2],
       orderId: message.data[3]
-    };
-    handlers = {
-      cacheHandler: handlersList.cacheHandler(order.orderId),
-      networkHandler: handlersList.networkHandler(order.orderId),
-      depsHandler: handlersList.depsHandler(order.orderId)
     };
     processOrder(order);
   };

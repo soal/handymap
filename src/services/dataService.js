@@ -12,8 +12,8 @@ const dataService = {
     }
 
     this.worker.onmessage = message => {
-      console.log("MESSAGE_ID: ", message.data[0]);
-      console.log("MESSAGE_BODY: ", message.data[1]);
+      // console.log("MESSAGE_ID: ", message.data[0]);
+      // console.log("MESSAGE_BODY: ", message.data[1]);
       var workerEvent = new CustomEvent("dataWorkerMessage", {
         detail: { message }
       });
@@ -54,13 +54,14 @@ const dataService = {
     var worker = this.worker;
     return new Promise((resolve, reject) => {
       let orderId = Math.random().toString(36);
-      console.log("ORIGINAL_ORDER_ID: ", orderId);
+      // console.log("ORDER_ID: ", orderId);
       worker.postMessage(["networkHandler", `${type}`, options, orderId]);
 
       document.addEventListener("dataWorkerMessage", (event) => {
-        console.log("MESSAGE_IN_PROMISE_ID: ", event.detail.message.data[0]);
-        console.log("MESSAGE_IN_PROMISE_BODY: ", event.detail.message.data[1]);
+        // console.log("MESSAGE_IN_PROMISE_ID: ", event.detail.message.data[0]);
+        // console.log("MESSAGE_IN_PROMISE_BODY: ", event.detail.message.data[1]);
         if (event.detail.message.data[0] === orderId) {
+          // console.log("RESOLVE: ", orderId);
           resolve(event.detail.message.data[1]);
         }
       });

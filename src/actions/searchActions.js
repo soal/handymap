@@ -2,7 +2,8 @@ import dataService from "../services/dataService";
 
 var actions = {
   search({ dispatch }, params, callback=false) {
-    return dataService.fetch("getSome", "search", params, null, false)
+    var answer = dataService.fetch("getSome", "search", params, null, false);
+    return answer
       .then(response => {
         // console.log("SEARCH: ", response);
         if (callback) {
