@@ -1,8 +1,8 @@
 import localforage from "localforage";
 // TODO: move here all cache working
 export default {
-  getItem(id) {
-    return localforage.getItem(id);
+  getItem(type, id) {
+    return localforage.getItem(`${type}_${id}`);
   },
 
   getItems(keysToGet) {
@@ -21,8 +21,8 @@ export default {
     }
   },
 
-  removeItem(id) {
-    localforage.removeItem(id);
+  removeItem(type, id) {
+    localforage.removeItem(`${type}_${id}`);
   },
 
   clearStorage() {

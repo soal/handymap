@@ -43,7 +43,7 @@ export default {
     },
     data({ to }) {
       if (to.name === "main") {
-        return this.getElement(this.defaultElementId, null, function({dispatch}, response) {
+        return this.getElement({ id: this.defaultElementId }, function({dispatch}, response) {
           dispatch("SET_ELEMENT", (response.data ? response.data : response));
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
           dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
@@ -52,12 +52,12 @@ export default {
       }
       let storedElement = this.elements.find((item) => item.name === to.params.element);
       if (storedElement) {
-        this.getElement(storedElement.id, null, function({dispatch}, response) {
-          dispatch("SET_ELEMENT", (response.data ? response.data : response));
-          dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
-          dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
-          return response;
-        });
+        // this.getElement({ id: this.defaultElementId }, function({dispatch}, response) {
+        store.dispatch("SET_ELEMENT", storedElement);
+        store.dispatch("SET_CURRENT_ELEMENT", storedElement);
+        store.dispatch("SET_CURRENT_ELEMENT_ID", storedElement.id);
+          // return response;
+        // });
       } else {
         this.getCurrentElementByName(to.params.element);
       }
@@ -120,7 +120,7 @@ export default {
   ready() {
     store.watch(state => state.currentElement, (newEl) => {
       if (newEl) {
-        if (newEl.children_ids) {
+        if (newEl.children_ids && newEl.children_ids.length) {
           this.getChildren(newEl);
         }
       }
