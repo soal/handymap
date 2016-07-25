@@ -11,7 +11,7 @@ Vue.http.options.crossOrigin = true;
 Vue.http.headers.common["X-Requested-With"] = "XMLHttpRequest";
 Vue.http.headers.common["MimeType"] = "application/json";
 
-export const Element = Vue.resource(`${API_ROOT}/elements{/id}`);
+export const Element = Vue.resource(`${API_ROOT}/elements{/id}{/field}`);
 export const Collection = Vue.resource(`${API_ROOT}/collections{/id}`);
 export const OrderedCollection = Vue.resource(`${API_ROOT}/ordered_collections{/id}`);
 export const Shape = Vue.resource(`${API_ROOT}/shapes{/id}`);

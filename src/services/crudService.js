@@ -1,10 +1,13 @@
 /**
  * CRUD service module
  */
+import waterfall from "async/waterfall";
 
 import cacheService from "./cacheService";
+import localforage from "localforage";
+import urlService from "./urlService";
 import store from "../storage/store";
-
+import {resourcesToCache} from "../config";
 var dispatch = store.dispatch;
 
 /**
@@ -25,13 +28,14 @@ class Crud {
     function methods(dispatch, resource, resourceName) {
       return {
         /** Get single data elment from server
-        * @param  {Object}   options.dispatch Service object from Vue
-        * @param  {String||Number}   id       Id of odject to get. If not presented, method will return list of objects
-        * @param  {Function} callback         Callback for custom behavior, called in success promise callback
-        * @param  {Boolean}  cache            Use cache or not
-        * @param  {Boolean}  preventDefaultAcion  If true, callback will be called and default action canceled. If not, method call dispatch() store method
+        * @param  {Object}            options.dispatch     Service object from Vue
+        * @param  {Object}            params               Parameters for request
+        * @param  {string | number}   params.id            Id of object to get
+        * @param  {Function}          callback             Callback for custom behavior, called in success promise callback
+        * @param  {Boolean}           cache                Use cache or not
+        * @param  {Boolean}           preventDefaultAcion  If true, callback will be called and default action canceled. If not, method call dispatch() store method
         */
-        [`get${resourceName}`]({ dispatch }, id=null, params=null, callback=null, cache=true, preventDefaultAcion=false) {
+        [`get${resourceName}`]({ dispatch }, params=null, callback=null, cache=true, preventDefaultAcion=false) {
 
           /**
            * Dispatch mutation event
@@ -45,29 +49,43 @@ class Crud {
               dispatch(`SET_${resourceName.toUpperCase()}`, (response.data ? response.data : response));
             }
           }
-
-          var result = null;
-
-          if (cache) {
-            result = cacheService.getItem(`${resourceName}_${id}`);
-          } else {
-            result = resource.get({ id });
-          }
-          return result
-            .then(cachedItem => {
-              if (cachedItem) {
-                mutate(cachedItem);
+          waterfall([
+            function(next) {
+              if (cache) {
+                cacheService.getItem(resourceName, params.id)
+                  .then(cached => {
+                    if (cached) {
+                      next(null, cached);
+                    } else {
+                      next(null, null);
+                    }
+                  });
+              } else {
+                next(null, null);
               }
-              return cachedItem;
-            })
-            .then(cachedItem => {
-              if (cachedItem == null) {
-                resource.get({ id }).then(response => {
-                  mutate(response);
-                });
+            },
+            function(cached, next) {
+              if (cached) {
+                next(null, cached);
+              } else {
+                resource.get(params).then(response => {
+                  var result = response.data ? response.data : response;
+                  if (resourcesToCache.includes(resourceName)) {
+                    cacheService.setItem(resourceName, result);
+                  }
+                  next(null, result);
+                },
+                error => next(error)
+                );
               }
-            })
-            .catch(err => console.log(err));
+            }
+          ], function(error, result) {
+            if (error) {
+              console.log(error);
+            } else {
+              mutate(result);
+            }
+          });
         },
 
         /** Get single data elment from server
@@ -90,51 +108,60 @@ class Crud {
               response = callback({ dispatch }, response);
             }
           }
-          // TODO: Use async from ECMAScript 2017 already for all this?
-          var items = [];
-          // Empty promise for unify code for ids and other params
-          var filteredIds = new Promise(() => {});
-          var result = null;
-
-          // If we get list of objects by ids and need check cache, we need to do some weird stuff
-          if (params.ids) {
-            if (cache) {
-              // Convert plain ids to ids for in-browser storage, e.g id "1" to "Element_1"
-              var cacheKeys = params.ids.map((key) => `${resourceName}_${key}`);
-              filteredIds = cacheService.getItems(cacheKeys)
-                .then(function(cachedItems) {
-                  // Add items from cache
-                  items = items.concat(cachedItems);
-                  // Filter list of ids to get from server, removing ids of items we already got from cache
-                  params.ids = params.ids.filter(
-                    (itemId) => {
-                      return !(cachedItems.map((item) => item.id).includes(itemId));
-                    })
-                    .join(",");
-                  return params;
+          waterfall([
+            function(next) {
+              if (cache && resourcesToCache.includes(resourceName) && params.ids && params.ids.length) {
+                localforage.keys((err, keys) => {
+                  if (err) {
+                    next(err);
+                  }
+                  next(null, keys);
                 });
+              } else {
+                next(null, null);
+              }
+            },
+            function (keysFromCache, next) {
+              if (keysFromCache && keysFromCache.length) {
+                params.ids = params.ids.filter(itemId => !keysFromCache.includes(itemId));
+                cacheService.getItems(keysFromCache)
+                  .then(cached => {
+                    next(null, cached);
+                  },
+                  err => console.log(err));
+              } else {
+                next(null, null);
+              }
+            },
+
+            function(cached, next) {
+              // TODO: What if we need filter objects from list of ids by other params?
+              if (params.ids && !params.ids.length) {
+                next(null, cached);
+              }
+
+              resource.get(params).then(response => {
+                let result = response.data;
+                let items = [];
+                if (cached) {
+                  items = items.concat(cached, result.data ? result.data : result);
+                } else {
+                  items = items.concat(result.data ? result.data : result);
+                }
+                if (resourcesToCache.includes(resourceName)) {
+                  cacheService.setItems(resourceName, items);
+                }
+                next(null, items);
+              });
             }
-          }
-          // TODO: Processing all types of Params
-          return filteredIds.then(function(params) {
-            if (!params.ids.length) {
-              delete params.ids;
-            }
-            // FIXME: Prevent requesting if params empty
-            if (Object.keys(params).length) {
-              result = resource.get(params);
-              result
-              .then(response => {
-                // Adding items from server response to items from cache and mutate state
-                mutate(items.concat(response.data.data ? response.data.data : response));
-                return response;
-              })
-              .catch(err => console.log(err));
+
+          ], function(error, result) {
+            if (error) {
+              console.log(error);
             } else {
-              // If all items got from cache, just mutate state without requsting data from server
-              mutate(items);
+              mutate(result);
             }
-          }).catch(err => console.log(err));
+          });
         },
         /**
          * Save item to server

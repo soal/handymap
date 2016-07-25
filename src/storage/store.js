@@ -30,7 +30,6 @@ const store =  new Vuex.Store({
   mutations: {
     [Mut.SET_ELEMENTS](state, data) {
       state.elements = _.unionWith(state.elements, data, (currentItem, newItem) => currentItem.id === newItem.id);
-      cacheService.setItems("Element", data);
     },
     [Mut.SET_ELEMENT](state, data) {
       let elementToSet = state.elements.find((item) => item.id === data.id);
@@ -39,7 +38,6 @@ const store =  new Vuex.Store({
       } else {
         state.elements.push(data);
       }
-      cacheService.setItem("Element", data);
     },
     [Mut.SET_CURRENT_ELEMENT](state, data) {
       state.currentElementId = data.id;

@@ -17,3 +17,4 @@ const localSource = "mapstyle.json";
  */
 export const MAP_SOURCE = mapboxSource;
 // export const MAP_SOURCE = localSource;
+export const resourcesToCache = ["element", "collection", "ordered_collection"];
