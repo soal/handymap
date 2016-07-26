@@ -26,35 +26,7 @@ export default {
     };
   },
   props: ["element", "map", "M"],
-  events: {
-    "mapLoaded": () => {
-      // if (this.element.shapes_ids && this.element.shapes_ids.length) {
-      //   this.getElementShapes(this.element.id, (elementId, response) => {
-      //     console.log("SHAPES_CALLBACK")
-      //     console.log("THIS: ", this)
-      //     dispatch("SET_ELEMENT_SHAPES", { id: elementId, shape: response });
-      //     this.element.shapes.forEach(shape => {
-      //       var shapeSource = new this.M.GeoJSONSource({ data: shape });
-      //       this.map.addSource(shape.id, shapeSource);
-
-      //       this.map.addLayer({
-      //         id: shape.id,
-      //         type: "fill",
-      //         source: shape.id,
-      //         // "source-layer": "Roma",
-      //         layout: {
-      //           visibility: "visible"
-      //         },
-      //         paint: {
-      //           "fill-color": shape.properties.fill,
-      //           "fill-opacity": shape.properties.fill-opacity
-      //         }
-      //       });
-      //     });
-      //   });
-      // }
-    }
-  },
+  events: {},
   vuex: {
     getters: {
       currentElementId: state => state.currentElementId
