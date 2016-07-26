@@ -36,14 +36,14 @@
 <script>
 
 import store from "./storage/store";
-import BaseElement from "./components/BaseElement.vue";
+import Layout from "./components/Layout.vue";
 import TopMenu from "./components/TopMenu.vue";
 import dataService from "./services/dataService";
 
 export default {
   store,
   components: {
-    BaseElement,
+    Layout,
     TopMenu
   },
   vuex: {

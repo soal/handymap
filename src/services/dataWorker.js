@@ -132,7 +132,7 @@ module.exports = function(self) {
                     if (contentType.includes("text")) {
                       return response.text();
                     }
-                    return response;
+                    return response.json();
                   })
                   .then(proceded => {
                     var responseData = proceded.data ? proceded.data : proceded;
@@ -147,7 +147,6 @@ module.exports = function(self) {
           ], function(error, result) {
             if (error) {
               console.log(error);
-              return false;
             } else {
               // console.log("BEFORE_POST: ", orderId);
               self.postMessage([orderId, result]);

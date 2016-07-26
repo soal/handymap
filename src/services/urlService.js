@@ -8,7 +8,7 @@ module.exports = {
    * @return {string}               URL string, starts with slash, no slash in the end
    */
   processPathParams(pathParams) {
-    return pathParams.map((param) => `/${param}`).join();
+    return pathParams.map((param) => `/${param}`).join("");
   },
   /**
    * Create GET query string from data object

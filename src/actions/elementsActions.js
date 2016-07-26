@@ -1,6 +1,7 @@
 /** ElementsActions module */
 
 import {ResourceActions} from "../services/crudService";
+import dataService from "../services/dataService";
 
 var actions = {
   getChildren({dispatch}, element) {
@@ -18,6 +19,17 @@ var actions = {
         dispatch("SET_ELEMENT", (response[0].data ? response[0].data : response[0]));
         dispatch("SET_CURRENT_ELEMENT_ID", (response[0].data ? response[0].data.id : response[0].id));
         dispatch("SET_CURRENT_ELEMENT", (response[0].data ? response[0].data : response[0]));
+      });
+  },
+  getElementShapes({dispatch}, elementId, callback=null) {
+    dataService.fetch("getOne", "elements", { path: [elementId, "shapes"] })
+      .then(response => {
+        if (callback) {
+          callback(elementId, response);
+        } else {
+
+          dispatch("SET_ELEMENT_SHAPES", { id: elementId, shape: response });
+        }
       });
   }
 };

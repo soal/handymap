@@ -38,6 +38,11 @@ const store =  new Vuex.Store({
         state.elements.push(data);
       }
     },
+    [Mut.SET_ELEMENT_SHAPES](state, data) {
+      let elementToSet = state.elements.find((item) => item.id === data.id);
+      elementToSet.shapes = [];
+      elementToSet.shapes.push(data.shapes);
+    },
     [Mut.SET_CURRENT_ELEMENT](state, data) {
       state.currentElementId = data.id;
       state.currentElement = Object.assign({}, data);

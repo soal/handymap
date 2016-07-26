@@ -11,7 +11,6 @@ var actions = {
         } else {
           dispatch("SET_SEARCH_RESULTS", (response.data ? response.data : response));
         }
-        // return response;
       },
       err => console.log(err));
   }
