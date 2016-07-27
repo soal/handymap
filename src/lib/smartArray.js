@@ -1,4 +1,5 @@
 import uniqWith from "lodash/uniqWith";
+import capitalize from "lodash/capitalize";
 
 /**
  * Array that keeps only unique elements and compare objects by id if present.
@@ -14,10 +15,6 @@ const check = Symbol("check");
 class SmartArray extends Array {
   constructor(items, virtualPaths=null) {
     super(...items);
-    // this.createVirtualPaths = Symbol("createVirtualPaths");
-    // this.isObject = Symbol("isObject");
-    // this.check = Symbol("check");
-
 
     Object.defineProperty(this, "virtualPaths", {
       enumerable: false,
@@ -28,11 +25,12 @@ class SmartArray extends Array {
 
     this[createVirtualPaths] = item => {
       for (let virtualPath of this.virtualPaths) {
-        Object.defineProperty(item, virtualPath, {
-          get: () => this.filter(el => item[`${virtualPath}_ids`].includes(el.id)),
-          set: data => {
-            item[`${virtualPath}_ids`] = data.map(el => el.id);
-          }
+        Object.defineProperty(item, `get${capitalize(virtualPath)}`, {
+          value: () => {
+            return this.filter(el => item[`${virtualPath}_ids`].includes(el.id));
+          },
+          enumerable: false,
+          configurable: false
         });
       }
     };
@@ -42,17 +40,19 @@ class SmartArray extends Array {
     };
     this[check] = object => {
       if (this[isObject](object) && this.find(item => object.id === item.id)) {
-        return true;
+        return false;
       }
       return false;
     };
+
     for (let el of this.entries()) {
       if (this[isObject](el[1])) {
         this[createVirtualPaths](el[1]);
       }
     }
+
+
     this.push = (item, ...rest) => {
-      console.log("FUNC: ", this[createVirtualPaths]);
       if (this[check](item)) {
         return false;
       } else {
@@ -93,7 +93,11 @@ class SmartArray extends Array {
       }
     };
     this.getById = (id) => {
-      return this.find(el => id === el.id);
+      var finded = this.find(el => id === el.id);
+      for (let virtualPath of this.virtualPaths) {
+        finded[virtualPath] = finded[`get${capitalize(virtualPath)}`]();
+      }
+      return finded;
     };
 
     this.delete = (item) => {
@@ -121,7 +125,6 @@ class SmartArray extends Array {
     };
     this.clear = () => { this.length = 0; };
   }
-
 }
 export default SmartArray;
 module.export = SmartArray;
