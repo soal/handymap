@@ -1,18 +1,24 @@
 import uniqWith from "lodash/uniqWith";
 import capitalize from "lodash/capitalize";
 
+
+const createVirtualPaths = Symbol("createVirtualPaths");
+const isObject = Symbol("isObject");
+const existed = Symbol("existed");
+
 /**
  * Array that keeps only unique elements and compare objects by id if present.
  *
  * @class SmartArray
  * @extends {Array}
  */
-
-const createVirtualPaths = Symbol("createVirtualPaths");
-const isObject = Symbol("isObject");
-const check = Symbol("check");
-
 class SmartArray extends Array {
+  /**
+   * Creates an instance of SmartArray.
+   *
+   * @param {any[]}    items                Items to keep in SmartArray
+   * @param {string[]} [virtualPaths=null]  Names of virtual elements of objects in array, constructor generates get functions for them (e.g. "getChildren()" for "children")
+   */
   constructor(items, virtualPaths=null) {
     super(...items);
 
@@ -30,7 +36,7 @@ class SmartArray extends Array {
             return this.filter(el => item[`${virtualPath}_ids`].includes(el.id));
           },
           enumerable: false,
-          configurable: false
+          configurable: true
         });
       }
     };
@@ -38,11 +44,8 @@ class SmartArray extends Array {
       var toClass = {}.toString;
       return toClass.call(object) === "[object Object]";
     };
-    this[check] = object => {
-      if (this[isObject](object) && this.find(item => object.id === item.id)) {
-        return false;
-      }
-      return false;
+    this[existed] = object => {
+      return this[isObject](object) && this.find(item => object.id === item.id);
     };
 
     for (let el of this.entries()) {
@@ -51,9 +54,8 @@ class SmartArray extends Array {
       }
     }
 
-
     this.push = (item, ...rest) => {
-      if (this[check](item)) {
+      if (this[existed](item)) {
         return false;
       } else {
         if (this[isObject](item)) {
@@ -62,8 +64,9 @@ class SmartArray extends Array {
         return super.push(item, ...rest);
       }
     };
+
     this.unshift = (item, ...rest) => {
-      if (this[check](item)) {
+      if (this[existed](item)) {
         return false;
       } else {
         if (this[isObject](item)) {
@@ -72,6 +75,7 @@ class SmartArray extends Array {
         return super.unshift(item, ...rest);
       }
     };
+
     this.concat = (...args) => {
       var newArray = super.concat(...args);
       return uniqWith(newArray.reverse(), (first, second) => {
@@ -85,33 +89,38 @@ class SmartArray extends Array {
         }
       });
     };
-    this.includes = (item, index) => {
-      if (this.slice(index)[check](item)) {
+
+    this.slice = (...args) => {
+      return new SmartArray(super.slice(...args), [...this.virtualPaths]);
+    };
+
+    this.includes = (item, index=0) => {
+      if (this.slice(index)[existed](item)) {
         return true;
       } else {
         return super.includes(item, index);
       }
     };
-    this.getById = (id) => {
-      var finded = this.find(el => id === el.id);
-      for (let virtualPath of this.virtualPaths) {
-        finded[virtualPath] = finded[`get${capitalize(virtualPath)}`]();
-      }
-      return finded;
+
+    this.includesId = (id, index=0) => {
+      return this.includes({ id: id }, index);
     };
 
-    this.delete = (item) => {
-      this.splice(this.findIndex(el => {
-        if (item.id && el.id) {
-          return item.id === el.id;
-        } else {
-          return item === el;
+    this.getById = (id) => {
+      var finded = this.find(el => id === el.id);
+      if (finded) {
+        var tmp = {};
+        for (let virtualPath of this.virtualPaths) {
+          tmp[virtualPath] = finded[`get${capitalize(virtualPath)}`]();
         }
-      }), 1);
+        return Object.assign(finded, tmp);
+      }
     };
+
     this.deleteById = (id) => {
       return this.splice(this.findIndex(el => el.id === id), 1);
     };
+
     this.sortBy = (field) => {
       return this.sort((a, b) => {
         if (a[field] > b[field]) {
