@@ -8,6 +8,23 @@ const debug = process.env.NODE_ENV !== "production";
 Vue.use(Vuex);
 Vue.config.debug = debug;
 
+const storageService = function(dataService) {
+  return store => {
+    store.subscribe(mutation => {
+      if (mutation.type === "router/ROUTE_CHANGED") {
+        if (mutation.payload.name === "element") {
+          dataService.get(["element"], [{ "name": mutation.payload.params.name }]);
+        }
+      } else {
+        dataService.process(mutation.type, mutation.payload);
+      }
+      console.log(mutation);
+    });
+  };
+};
+
+const storagePlugin = storageService();
+
 const store =  new Vuex.Store({
   state: {
     title: {
@@ -58,6 +75,7 @@ const store =  new Vuex.Store({
     }
   },
   modules: {},
+  plugins: [storagePlugin],
   strict: debug
 });
 

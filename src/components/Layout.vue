@@ -27,7 +27,7 @@
 </style>
 
 <script>
-import store from "../storage/store";
+import store from "../vuex/store";
 import elementsActions from "../actions/elementsActions";
 import searchActions from "../actions/searchActions";
 import InfoBox from "./InfoBox.vue";

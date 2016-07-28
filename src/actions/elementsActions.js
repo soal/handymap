@@ -1,7 +1,7 @@
 /** ElementsActions module */
 
 import {ResourceActions} from "../services/crudService";
-import dataService from "../services/dataService";
+import dataService from "../storage/dataService";
 
 var actions = {
   getChildren({dispatch}, element) {

@@ -35,10 +35,10 @@
 
 <script>
 
-import store from "./storage/store";
+import store from "./vuex/store";
 import Layout from "./components/Layout.vue";
 import TopMenu from "./components/TopMenu.vue";
-import dataService from "./services/dataService";
+import dataService from "./storage/dataService";
 
 export default {
   store,

@@ -1,4 +1,4 @@
-import dataService from "../services/dataService";
+import dataService from "../storage/dataService";
 
 var actions = {
   search({ dispatch }, params, callback=false) {

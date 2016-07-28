@@ -16,7 +16,7 @@
 
 <script>
 import elementsActions from "../actions/elementsActions";
-import store from "../storage/store";
+import store from "../vuex/store";
 
 export default {
   name: "Element",

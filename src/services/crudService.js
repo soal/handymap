@@ -2,8 +2,8 @@
  * @module CRUD service module
  */
 
-import store from "../storage/store";
-import dataService from "./dataService";
+import store from "../vuex/store";
+import dataService from "../storage/dataService";
 import capitalize from "lodash/capitalize";
 
 var dispatch = store.dispatch;

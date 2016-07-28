@@ -290,20 +290,6 @@ module.exports = function(self) {
     handlers[order.handler][order.method](order.options);
   }
 
-  // function workCicle() {
-  //   var counter = 0;
-  //   setTimeout(function() {
-  //     while (orders.length) {
-  //       orders.forEach(order => {
-  //         processOrder(order);
-  //         orders.shift();
-  //         counter++;
-  //         console.log(counter);
-  //       });
-  //     }
-  //   }, 100);
-  // }
-
   self.onmessage = function(message) {
     // console.log(message);
     // orders.push(message);
@@ -315,5 +301,4 @@ module.exports = function(self) {
     };
     processOrder(order);
   };
-  // workCicle();
 };

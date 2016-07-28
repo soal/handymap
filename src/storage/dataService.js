@@ -7,7 +7,7 @@ const dataService = {
    */
   initWorker() {
     if (window.Worker) {
-      this.worker = workify(require("./dataWorker.js"));
+      this.worker = workify(require("../storage/dataWorker.js"));
       // console.log(this.worker);
     }
 
