@@ -1,15 +1,15 @@
-import {Search} from "../api/resources";
+import dataService from "../storage/dataService";
 
 var actions = {
   search({ dispatch }, params, callback=false) {
-    return Search.get({ ...params })
-      .then((response) => {
+    var answer = dataService.fetch("getSome", "search", params, null, false);
+    return answer
+      .then(response => {
         if (callback) {
           callback({dispatch}, response);
         } else {
           dispatch("SET_SEARCH_RESULTS", (response.data ? response.data : response));
         }
-        return response;
       },
       err => console.log(err));
   }

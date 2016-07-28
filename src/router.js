@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import BaseElement from "./components/BaseElement.vue";
+import Layout from "./components/Layout.vue";
 
 Vue.use(Router);
 
@@ -14,11 +14,11 @@ var router = new Router({
 router.map({
   "/": {
     name: "main",
-    component: BaseElement,
+    component: Layout,
     subRoutes: {
       ":element": {
         name: "element",
-        component: BaseElement
+        component: Layout
       }
     }
   }

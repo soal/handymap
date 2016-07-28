@@ -1,30 +1,47 @@
 <template lang="html">
   <div id="base-element">
-    <base-map></base-map>
+    <geo-map></geo-map>
     <info-box :current-element="currentElement"
-              :children="children"
+              :children="filteredChildren"
+              :elementsComponents="elementComponents"
               :connections="connections"
               :element-collections="elementCollections"
               :element-ordered-collections="elementOrderedCollections">
+
+      <ul class="elements" slot="elementsList">
+        <li v-for="element of filteredChildren">
+          <element :element="element" :map="map" :M="M"></element>
+        </li>
+      </ul>
     </info-box>
-    <timeline></timeline>
-  </div>
 </template>
 
+
+<style lang="scss">
+  #base-element {
+    // position: absolute;
+    // width: 100%;
+    // height: 100vh;
+    /*z-index: 49*/
+  }
+</style>
+
 <script>
-import store from "../storage/store";
+import store from "../vuex/store";
 import elementsActions from "../actions/elementsActions";
 import searchActions from "../actions/searchActions";
 import InfoBox from "./InfoBox.vue";
-import BaseMap from "./BaseMap.vue";
+import GeoMap from "./GeoMap.vue";
+import Element from "./Element.vue"
 import Timeline from "./Timeline.vue";
 
 export default {
-  name: "BaseElement",
+  name: "Layout",
   components: {
     InfoBox,
-    BaseMap,
-    Timeline
+    GeoMap,
+    Timeline,
+    Element
   },
   route: {
     activate({ to, next }) {
@@ -43,8 +60,7 @@ export default {
     },
     data({ to }) {
       if (to.name === "main") {
-        return this.getElement({ id: this.defaultElementId }, function({dispatch}, response) {
-          dispatch("SET_ELEMENT", (response.data ? response.data : response));
+        return this.getElement(this.defaultElementId, null, function({dispatch}, response) {
           dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
           dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
           return response;
@@ -52,12 +68,11 @@ export default {
       }
       let storedElement = this.elements.find((item) => item.name === to.params.element);
       if (storedElement) {
-        // this.getElement({ id: this.defaultElementId }, function({dispatch}, response) {
-        store.dispatch("SET_ELEMENT", storedElement);
-        store.dispatch("SET_CURRENT_ELEMENT", storedElement);
-        store.dispatch("SET_CURRENT_ELEMENT_ID", storedElement.id);
-          // return response;
-        // });
+        this.getElement(storedElement.id, null, function({dispatch}, response) {
+          dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
+          dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
+          return response;
+        });
       } else {
         this.getCurrentElementByName(to.params.element);
       }
@@ -73,13 +88,19 @@ export default {
       orderedCollections: state => state.orderedCollections
     },
     actions: Object.assign(
-      elementsActions,
       searchActions,
+      elementsActions,
       {}
     )
   },
+  data() {
+    return {
+      map: {},
+      M: {}
+    }
+  },
   computed: {
-    children: function() {
+    children() {
       // TODO: move to actions for using in WebWorker
       if (this.currentElement.children_ids) {
         return this.elements.filter(
@@ -89,7 +110,10 @@ export default {
         );
       }
     },
-    connections: function() {
+    filteredChildren() {
+      return this.children;
+    },
+    connections() {
       if (this.currentElement.connections_ids) {
         return this.elements.filter(
           (item) => {
@@ -98,7 +122,7 @@ export default {
         );
       }
     },
-    elementCollections: function() {
+    elementCollections() {
       if (this.currentElement.collections_ids) {
         return this.collections.filter(
           (item) => {
@@ -107,7 +131,7 @@ export default {
         );
       }
     },
-    elementOrderedCollections: function() {
+    elementOrderedCollections() {
       if (this.currentElement.ordered_collections_ids) {
         return this.orderedCollections.filter(
           (item) => {
@@ -120,20 +144,18 @@ export default {
   ready() {
     store.watch(state => state.currentElement, (newEl) => {
       if (newEl) {
-        if (newEl.children_ids && newEl.children_ids.length) {
+        if (newEl.children_ids) {
           this.getChildren(newEl);
         }
       }
+    });
+    this.$on("geoMapLoaded", (map, M) => {
+      this.map = map;
+      this.M = M;
+
+
     });
   }
 };
 </script>
 
-<style lang="scss">
-  #base-element {
-    // position: absolute;
-    // width: 100%;
-    // height: 100vh;
-    /*z-index: 49*/
-  }
-</style>

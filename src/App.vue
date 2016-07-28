@@ -5,42 +5,6 @@
 </div>
 </template>
 
-
-<script>
-
-import store from "./storage/store";
-import BaseElement from "./components/BaseElement.vue";
-import TopMenu from "./components/TopMenu.vue";
-import {Dicts} from "./api/resources";
-
-export default {
-  store,
-  components: {
-    BaseElement,
-    TopMenu
-  },
-  vuex: {
-    getters: {
-      title: state => state.title,
-      elements: state => state.elements,
-      defaultElementId: state => state.defaultElementId
-    }
-  },
-  methods: {
-  },
-  init() {
-    Dicts.get()
-      .then((dicts) => {
-        store.dispatch("SET_DICTS", dicts.data);
-        if (dicts.data.default_element) {
-          store.dispatch("SET_DEFAULT_ELEMENT_ID", dicts.data.default_element);
-        }
-      });
-  }
-};
-
-</script>
-
 <style lang="scss">
 #top-menu {
   margin: 0;
@@ -68,3 +32,43 @@ export default {
   }
 }
 </style>
+
+<script>
+
+import store from "./vuex/store";
+import Layout from "./components/Layout.vue";
+import TopMenu from "./components/TopMenu.vue";
+import dataService from "./storage/dataService";
+
+export default {
+  store,
+  components: {
+    Layout,
+    TopMenu
+  },
+  vuex: {
+    getters: {
+      title: state => state.title,
+      elements: state => state.elements,
+      defaultElementId: state => state.defaultElementId
+    }
+  },
+  methods: {
+    getDicts() {
+      dataService.fetch("getOne", "dicts", null, null, false)
+        .then(response => {
+          // console.log("response: ", response);
+          store.dispatch("SET_DICTS", response);
+          if (response.default_element) {
+            store.dispatch("SET_DEFAULT_ELEMENT_ID", response.default_element);
+          }
+        },
+        err => console.log(err));
+      }
+  },
+  ready() {
+    this.getDicts();
+  }
+};
+
+</script>
