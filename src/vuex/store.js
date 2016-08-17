@@ -10,7 +10,7 @@ Vue.use(Vuex);
 Vue.config.debug = debug;
 
 
-const dataManager = function({ Element, Dicts }) {
+const dataManager = function({ Element, Dicts, Search }) {
   return store => {
     store.subscribe(mutation => {
       if (mutation.type === "router/ROUTE_CHANGED") {
@@ -21,7 +21,7 @@ const dataManager = function({ Element, Dicts }) {
           });
         }
         if (mutation.payload[0].name === "element") {
-          Search.get({ dataType: "elements", name: mutation.payload[0].params.element })
+          Search.findElements({ name: mutation.payload[0].params.element })
             .then(res => {
               store.dispatch("SET_CURRENT_ELEMENT", res.json());
             });
@@ -40,7 +40,7 @@ const dataManager = function({ Element, Dicts }) {
   };
 };
 
-const dataManagerPlugin = dataManager({ Element, Dicts });
+const dataManagerPlugin = dataManager({ Element, Dicts, Search });
 
 const store =  new Vuex.Store({
   state: {
