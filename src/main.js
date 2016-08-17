@@ -6,9 +6,6 @@ import router from "./router";
 import dataService from "./storage/dataService";
 import App from "./App.vue";
 
-// import SmartArray from "./lib/smartArray";
-
-// console.log(SmartArray);
 
 Vue.config.debug = true;
 dataService.initWorker();
