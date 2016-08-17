@@ -15,7 +15,11 @@ export const Element = Vue.resource(`${API_ROOT}/elements{/id}{/field}`);
 export const Collection = Vue.resource(`${API_ROOT}/collections{/id}`);
 export const OrderedCollection = Vue.resource(`${API_ROOT}/ordered_collections{/id}`);
 export const Shape = Vue.resource(`${API_ROOT}/shapes{/id}`);
-export const Search = Vue.resource(`${API_ROOT}/search{/dataType}`);
+
+export const Search = Vue.resource(`${API_ROOT}/search{/dataType}`, {}, {
+  findElements: { method: "GET", url: "${API_ROOT}/search/elements"},
+  findCollections: { method: "GET", url: "${API_ROOT}/search/collections"}
+});
 
 export const Dicts = Vue.resource(`${API_ROOT}/dicts`);
 export const User = Vue.resource(`${API_ROOT}/users{/id}`);
