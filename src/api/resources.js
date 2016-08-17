@@ -11,14 +11,18 @@ Vue.http.options.crossOrigin = true;
 Vue.http.headers.common["X-Requested-With"] = "XMLHttpRequest";
 Vue.http.headers.common["MimeType"] = "application/json";
 
-export const Element = Vue.resource(`${API_ROOT}/elements{/id}{/field}`);
+export const Element = Vue.resource(`${API_ROOT}/elements{/id}`, {}, {
+  getShapes: { method: "GET", url: `${API_ROOT}/elements{/id}/shapes` },
+  getText: { method: "GET", url: `${API_ROOT}/elements{/id}/text` }
+});
+
 export const Collection = Vue.resource(`${API_ROOT}/collections{/id}`);
 export const OrderedCollection = Vue.resource(`${API_ROOT}/ordered_collections{/id}`);
 export const Shape = Vue.resource(`${API_ROOT}/shapes{/id}`);
 
 export const Search = Vue.resource(`${API_ROOT}/search{/dataType}`, {}, {
-  findElements: { method: "GET", url: "${API_ROOT}/search/elements"},
-  findCollections: { method: "GET", url: "${API_ROOT}/search/collections"}
+  findElements: { method: "GET", url: `${API_ROOT}/search/elements`},
+  findCollections: { method: "GET", url: `${API_ROOT}/search/collections`}
 });
 
 export const Dicts = Vue.resource(`${API_ROOT}/dicts`);
