@@ -43,45 +43,9 @@ export default {
     Timeline,
     Element
   },
-  route: {
-    activate({ to, next }) {
-      // NOTE: need refactor
-      if (to.name === "main" && !store.state.defaultElementId) {
-        return new Promise((resolve) => {
-          let timer = setInterval(() => {
-            if (store.state.defaultElementId) {
-              clearInterval(timer);
-              resolve(store.state.defaultElementId);
-            }
-          }, 10);
-        });
-      }
-      next();
-    },
-    data({ to }) {
-      if (to.name === "main") {
-        return this.getElement(this.defaultElementId, null, function({dispatch}, response) {
-          dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
-          dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
-          return response;
-        });
-      }
-      let storedElement = this.elements.find((item) => item.name === to.params.element);
-      if (storedElement) {
-        this.getElement(storedElement.id, null, function({dispatch}, response) {
-          dispatch("SET_CURRENT_ELEMENT", (response.data ? response.data : response));
-          dispatch("SET_CURRENT_ELEMENT_ID", (response.data ? response.data.id : response.id));
-          return response;
-        });
-      } else {
-        this.getCurrentElementByName(to.params.element);
-      }
-    }
-  },
   vuex: {
     getters: {
       currentElement: state => state.currentElement,
-      defaultElementId: state => state.defaultElementId,
       currentElementId: state => state.currentElementId,
       elements: state => state.elements,
       collections: state => state.collections,
