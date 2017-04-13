@@ -1,16 +1,7 @@
 .DS_Store
-node_modules
-dist/build.js
-dist/app.css
-dist/app.css.map
-dist/.*
-*npm-debug*
-
-# IDEs files
-*.sublime-*
-*.idea
-*.tern-*
+node_modules/
+dist/
+npm-debug.log
+yarn-error.log
 *.vscode
-*.imdone
-jsconfig.json
-typings
+*.sublime-*

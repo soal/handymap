@@ -1,26 +1,45 @@
 import Vue from "vue";
-import Router from "vue-router";
-import Layout from "./components/Layout.vue";
+import VueRouter from "vue-router";
 
-Vue.use(Router);
+Vue.use(VueRouter);
 
-var router = new Router({
-  history: true,
-  transitionOnLoad: true,
-  saveScrollPosition: true
-});
+import Intro from "./components/Intro.vue";
+import MapViewer from "./components/MapViewer.vue";
+import ElementArticle from "./components/infobox/ElementArticle.vue";
 
-
-router.map({
-  "/": {
-    name: "main",
-    component: Layout,
-    subRoutes: {
-      ":element": {
+const routes = [
+  { path: "/",
+    name: "intro",
+    components: { default: Intro }
+  },
+  { path: "/map",
+    name: "view_map",
+    components: { default: MapViewer },
+    children: [
+      { path: "elements/:id",
         name: "element",
-        component: Layout
+        components: {
+          infobox: ElementArticle
+        }
+      },
+      { path: "scenarios/:id",
+        name: "scenario",
+        components: {
+        },
+        children: [
+          { path: "elements/:id",
+            name: "scenario_element",
+            components: {}
+          }
+        ]
       }
-    }
+    ]
   }
+];
+
+export default new VueRouter({
+  mode: "history",
+  transitionOnLoad: true,
+  saveScrollPosition: true,
+  routes
 });
-export default router;

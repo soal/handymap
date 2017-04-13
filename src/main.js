@@ -1,17 +1,19 @@
 import Vue from "vue";
-import {sync} from "vuex-router-sync";
+import { sync } from "vuex-router-sync";
+import BootstrapVue from "bootstrap-vue/dist/bootstrap-vue.esm";
 
-import store from "./vuex/store";
+import store from "./store";
 import router from "./router";
-import dataService from "./storage/dataService";
+
 import App from "./App.vue";
 
-
-Vue.config.debug = true;
-dataService.initWorker();
+Vue.use(BootstrapVue);
 
 sync(store, router);
 
-router.start(App, "app");
-window.Vue = Vue;
+const app = new Vue({ // eslint-disable-line no-new, no-unused-vars
+  store,
+  router,
+  render: (h) => h(App)
+}).$mount("#app");
 

@@ -1,9 +1,0 @@
-export const SET_DEFAULT_ELEMENT_ID = "SET_DEFAULT_ELEMENT_ID";
-export const SET_CURRENT_ELEMENT_ID = "SET_CURRENT_ELEMENT_ID";
-export const SET_CURRENT_ELEMENT    = "SET_CURRENT_ELEMENT";
-export const SET_ELEMENTS           = "SET_ELEMENTS";
-export const SET_ELEMENTS_IDS       = "SET_ELEMENTS_IDS";
-export const SET_CHILDREN           = "SET_CHILDREN";
-export const SET_CONNECTIONS        = "SET_CONNECTIONS";
-export const SET_DICTS              = "SET_DICTS";
-export const SET_ELEMENT_SHAPES     = "SET_ELEMENT_SHAPES";

@@ -1,114 +1,101 @@
-<template lang="html">
-  <div class="map-wrapper">
-    <div id="map"></div>
-  </div>
+<template>
+  <div id="map"></div>
 </template>
-
-<style lang="scss">
-  .map-wrapper {
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 1;
-  }
-
-  #map {
-    height: 100vh;
-    width: 100vw;
-    /*height: 140vh
-    width: 145vw
-    margin-bottom: -20vh
-    margin-left: -25vw
-    margin-top: -20vh
-    margin-right: -20vw
-    padding: 0 10vw*/
-
-    .mapboxgl-control-container {
-      bottom: 0;
-      position: absolute;
-      right: 0;
-
-    }
-  }
-
-  .timeline-wrapper {
-    background-color: blue;
-    bottom: 0;
-    height: 20px;
-    position: fixed;
-    width: 100%;
-    z-index: 90;
-  }
-</style>
 
 <script>
 import M from "mapbox-gl";
-import {MAP_SOURCE, MAPBOX_ACCESS_TOKEN, API_ROOT} from "../config";
+
+import { MAP_SOURCE, MAPBOX_ACCESS_TOKEN } from "../config";
+import api from "../api";
 
 export default {
   name: "GeoMap",
-  components: {
-  },
-  vuex: {
-    getters: {}
-  },
-  events: {
+  props: ["currentElement"],
 
+  data() {
+    return {
+      map: null,
+      userLayers: new Set()
+    };
   },
-  ready() {
-    M.accessToken = MAPBOX_ACCESS_TOKEN;
-    var map = new M.Map({
-      container: "map",
-      style: MAP_SOURCE,
-      center: [8.3221, 46.5928],
-      maxZoom: 6,
-      minZoom: 1.76,
-      zoom: 3,
-      hash: true
+  // QUESTION: May be watch currentElementId?
+  watch: {
+    currentElement(newcurrentElement) {
+      this.addElementShapes(newcurrentElement);
+    }
+  },
+
+  mounted() {
+    this.loadMap().then(map => {
+      this.map = map;
+      this.map.addControl(new M.NavigationControl(), "bottom-right");
+      this.addElementShapes(this.currentElement);
     });
+  },
+  methods: {
+    loadMap() {
+      return new Promise((resolve) => {
+        M.accessToken = MAPBOX_ACCESS_TOKEN;
 
-    var Roma = new M.GeoJSONSource({data: `${ API_ROOT }/shapes/11`});
-    var Carthago = new M.GeoJSONSource({data: `${ API_ROOT }/shapes/71`});
+        let map = new M.Map({
+          container: "map",
+          style: MAP_SOURCE,
+          center: [8.3221, 46.5928],
+          maxZoom: 6,
+          minZoom: 1.76,
+          zoom: 3,
+          hash: true
+        });
 
-    map.addControl(new M.Navigation({position: "bottom-right"}));
-    map.on("load", () => {
-      this.$dispatch("geoMapLoaded", map, M);
-
-      // map.addSource("Roma", Roma);
-      // map.addSource("Carthago", Carthago);
-
-      // console.log(Roma)
-      // map.addLayer({
-      //   id: "Roma",
-      //   type: "fill",
-      //   source: "Roma",
-      //   "source-layer": "Roma",
-      //   layout: {
-      //     visibility: "visible"
-      //   },
-      //   paint: {
-      //     "fill-color": "rgba(61,153,80,0.55)"
-      //   }
-      // });
-
-      // map.addLayer({
-      //   id: "Carthago",
-      //   type: "fill",
-      //   source: "Carthago",
-      //   "source-layer": "Carthago",
-      //   layout: {
-      //       visibility: "visible"
-      //   },
-      //   paint: {
-      //     "fill-color": "rgba(255,153,80,0.55)"
-      //   }
-      // });
-    });
+        map.on("load", () => resolve(map));
+      });
+    },
+    loadShape(id) {
+      id = "" + id;
+      if (this.map.getSource(id) === undefined) {
+        this.map.addSource(id, {
+          type: "geojson",
+          data: `${api.shapes.defaults.baseURL}${id}`
+        });
+      }
+      if (this.map.getLayer(id) === undefined) {
+        this.userLayers.add(id);
+        this.map.addLayer({
+          id,
+          type: "fill",
+          source: id,
+          layout: {
+            visibility: "visible"
+          },
+          paint: {
+            "fill-color": `rgba(${12 * id + 3},153,80,0.55)`
+          }
+        });
+      }
+    },
+    addElementShapes(element) {
+      if (this.map && element && element.shapes_ids) {
+        element.shapes_ids.forEach(id => {
+          this.loadShape(id);
+        });
+      } else {
+        this.userLayers.forEach(layer => {
+          this.map.removeLayer(layer);
+        });
+        this.userLayers = new Set();
+      }
+    }
   }
 };
 
 </script>
 
+<style lang="scss" scoped>
+  #map {
+    position: absolute;
+    top: 57px;
+    left: 0;
+    height: calc(100vh - 57px);
+    width: 100vw;
+  }
+</style>
