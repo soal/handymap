@@ -1,26 +1,17 @@
+import uniqBy from 'lodash';
+
 export default {
 
-  /**
-   * Returns single element finded by given selector and value.
-   *
-   * @param  {any} value            value of the selector to search with.
-   * @param  {string} selector="id" property to search by.
-   *
-   * @return {Object} Single element
-   */
   queryElement: state => {
-    return (value, selector="id") => state.elements.find(element => element[selector] === value);
+    return (value, selector='id') => state.elements.find(element => element[selector] === value);
   },
-  /**
-   * Returns array of elements filtered by given selector and value.
-   *
-   * @param  {any} value            value of the selector to search with.
-   * @param  {string} selector="id" property to search by.
-   *
-   * @return {Object[]} Array of scenarios
-   */
   queryElements: state => {
-    return (value, selector="id") => state.elements.filter(element => element[selector] === value);
+    return (value, selector='id') => {
+      if (value instanceof Array) {
+        return state.elements.filter(element => value.indexOf(element[selector]) !== -1)
+      }
+      return state.elements.filter(element => element[selector] === value)
+    };
   },
 
   isElementSelected: state => id => id in state.selectedElements.map(el => el.id),
@@ -29,12 +20,18 @@ export default {
 
   currentElement: (state, getters) => getters.queryElement(state.currentElementId),
 
-  contextElements: state => {
-    return state.elements.filter(element => {
-      // TODO: add filtering by links types
-      return element.type in state.activeContext.elementsTypes ||
-             element.id in state.activeContext.additionalElementsIds ||
-             element.weigth >= state.activeContext.weight;
-    });
+  commonDataset: (state, getters) => {
+    let dataset = [];
+
+    let allIds = uniqBy(
+      [ state.rootContext.rootElement,
+        ...state.rootContext.dataset,
+        ...state.contexts.map(context => context.rootElement),
+        ...state.contexts.map(context => context.dataset)
+      ]);
+
+    dataset = getters.queryElements(allIds);
+
+    return dataset;
   }
 };

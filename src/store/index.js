@@ -1,11 +1,11 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import { DEBUG } from "../config";
-import dataHandler from "./dataHandler.js";
-import getters from "./getters";
-import mutations from "./mutations";
-import actions from "./actions";
+import { DEBUG } from '../config';
+import dataHandler from './dataHandler.js';
+import getters from './getters';
+import mutations from './mutations';
+import actions from './actions';
 
 
 Vue.use(Vuex);
@@ -13,13 +13,13 @@ Vue.config.debug = DEBUG;
 
 export default new Vuex.Store({
   state: {
-    title: "HistoryFlow",
-    shortTitle: "HF",
+    title: 'HistoryFlow',
+    shortTitle: 'HF',
 
     dicts: {},
 
-    rootScenario: { // global context of the project
-      name: "",
+    rootContext: { // global context of the project
+      name: '',
       rootElement: null,
       info_fields: [],
       start_date: {},
@@ -28,27 +28,19 @@ export default new Vuex.Store({
       links_types: [],
       additional_ids: [],
       bbox: [],
-      step_size: "",
+      step_size: '',
       weight: 1,
-      disable_others: false
+      disable_others: false,
+      dataset: []
     },
-    activeContext: {
-      rootElements: [],
-      infoFields: [],
-      startDate: {},
-      endDate: {},
-      elementsTypes: [],
-      linksTypes: [],
-      additionalElementsIds: [],
-      bboxes: [],
-      weight: 1,
-      disableOthers: false
-    },
+    contexts: [
+      // dataset: [] list of ids of elements in context
+    ],
 
     scenario: {},
     elements: [],
     selectedElementsIds: [],
-    currentElementId: ""
+    currentElementId: ''
 
   },
   getters,
