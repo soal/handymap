@@ -12,7 +12,7 @@ import ElementsList from "./ElementsList.vue";
 import ElementArticle from "./ElementArticle.vue";
 
 export default {
-  name: "InfoBox",
+  name: 'InfoBox',
   components: {
     ElementArticle,
     ElementsList

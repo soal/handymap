@@ -1,34 +1,34 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
-import Intro from "./components/Intro.vue";
-import MapViewer from "./components/MapViewer.vue";
-import ElementArticle from "./components/infobox/ElementArticle.vue";
+import Intro from './components/Intro.vue';
+import MapViewer from './components/MapViewer.vue';
+import ElementArticle from './components/infobox/ElementArticle.vue';
 
 const routes = [
-  { path: "/",
-    name: "intro",
+  { path: '/',
+    name: 'intro',
     components: { default: Intro }
   },
-  { path: "/map",
-    name: "view_map",
+  { path: '/map',
+    name: 'view_map',
     components: { default: MapViewer },
     children: [
-      { path: "elements/:id",
-        name: "element",
+      { path: 'elements/:id',
+        name: 'element',
         components: {
           infobox: ElementArticle
         }
       },
-      { path: "scenarios/:id",
-        name: "scenario",
+      { path: 'scenarios/:id',
+        name: 'scenario',
         components: {
         },
         children: [
-          { path: "elements/:id",
-            name: "scenario_element",
+          { path: 'elements/:id',
+            name: 'scenario_element',
             components: {}
           }
         ]
@@ -38,7 +38,7 @@ const routes = [
 ];
 
 export default new VueRouter({
-  mode: "history",
+  mode: 'history',
   transitionOnLoad: true,
   saveScrollPosition: true,
   routes

@@ -1,4 +1,4 @@
-import { union, unionBy, isArray } from "lodash";
+import { union, unionBy, isArray } from 'lodash';
 
 export default {
   /**
@@ -44,7 +44,7 @@ export default {
    * @param {Object[] | {}} element element or array of elements
    */
   setElements(state, elements) {
-    state.elements = unionBy(state.elements, isArray(elements) ? elements : [elements], "id");
+    state.elements = unionBy(state.elements, isArray(elements) ? elements : [elements], 'id');
   },
 
   /**
@@ -54,7 +54,7 @@ export default {
    * @param {Object} element
    */
   selectElement(state, id) {
-    state.selectedElementsIds = union(state.selectedElementsIds, [id], "id");
+    state.selectedElementsIds = union(state.selectedElementsIds, [id], 'id');
   },
   setCurrentElement(state, id) {
     state.currentElementId = id;
