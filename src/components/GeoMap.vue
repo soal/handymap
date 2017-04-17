@@ -1,20 +1,43 @@
 <template>
-  <div id="map"></div>
+  <!-- <div id="map"></div> -->
+  <gl-map :accessToken="accessToken"
+          :map-style="mapSource"
+          :center="[8.3221, 46.5928]"
+          :maxZoom="6"
+          :minZoom="1.76"
+          :zoom="3"
+          :hash="true"
+  >
+  </gl-map>
 </template>
 
 <script>
-import M from "mapbox-gl";
+import {
+  MglMap,
+  MglNavigationControl,
+  MglGeojsonLayer
+} from 'vue-mapbox';
 
-import { MAP_SOURCE, MAPBOX_ACCESS_TOKEN } from "../config";
-import api from "../api";
+import {MAP_SOURCE, MAPBOX_ACCESS_TOKEN} from '../config';
+import api from '../api';
 
 export default {
-  name: "GeoMap",
-  props: ["currentElement"],
+  name: 'GeoMap',
+  components: {
+    GlMap: MglMap,
+    NavControl: MglNavigationControl,
+    Layer: MglGeojsonLayer
+  },
+  props: ['currentElement'],
 
   data() {
     return {
       map: null,
+      accessToken: MAPBOX_ACCESS_TOKEN,
+      mapSource: MAP_SOURCE,
+      mapOptions: {
+        center: [8.3221, 46.5928]
+      },
       userLayers: new Set()
     };
   },
@@ -26,35 +49,30 @@ export default {
   },
 
   mounted() {
-    this.loadMap().then(map => {
-      this.map = map;
-      this.map.addControl(new M.NavigationControl(), "bottom-right");
-      this.addElementShapes(this.currentElement);
-    });
   },
   methods: {
-    loadMap() {
-      return new Promise((resolve) => {
-        M.accessToken = MAPBOX_ACCESS_TOKEN;
+    // loadMap() {
+    //   return new Promise((resolve) => {
+    //     M.accessToken = MAPBOX_ACCESS_TOKEN;
 
-        let map = new M.Map({
-          container: "map",
-          style: MAP_SOURCE,
-          center: [8.3221, 46.5928],
-          maxZoom: 6,
-          minZoom: 1.76,
-          zoom: 3,
-          hash: true
-        });
+    //     let map = new M.Map({
+    //       container: 'map',
+    //       style: MAP_SOURCE,
+    //       center: [8.3221, 46.5928],
+    //       maxZoom: 6,
+    //       minZoom: 1.76,
+    //       zoom: 3,
+    //       hash: true
+    //     });
 
-        map.on("load", () => resolve(map));
-      });
-    },
+    //     map.on('load', () => resolve(map));
+    //   });
+    // },
     loadShape(id) {
-      id = "" + id;
+      id = '' + id;
       if (this.map.getSource(id) === undefined) {
         this.map.addSource(id, {
-          type: "geojson",
+          type: 'geojson',
           data: `${api.shapes.defaults.baseURL}${id}`
         });
       }
@@ -62,13 +80,13 @@ export default {
         this.userLayers.add(id);
         this.map.addLayer({
           id,
-          type: "fill",
+          type: 'fill',
           source: id,
           layout: {
-            visibility: "visible"
+            visibility: 'visible'
           },
           paint: {
-            "fill-color": `rgba(${12 * id + 3},153,80,0.55)`
+            'fill-color': `rgba(${12 * id + 3},153,80,0.55)`
           }
         });
       }
