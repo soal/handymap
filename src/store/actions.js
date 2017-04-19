@@ -12,6 +12,7 @@ export default {
   fetchElements({ commit }, ids) {
     return api.elements(ids)
       .then(elements => {
+        commit('setElements', elements.data)
         return elements.data;
       });
   },
@@ -41,9 +42,8 @@ export default {
         let elements = scenario.contexts.map(context => {
           return dispatch('fetchElements', context.dataset)
         });
-        Promise.all(elements).then(elements => {
+        Promise.all(elements).then(() => {
           commit('setScenario', scenario)
-          commit('setElements', ...elements)
         });
       });
   },

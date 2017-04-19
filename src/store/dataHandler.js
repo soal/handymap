@@ -1,4 +1,3 @@
-
 const handlers = {
   root: async store => {
     store.commit('setCurrentElement', null);

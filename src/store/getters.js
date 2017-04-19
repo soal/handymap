@@ -20,7 +20,7 @@ export default {
   },
   elementShapes: state => {
     return ids => {
-      return state.shapes.filter(shape => ids.indexOf(+shape.properties.id));
+      return compact(state.shapes.filter(shape => ids.indexOf(+shape.properties.id)));
     }
   },
 
@@ -38,7 +38,6 @@ export default {
         ...flatten(state.scenario.contexts.map(context => context.dataset))
       ])
     );
-    // debugger
     return getters.queryElements(allIds);
   }
 };

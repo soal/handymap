@@ -44,7 +44,6 @@ export default {
     currentElement() { return this.$store.getters.currentElement; },
     dataset() {
       let dataset = this.$store.getters.commonDataset;
-      // debugger
       return dataset;
     }
   }
