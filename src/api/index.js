@@ -1,41 +1,4 @@
-// import axios from 'axios';
 import { API_ROOT } from '../config';
-
-// const httpConfig = {
-//   timeout: 10000
-// };
-
-// const xhrq = {
-//   root: axios.create({
-//     baseURL: `${API_ROOT}/`,
-//     timeout: httpConfig.timeout
-//   }),
-
-//   dicts: axios.create({
-//     baseURL: `${API_ROOT}/dicts`,
-//     timeout: httpConfig.timeout
-//   }),
-
-//   contexts: axios.create({
-//     baseURL: `${API_ROOT}/contexts`,
-//     timeout: httpConfig.timeout
-//   }),
-
-//   elements: axios.create({
-//     baseURL: `${API_ROOT}/elements`,
-//     timeout: httpConfig.timeout
-//   }),
-
-//   shapes: axios.create({
-//     baseURL: `${API_ROOT}/shapes`,
-//     timeout: httpConfig.timeout
-//   }),
-
-//   scenarios: axios.create({
-//     baseURL: `${API_ROOT}/scenarios`,
-//     timeout: httpConfig.timeout
-//   })
-// };
 
 export default {
   root: () => {
@@ -60,8 +23,8 @@ export default {
       })
   },
 
-  context: id => {
-    return fetch(`${API_ROOT}/contexts/${id}`)
+  context: (id, nameSpace='public') => {
+    return fetch(`${API_ROOT}/${nameSpace}/contexts/${id}`)
       .then(res => {
         return res.json()
       })
@@ -70,9 +33,9 @@ export default {
       })
   },
 
-  elements: ids => {
+  elements: (ids, nameSpace='public') => {
     if (!ids instanceof Array) throw new Error('Ids must be an array');
-    return fetch(`${API_ROOT}/elements?ids=${ids.join(',')}`)
+    return fetch(`${API_ROOT}/${nameSpace}/elements?ids=${ids.join(',')}`)
       .then(res => {
         return res.json()
       })
@@ -81,9 +44,8 @@ export default {
       })
   },
 
-  element: id => {
-    return fetch(`
-    ${API_ROOT}/elements/${id}`)
+  element: (id, nameSpace='public') => {
+    return fetch(`${API_ROOT}/${nameSpace}/elements/${id}`)
       .then(res => {
         return res.json()
       })
@@ -92,9 +54,9 @@ export default {
       })
   },
 
-  shapes: ids => {
+  shapes: (ids, nameSpace='public') => {
     if (!ids instanceof Array) throw new Error('Ids must be an array');
-    return fetch(`${API_ROOT}/shapes?ids=${ids.join(',')}`)
+    return fetch(`${API_ROOT}/${nameSpace}/shapes?ids=${ids.join(',')}`)
       .then(res => {
         return res.json()
       })
@@ -103,8 +65,8 @@ export default {
       })
   },
 
-  shape: id => {
-    return fetch(`${API_ROOT}/shapes/${id}`)
+  shape: (id, nameSpace='public') => {
+    return fetch(`${API_ROOT}/${nameSpace}/shapes/${id}`)
       .then(res => {
         return res.json()
       })
@@ -113,8 +75,8 @@ export default {
       })
   },
 
-  scenario: id => {
-    return fetch(`${API_ROOT}/scenarios/${id}`)
+  scenario: (name, nameSpace='public') => {
+    return fetch(`${API_ROOT}/${nameSpace}/scenarios/${name}`)
       .then(res => {
         return res.json()
       })

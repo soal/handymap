@@ -7,10 +7,9 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 
 export default {
-  name: "ElementArticle",
+  name: 'ElementArticle',
 
   computed: {
     element() { return this.$store.getters.currentElement; }

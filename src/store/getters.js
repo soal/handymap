@@ -29,14 +29,14 @@ export default {
   currentElement: (state, getters) => getters.queryElement(state.currentElementId),
 
   commonDataset: (state, getters) => {
-    let rootDataset = state.rootContext.dataset ? state.rootContext.dataset : [];
+    let rootDataset = state.rootScenario.context.dataset ? state.rootScenario.context.dataset : [];
     let allIds = uniqBy(
-      [ state.rootContext.rootElement,
+      [ state.rootScenario.context.rootElement,
         ...rootDataset,
-        ...state.contexts.map(context => context.rootElement),
-        ...state.contexts.map(context => context.dataset)
+        ...state.scenario.contexts.map(context => context.rootElement),
+        ...state.scenario.contexts.map(context => context.dataset)
       ]);
-
+    // debugger
     return getters.queryElements(allIds);
   }
 };

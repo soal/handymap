@@ -1,7 +1,7 @@
 <template>
   <div id="viewer">
-    <info-box :currentElement="currentElement"></info-box>
-    <geo-map :currentElement="currentElement" :dataset="commonDataset"></geo-map>
+    <info-box></info-box>
+    <geo-map></geo-map>
   </div>
 </template>
 

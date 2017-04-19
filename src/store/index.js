@@ -18,28 +18,27 @@ export default new Vuex.Store({
 
     dicts: {},
 
-    rootContext: { // global context of the project
-      // name: '',
-      // rootElement: null,
-      // info_fields: [],
-      // start_date: {},
-      // end_date: {},
-      // elements_types: [],
-      // links_types: [],
-      // additional_ids: [],
-      // bbox: [],
-      // step_size: '',
-      // weight: 1,
-      // disable_others: false,
-      // dataset: []
-    },
-    contexts: [
-      // {
-      // dataset: [] list of ids of elements in context
+    rootScenario: { // global scenario of the project
+      context: {}
+      // context: {
+      //   name: '',
+      //   rootElement: null,
+      //   info_fields: [],
+      //   start_date: {},
+      //   end_date: {},
+      //   elements_types: [],
+      //   links_types: [],
+      //   additional_ids: [],
+      //   bbox: [],
+      //   step_size: '',
+      //   weight: 1,
+      //   disable_others: false,
+      //   dataset: []
       // }
-    ],
-
-    scenario: {},
+    },
+    scenario: {
+      contexts: []
+    },
     elements: [],
     shapes: [],
     selectedElementsIds: [],

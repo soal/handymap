@@ -16,22 +16,27 @@ const routes = [
     name: 'view_map',
     components: { default: MapViewer },
     children: [
+      {
+        path: 'scenarios/:name',
+        name: 'scenario',
+        components: {
+          // infobox: ScenarioBox
+        },
+        children: [
+          {
+            path: 'elements/:id',
+            name: 'context_element',
+            components: {
+              infobox: ElementArticle
+            }
+          }
+        ]
+      },
       { path: 'elements/:id',
         name: 'element',
         components: {
           infobox: ElementArticle
         }
-      },
-      { path: 'scenarios/:id',
-        name: 'scenario',
-        components: {
-        },
-        children: [
-          { path: 'elements/:id',
-            name: 'scenario_element',
-            components: {}
-          }
-        ]
       }
     ]
   }

@@ -15,8 +15,8 @@ export default {
     state.currentElementId = id;
   },
 
-  setRootContext(state, context) {
-    state.rootContext = context;
+  setRootScenario(state, scenario) {
+    state.rootScenario = scenario;
   },
   addContext(state, context) {
     state.contexts.push(context);

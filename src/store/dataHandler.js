@@ -3,8 +3,8 @@ const handlers = {
   root: async store => {
     store.commit('setCurrentElement', null);
     await store.dispatch('fetchDicts');
-    await store.dispatch('fetchRootContext', store.state.dicts.root_context);
-    await store.dispatch('fetchElements', store.state.rootContext.dataset)
+    await store.dispatch('fetchRootScenario', store.state.dicts.rootScenario);
+    await store.dispatch('fetchElements', store.state.rootScenario.context.dataset)
   },
 
   element: async (store, id) => {
@@ -12,9 +12,9 @@ const handlers = {
     store.commit('setCurrentElement', element.id);
   },
 
-  context: async (store, id) => {
-    let context = await store.dispatch('fetchContext', id);
-    store.commit('setContext', context);
+  scenario: async (store, name) => {
+    let context = await store.dispatch('fetchScenario', name);
+    store.commit('setScenario', context);
   }
 }
 

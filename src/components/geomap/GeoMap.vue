@@ -31,7 +31,6 @@ export default {
     NavControl: MglNavigationControl,
     ElementShape
   },
-  props: ['currentElement', 'dataset'],
 
   data() {
     return {
@@ -40,16 +39,10 @@ export default {
       mapSource: MAP_SOURCE
     };
   },
-  // QUESTION: May be watch currentElementId?
-  watch: {
-    // currentElement(newCurrentElement) {
-    //   this.addElementShapes(newCurrentElement);
-    // }
-  },
 
-  mounted() {
-  },
-  methods: {
+  computed: {
+    currentElement() { return this.$store.getters.currentElement; },
+    dataset() { return this.$store.getters.commonDataset; }
   }
 };
 

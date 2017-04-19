@@ -1,49 +1,23 @@
 <template>
   <div id="hf" class="container-fluid">
-    <div class="row">
-      <b-navbar toggleable fixed type="inverse" variant="primary" class="col">
-        <b-nav-toggle target="nav_collapse"></b-nav-toggle>
-        <b-link class="navbar-brand" to="#">
-          <span>{{ title }}</span>
-          <router-link :to="{ name: 'view_map' }" v-if="$route.name === 'intro'">Map</router-link>
-          <router-link :to="{ name: 'intro' }" v-else>Intro</router-link>
-        </b-link>
-        <b-collapse is-nav id="nav_collapse" v-if="$route.name !== 'intro'">
-          <b-nav is-nav-bar>
-            <b-nav-item>
-              <router-link :to="{ name: 'element', params: { id: 1 } }">Rome</router-link>
-            </b-nav-item>
-            <b-nav-item>
-              <router-link :to="{ name: 'element', params: { id: 7 } }">Carthago</router-link>
-            </b-nav-item>
-            <b-nav-item>
-              <router-link :to="{ name: 'scenario', params: { id: 1 } }">Second Punic War</router-link>
-            </b-nav-item>
-            <b-nav-item>
-              <b-button size="sm" variant="secondary" @click="clearMap()">Clear map</b-button>
-            </b-nav-item>
-          </b-nav>
-        </b-collapse>
-      </b-navbar>
-    </div>
+    <top-bar></top-bar>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
+import TopBar from './TopBar.vue';
 
 export default {
-  name: "App",
-
-  computed: mapState({
-    title: "title",
-    shortTitle: "shortTitle"
-  }),
+  name: 'App',
+  components: {
+    TopBar
+  },
 
   methods: {
     clearMap() {
-      this.$store.commit("setCurrentElement", null);
+      this.$store.commit('setCurrentElement', null);
     }
   }
 };
