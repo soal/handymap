@@ -1,9 +1,9 @@
 <template>
 <div>
-  <layer v-for="shape of visibleShapes" :key="shape.id"
-        :sourceId="shape.id"
-        :source="shape.url"
-        :layerId="shape.id"
+  <layer v-for="shape of visibleShapes" :key="shape.properties.id"
+        :sourceId="shape.properties.id"
+        :source="shape"
+        :layerId="shape.properties.id"
         :listenUserEvents="false"
   >
   </layer>
@@ -22,13 +22,16 @@
     },
     props: ['element'],
 
+    mounted() {
+      this.element.shapes_ids.forEach(id => {
+        this.$store.dispatch('fetchShape', id);
+      });
+    },
+
     computed: {
       visibleShapes() {
         // TODO: filter by time
-        // console.log(this.element.shapes_ids)
-        return this.element.shapes_ids.map(shape => {
-          return {id: shape+'', url: `${API_ROOT}/shapes/${shape}`};
-        });
+        return this.$store.getters.elementShapes(this.element.shapes_ids);
       }
     }
 

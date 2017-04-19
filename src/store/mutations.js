@@ -24,5 +24,9 @@ export default {
 
   setDicts(state, dicts) {
     state.dicts = dicts;
+  },
+
+  addShape(state, shape) {
+    state.shapes.push(shape);
   }
 };

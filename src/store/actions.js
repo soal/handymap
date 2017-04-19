@@ -28,7 +28,7 @@ export default {
   },
 
   fetchShape({ commit }, id) {
-    // return api.shape(id).then(shape)
+    return api.shape(id).then(shape => commit('addShape', shape));
   }
 };
 

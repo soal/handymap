@@ -41,6 +41,7 @@ export default new Vuex.Store({
 
     scenario: {},
     elements: [],
+    shapes: [],
     selectedElementsIds: [],
     currentElementId: ''
 

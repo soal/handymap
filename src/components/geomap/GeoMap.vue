@@ -8,6 +8,7 @@
           :zoom="3"
           :hash="true"
   >
+    <nav-control></nav-control>
     <element-shape v-for="element of dataset" :key="element.id" :element="element"></element-shape>
   </gl-map>
 </div>
@@ -36,75 +37,19 @@ export default {
     return {
       map: null,
       accessToken: MAPBOX_ACCESS_TOKEN,
-      mapSource: MAP_SOURCE,
-      mapOptions: {
-        center: [8.3221, 46.5928]
-      },
-      userLayers: new Set()
+      mapSource: MAP_SOURCE
     };
   },
   // QUESTION: May be watch currentElementId?
   watch: {
-    currentElement(newcurrentElement) {
-      this.addElementShapes(newcurrentElement);
-    }
+    // currentElement(newCurrentElement) {
+    //   this.addElementShapes(newCurrentElement);
+    // }
   },
 
   mounted() {
   },
   methods: {
-    // loadMap() {
-    //   return new Promise((resolve) => {
-    //     M.accessToken = MAPBOX_ACCESS_TOKEN;
-
-    //     let map = new M.Map({
-    //       container: 'map',
-    //       style: MAP_SOURCE,
-    //       center: [8.3221, 46.5928],
-    //       maxZoom: 6,
-    //       minZoom: 1.76,
-    //       zoom: 3,
-    //       hash: true
-    //     });
-
-    //     map.on('load', () => resolve(map));
-    //   });
-    // },
-    loadShape(id) {
-      id = '' + id;
-      if (this.map.getSource(id) === undefined) {
-        this.map.addSource(id, {
-          type: 'geojson',
-          data: `${api.shapes.defaults.baseURL}${id}`
-        });
-      }
-      if (this.map.getLayer(id) === undefined) {
-        this.userLayers.add(id);
-        this.map.addLayer({
-          id,
-          type: 'fill',
-          source: id,
-          layout: {
-            visibility: 'visible'
-          },
-          paint: {
-            'fill-color': `rgba(${12 * id + 3},153,80,0.55)`
-          }
-        });
-      }
-    },
-    addElementShapes(element) {
-      if (this.map && element && element.shapes_ids) {
-        element.shapes_ids.forEach(id => {
-          this.loadShape(id);
-        });
-      } else {
-        this.userLayers.forEach(layer => {
-          this.map.removeLayer(layer);
-        });
-        this.userLayers = new Set();
-      }
-    }
   }
 };
 

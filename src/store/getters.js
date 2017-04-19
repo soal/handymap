@@ -18,8 +18,13 @@ export default {
       return context.info_fields.indexOf(field.name) !== -1 ? field : undefined
     });
   },
+  elementShapes: state => {
+    return ids => {
+      return state.shapes.filter(shape => ids.indexOf(+shape.properties.id));
+    }
+  },
 
-  // selectedElements: state => state.elements.filter(el => el.id in state.selectedElementsIds),
+  selectedElements: state => state.elements.filter(el => el.id in state.selectedElementsIds),
 
   currentElement: (state, getters) => getters.queryElement(state.currentElementId),
 
