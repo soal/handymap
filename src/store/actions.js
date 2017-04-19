@@ -2,31 +2,29 @@ import api from '../api';
 
 export default {
   fetchElement({ commit }, id) {
-    return api.elements.get(`${id}`)
+    return api.element(id)
       .then(res => {
-        commit('setElements', res.data);
-        return res.data;
+        commit('setElements', res);
+        return res;
       })
       .catch(err => console.log(err));
   },
-
-  fetchCurrentElement({ commit, dispatch }, id) {
-    return dispatch('fetchElement', id)
-      .then(element => commit('setCurrentElement', element.id));
+  fetchElements({ commit }, ids) {
+    return api.elements(ids).then(elements => commit('setElements', elements.datad))
   },
 
-  fetchScenario({ commit }, id) {
-    return api.scenarios.get(`${id}`)
-      .then(res => {
-        commit('setScenario', res.data);
-        return res.data;
-      })
-      .catch(err => console.log(err));
+  fetchDicts({ commit }) {
+    return api.dicts().then(dicts => {
+      // debugger
+      commit('setDicts', dicts)
+    });
   },
 
-  fetchCurrentScenario({ commit, dispatch }, id) {
-    return dispatch('fetchElement', id)
-      .then(element => commit('setCurrentElement', element.id));
+  fetchRootContext({ commit }, id) {
+    return api.context(id).then(context => commit('setRootContext', context));
+  },
+  fetchContext({ commit }, id) {
+    return api.context(id).then(context => commit('addContext', context));
   }
 };
 

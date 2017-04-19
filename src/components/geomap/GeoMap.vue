@@ -1,5 +1,4 @@
 <template>
-  <!-- <div id="map"></div> -->
   <gl-map :accessToken="accessToken"
           :map-style="mapSource"
           :center="[8.3221, 46.5928]"
@@ -18,8 +17,8 @@ import {
   MglGeojsonLayer
 } from 'vue-mapbox';
 
-import {MAP_SOURCE, MAPBOX_ACCESS_TOKEN} from '../config';
-import api from '../api';
+import {MAP_SOURCE, MAPBOX_ACCESS_TOKEN} from '../../config';
+import api from '../../api';
 
 export default {
   name: 'GeoMap',

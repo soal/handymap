@@ -6,13 +6,13 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 
-import GeoMap from "./GeoMap.vue";
-import InfoBox from "./infobox/InfoBox.vue";
+import GeoMap from './geomap/GeoMap.vue';
+import InfoBox from './infobox/InfoBox.vue';
 
 export default {
-  name: "MapViewer",
+  name: 'MapViewer',
   components: {
     GeoMap,
     InfoBox
@@ -21,7 +21,7 @@ export default {
   computed: {
     currentElement() { return this.$store.getters.currentElement; },
     ...mapState({
-      scenarios: "scenarios"
+      scenarios: 'scenarios'
     })
   }
 };

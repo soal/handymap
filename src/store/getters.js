@@ -14,15 +14,19 @@ export default {
     };
   },
 
+  // single element getters
   isElementSelected: state => id => id in state.selectedElements.map(el => el.id),
+  infoFields: () => (element, context) => {
+    element.info.map(field => {
+       return context.info_fields.indexOf(field.name) !== -1 ? field : undefined
+    });
+  },
 
   selectedElements: state => state.elements.filter(el => el.id in state.selectedElementsIds),
 
   currentElement: (state, getters) => getters.queryElement(state.currentElementId),
 
   commonDataset: (state, getters) => {
-    let dataset = [];
-
     let allIds = uniqBy(
       [ state.rootContext.rootElement,
         ...state.rootContext.dataset,
@@ -30,8 +34,6 @@ export default {
         ...state.contexts.map(context => context.dataset)
       ]);
 
-    dataset = getters.queryElements(allIds);
-
-    return dataset;
+    return getters.queryElements(allIds);
   }
 };

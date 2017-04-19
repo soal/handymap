@@ -34,7 +34,9 @@ export default new Vuex.Store({
       dataset: []
     },
     contexts: [
+      // {
       // dataset: [] list of ids of elements in context
+      // }
     ],
 
     scenario: {},
