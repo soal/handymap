@@ -42,7 +42,11 @@ export default {
 
   computed: {
     currentElement() { return this.$store.getters.currentElement; },
-    dataset() { return this.$store.getters.commonDataset; }
+    dataset() {
+      let dataset = this.$store.getters.commonDataset;
+      // debugger
+      return dataset;
+    }
   }
 };
 

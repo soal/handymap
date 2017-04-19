@@ -10,7 +10,10 @@ export default {
       .catch(err => console.log(err));
   },
   fetchElements({ commit }, ids) {
-    return api.elements(ids).then(elements => commit('setElements', elements.data))
+    return api.elements(ids)
+      .then(elements => {
+        return elements.data;
+      });
   },
 
   fetchDicts({ commit }) {
@@ -22,16 +25,27 @@ export default {
   fetchRootScenario({ commit }, id) {
     return api.scenario(id).then(rootScenario => {
       commit('setRootScenario', rootScenario);
-      let scenario = Object.assign({}, rootScenario, { dirty: false, contexts: [rootScenario.context] });
-      delete scenario.context;
-      commit('setScenario', scenario);
     });
   },
-  fetchScenario({ commit }, name) {
+
+  fetchScenario({ commit, dispatch }, name) {
     return api.scenario(name).then(scenario => {
       scenario.dirty = false;
-      commit('setScenario', scenario)
+      return scenario;
     });
+  },
+
+  putScenario({ commit, dispatch }, name) {
+    dispatch('fetchScenario', name)
+      .then(scenario => {
+        let elements = scenario.contexts.map(context => {
+          return dispatch('fetchElements', context.dataset)
+        });
+        Promise.all(elements).then(elements => {
+          commit('setScenario', scenario)
+          commit('setElements', ...elements)
+        });
+      });
   },
 
   fetchContext({ commit }, id) {
@@ -39,7 +53,7 @@ export default {
   },
 
   fetchShape({ commit }, id) {
-    return api.shape(id).then(shape => commit('addShape', shape));
+    return api.shape(id).then(shape => shape);
   }
 };
 

@@ -47,7 +47,7 @@ module.exports = {
         include: [resolve('src'), resolve('test')],
         options: {
           formatter: require('eslint-friendly-formatter'),
-          warnings: false
+          quiet: process.env.NODE_ENV !== 'production'
         }
       },
       {

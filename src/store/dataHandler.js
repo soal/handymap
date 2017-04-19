@@ -13,8 +13,7 @@ const handlers = {
   },
 
   scenario: async (store, name) => {
-    let context = await store.dispatch('fetchScenario', name);
-    store.commit('setScenario', context);
+    await store.dispatch('putScenario', name);
   }
 }
 
@@ -31,8 +30,8 @@ export default function dataHandler(store) {
           handlers.element(store, mutation.payload.to.params.id);
           break;
 
-        case 'context':
-          handlers.context(store, mutation.payload.to.params.id);
+        case 'scenario':
+          handlers.scenario(store, mutation.payload.to.params.name);
           break;
 
         default:

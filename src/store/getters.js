@@ -1,4 +1,4 @@
-import uniqBy from 'lodash';
+import {uniq, flatten, compact} from 'lodash';
 
 export default {
 
@@ -30,12 +30,14 @@ export default {
 
   commonDataset: (state, getters) => {
     let rootDataset = state.rootScenario.context.dataset ? state.rootScenario.context.dataset : [];
-    let allIds = uniqBy(
-      [ state.rootScenario.context.rootElement,
+    let allIds = uniq(
+      compact([
+        state.rootScenario.context.rootElement,
         ...rootDataset,
         ...state.scenario.contexts.map(context => context.rootElement),
-        ...state.scenario.contexts.map(context => context.dataset)
-      ]);
+        ...flatten(state.scenario.contexts.map(context => context.dataset))
+      ])
+    );
     // debugger
     return getters.queryElements(allIds);
   }

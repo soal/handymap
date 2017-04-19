@@ -18,20 +18,20 @@
                   id="nav_collapse"
                   v-if="$route.name !== 'intro'">
         <b-nav is-nav-bar>
-          <b-nav-item>
+          <!--<b-nav-item>
             <router-link :to="{ name: 'element', params: { id: 1 } }">Rome</router-link>
           </b-nav-item>
           <b-nav-item>
             <router-link :to="{ name: 'element', params: { id: 7 } }">Carthago</router-link>
-          </b-nav-item>
+          </b-nav-item>-->
           <b-nav-item>
-            <router-link :to="{ name: 'scenario', params: { id: 1 } }">Second Punic War</router-link>
+            <router-link :to="{ name: 'scenario', params: { name: 'second_punic_war' } }">Second Punic War</router-link>
           </b-nav-item>
-          <b-nav-item>
+          <!--<b-nav-item>
             <b-button size="sm"
                       variant="secondary"
                       @click="clearMap()">Clear map</b-button>
-          </b-nav-item>
+          </b-nav-item>-->
         </b-nav>
       </b-collapse>
     </b-navbar>

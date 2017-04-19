@@ -15,8 +15,11 @@ export default {
     state.currentElementId = id;
   },
 
-  setRootScenario(state, scenario) {
-    state.rootScenario = scenario;
+  setRootScenario(state, rootScenario) {
+    state.rootScenario = rootScenario;
+    let scenario = Object.assign({}, rootScenario, { dirty: false, contexts: [rootScenario.context] });
+    delete scenario.context;
+    state.scenario = scenario;
   },
   addContext(state, context) {
     state.contexts.push(context);
@@ -28,5 +31,8 @@ export default {
 
   addShape(state, shape) {
     state.shapes.push(shape);
+  },
+  addShapes(state, shapes) {
+    state.shapes = unionBy(state.shapes, shapes, 'properties.id');
   }
 };
