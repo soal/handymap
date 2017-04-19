@@ -52,7 +52,6 @@ export default {
     return fetch(`${API_ROOT}/dicts`)
       .then(res => {
         return res.json().then(json => {
-          console.log(json);
           return json;
         });
       })

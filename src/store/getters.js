@@ -7,10 +7,7 @@ export default {
   },
   queryElements: state => {
     return (value, selector='id') => {
-      if (value instanceof Array) {
-        return state.elements.filter(element => value.indexOf(element[selector]) !== -1)
-      }
-      return state.elements.filter(element => element[selector] === value)
+      return state.elements.filter(element => value.indexOf(element[selector]) !== -1)
     };
   },
 
@@ -18,18 +15,19 @@ export default {
   isElementSelected: state => id => id in state.selectedElements.map(el => el.id),
   infoFields: () => (element, context) => {
     element.info.map(field => {
-       return context.info_fields.indexOf(field.name) !== -1 ? field : undefined
+      return context.info_fields.indexOf(field.name) !== -1 ? field : undefined
     });
   },
 
-  selectedElements: state => state.elements.filter(el => el.id in state.selectedElementsIds),
+  // selectedElements: state => state.elements.filter(el => el.id in state.selectedElementsIds),
 
   currentElement: (state, getters) => getters.queryElement(state.currentElementId),
 
   commonDataset: (state, getters) => {
+    let rootDataset = state.rootContext.dataset ? state.rootContext.dataset : [];
     let allIds = uniqBy(
       [ state.rootContext.rootElement,
-        ...state.rootContext.dataset,
+        ...rootDataset,
         ...state.contexts.map(context => context.rootElement),
         ...state.contexts.map(context => context.dataset)
       ]);

@@ -1,12 +1,12 @@
 <template>
   <div id="viewer">
     <info-box :currentElement="currentElement"></info-box>
-    <geo-map :currentElement="currentElement"></geo-map>
+    <geo-map :currentElement="currentElement" :dataset="commonDataset"></geo-map>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 import GeoMap from './geomap/GeoMap.vue';
 import InfoBox from './infobox/InfoBox.vue';
@@ -19,7 +19,10 @@ export default {
   },
 
   computed: {
-    currentElement() { return this.$store.getters.currentElement; },
+    ...mapGetters([
+      'currentElement',
+      'commonDataset'
+    ]),
     ...mapState({
       scenarios: 'scenarios'
     })

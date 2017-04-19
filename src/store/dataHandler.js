@@ -22,7 +22,6 @@ const handlers = {
 export default function dataHandler(store) {
   store.subscribe(mutation => {
     if (mutation.type === 'router/ROUTE_CHANGED') {
-      // console.log(mutation);
       switch (mutation.payload.to.name) {
         case 'view_map':
           handlers.root(store);
@@ -39,6 +38,7 @@ export default function dataHandler(store) {
         default:
           break;
       }
+      return;
     }
   });
 }

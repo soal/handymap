@@ -10,7 +10,7 @@ export default {
       .catch(err => console.log(err));
   },
   fetchElements({ commit }, ids) {
-    return api.elements(ids).then(elements => commit('setElements', elements.datad))
+    return api.elements(ids).then(elements => commit('setElements', elements.data))
   },
 
   fetchDicts({ commit }) {
@@ -25,6 +25,10 @@ export default {
   },
   fetchContext({ commit }, id) {
     return api.context(id).then(context => commit('addContext', context));
+  },
+
+  fetchShape({ commit }, id) {
+    // return api.shape(id).then(shape)
   }
 };
 
