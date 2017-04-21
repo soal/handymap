@@ -1,22 +1,19 @@
-import Vue from "vue";
-import {sync} from "vuex-router-sync";
-import localforage from "localforage";
+import Vue from 'vue';
+import { sync } from 'vuex-router-sync';
+import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 
+import store from './store';
+import router from './router';
 
-import store from "./storage/store";
-import router from "./router";
-import App from "./App.vue";
+import App from './App.vue';
 
-Vue.config.debug = true;
+Vue.use(BootstrapVue);
 
-localforage.config({
-  driver: [localforage.INDEXEDDB,
-           localforage.WEBSQL,
-           localforage.LOCALSTORAGE],
-  name: "handymap"
-});
 sync(store, router);
 
-router.start(App, "app");
+const app = new Vue({ // eslint-disable-line no-new, no-unused-vars
+  store,
+  router,
+  render: (h) => h(App)
+}).$mount('#app');
 
-window.Vue = Vue;

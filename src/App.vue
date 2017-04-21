@@ -1,70 +1,85 @@
-<template lang="html">
-<div id="app">
-  <top-menu></top-menu>
-  <router-view keep-alive></router-view>
-</div>
+<template>
+  <div id="hf" class="container-fluid">
+    <top-bar></top-bar>
+    <router-view></router-view>
+  </div>
 </template>
 
-
 <script>
-
-import store from "./storage/store";
-import BaseElement from "./components/BaseElement.vue";
-import TopMenu from "./components/TopMenu.vue";
-import {Dicts} from "./api/resources";
+import { mapState } from 'vuex';
+import TopBar from './TopBar.vue';
 
 export default {
-  store,
+  name: 'App',
   components: {
-    BaseElement,
-    TopMenu
+    TopBar
   },
-  vuex: {
-    getters: {
-      title: state => state.title,
-      elements: state => state.elements,
-      defaultElementId: state => state.defaultElementId
-    }
-  },
+
   methods: {
-  },
-  init() {
-    Dicts.get()
-      .then((dicts) => {
-        store.dispatch("SET_DICTS", dicts.data);
-        if (dicts.data.default_element) {
-          store.dispatch("SET_DEFAULT_ELEMENT_ID", dicts.data.default_element);
-        }
-      });
+    clearMap() {
+      this.$store.commit('setCurrentElement', null);
+    }
   }
 };
-
 </script>
 
 <style lang="scss">
-#top-menu {
-  margin: 0;
-  position: relative;
-  z-index: 2;
+  @import "~mapbox-gl/dist/mapbox-gl.css";
+  @import "~bootstrap/dist/css/bootstrap.css";
+  @import "~bootstrap-vue/dist/bootstrap-vue.css";
 
-  .fixed-logo {
-    position: absolute;
-    left: .85rem;
-    top: .85rem;
-    z-index: 9999;
+  html {
+    overflow: auto;
   }
-
-  .main-logo {
-    // font-size: $font-size-h3;
+  // a {
+  //   &:hover {
+  //     cursor: pointer;
+  //   }
+  // }
+  a.mapboxgl-ctrl-logo {
+    display: none;
   }
-
+  #hf {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+  }
 
   .navbar {
-    padding-left: 10rem;
+    z-index: 2;
+
+    h1, h2, nav, button {
+      display: inline-block;
+      line-height: 1em;
+    }
+
+    h1, h2 {
+      border: none;
+      font-weight: normal;
+    }
+    h1 {
+      font-size: 20px;
+      margin-top: 16px;
+    }
+    h2 {
+      font-size: 16px;
+    }
+
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
   }
 
-  form {
-    text-align: center;
+
+  // ul {
+  //   list-style-type: none;
+  //   padding: 0;
+  // }
+
+  li {
+    display: inline-block;
+    margin: 0 10px;
   }
-}
 </style>

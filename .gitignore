@@ -1,19 +1,7 @@
 .DS_Store
-node_modules
-dist/build.js
-dist/app.css
-dist/app.css.map
-dist/.*
-*npm-debug*
-
-# IDEs files
-*.sublime-*
-*.idea
-*.tern-*
+node_modules/
+dist/
+npm-debug.log
+yarn-error.log
 *.vscode
-*.imdone
-<<<<<<< HEAD
-=======
-jsconfig.json
->>>>>>> 226491b... Update .gitignore
-typings
+*.sublime-*
