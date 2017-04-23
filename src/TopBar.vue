@@ -27,11 +27,6 @@
           <b-nav-item>
             <router-link :to="{ name: 'scenario', params: { name: 'second_punic_war' } }">Second Punic War</router-link>
           </b-nav-item>
-          <!--<b-nav-item>
-            <b-button size="sm"
-                      variant="secondary"
-                      @click="clearMap()">Clear map</b-button>
-          </b-nav-item>-->
         </b-nav>
       </b-collapse>
     </b-navbar>
@@ -49,7 +44,7 @@
       title: 'title',
       shortTitle: 'shortTitle'
     })
-  }
+  };
 </script>
 
 <style lang="scss"></style>

@@ -7,14 +7,12 @@
         :listenUserEvents="false"
         :type="shape.properties.type"
         :paint="shape.properties.paint"
-
   >
   </layer>
 </div>
 </template>
 
 <script>
-  import {compact} from 'lodash';
   import { MglGeojsonLayer } from 'vue-mapbox';
 
   export default {
@@ -30,14 +28,13 @@
       });
       Promise.all(shapes).then(shapes => {
         this.$store.commit('addShapes', shapes);
-        // this.visibleShapes = compact(this.$store.getters.elementShapes(this.element.shapes_ids));
-      })
+      });
     },
 
     computed: {
       visibleShapes() {
         // TODO: filter by time
-        let shapes = this.$store.getters.elementShapes(this.element.shapes_ids)
+        let shapes = this.$store.getters.elementShapes(this.element.shapes_ids);
         return shapes;
       }
     }

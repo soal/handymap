@@ -64,7 +64,7 @@ module.exports = {
     "key-spacing": [2, { "beforeColon": false, "afterColon": true }],
 
     "linebreak-style": [2, "unix"],
-    "semi": [process.env.NODE_ENV === "production" ? 1 : 0, "always"],
+    "semi": [process.env.NODE_ENV === "production" ? 2 : 1, "always"],
     "dot-location": [1, "property"],
     "quotes": [1, "single", "avoid-escape"],
     "no-unused-vars": [1, { "vars": "all", "args": "after-used" }],

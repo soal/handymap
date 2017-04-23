@@ -5,23 +5,22 @@ export default {
   queryElement: state => {
     return (value, selector='id') => state.elements.find(element => element[selector] === value);
   },
-  queryElements: state => {
-    return (value, selector='id') => {
-      return state.elements.filter(element => value.indexOf(element[selector]) !== -1)
-    };
+  queryElements: state => (value, selector='id') => {
+    return state.elements.filter(element => value.indexOf(element[selector]) !== -1);
   },
 
   // single element getters
   isElementSelected: state => id => id in state.selectedElements.map(el => el.id),
+
   infoFields: () => (element, context) => {
     element.info.map(field => {
-      return context.info_fields.indexOf(field.name) !== -1 ? field : undefined
+      return context.info_fields.indexOf(field.name) !== -1 ? field : undefined;
     });
   },
   elementShapes: state => {
     return ids => {
       return compact(state.shapes.filter(shape => ids.indexOf(+shape.properties.id)));
-    }
+    };
   },
 
   selectedElements: state => state.elements.filter(el => el.id in state.selectedElementsIds),
