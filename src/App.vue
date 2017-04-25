@@ -7,7 +7,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import TopBar from './TopBar.vue';
+import TopBar from './components/topbar/TopBar.vue';
 
 export default {
   name: 'App',
