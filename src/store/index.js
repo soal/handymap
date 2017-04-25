@@ -19,7 +19,7 @@ export default new Vuex.Store({
     dicts: {},
     project: {
       name: 'world_history',
-      label: 'Мировая история',
+      label: 'World History',
       scenarios: [
         { id: 1, name: 'second_punic_war', label: 'Second Punic War' }
       ]
