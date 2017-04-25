@@ -17,6 +17,13 @@ export default new Vuex.Store({
     shortTitle: 'HF',
 
     dicts: {},
+    project: {
+      name: 'world_history',
+      label: 'Мировая история',
+      scenarios: [
+        { id: 1, name: 'second_punic_war', label: 'Second Punic War' }
+      ]
+    },
 
     rootScenario: { // global scenario of the project
       context: {}
