@@ -38,6 +38,9 @@
 </template>
 
 <script>
+  // TODO: Project —> Scenario –> Element as breadcrumbs
+  // TODO: Icon for search link
+  // TODO: Badges for project, scenario, event, place, region, persona
   import { mapState } from 'vuex';
   import TopBarProject from './TopBarProject.vue';
   import SearchPanel from './SearchPanel.vue';
