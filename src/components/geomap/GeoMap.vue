@@ -1,15 +1,24 @@
 <template>
 <div>
-  <gl-map :accessToken="accessToken"
-          :map-style="mapSource"
-          :center="[8.3221, 46.5928]"
-          :maxZoom="6"
-          :minZoom="1.76"
-          :zoom="3"
-          :hash="true"
+  <gl-map
+    :accessToken="accessToken"
+    :mapStyle.sync="mapSource"
+    :container="mapOptions.container"
+    :center.sync="mapOptions.center"
+    :maxZoom.sync="mapOptions.maxZoom"
+    :minZoom.sync="mapOptions.minZoom"
+    :zoom.sync="mapOptions.zoom"
+    :hash="true"
+    :attributionControl="false"
+    @mgl-load="setMap"
   >
     <nav-control></nav-control>
-    <element-shape v-for="element of dataset" :key="element.id" :element="element"></element-shape>
+    <element-shape v-for="element of dataset" :key="element.id"
+      :element="element"
+      :mapId="mapOptions.container"
+      :map="map"
+    >
+    </element-shape>
   </gl-map>
 </div>
 </template>
@@ -22,6 +31,7 @@ import {
 
 import {MAP_SOURCE, MAPBOX_ACCESS_TOKEN} from '../../config';
 import api from '../../api';
+import _ from 'lodash';
 import ElementShape from './ElementShape.vue';
 
 export default {
@@ -34,17 +44,29 @@ export default {
 
   data() {
     return {
-      map: null,
+      map: undefined,
       accessToken: MAPBOX_ACCESS_TOKEN,
-      mapSource: MAP_SOURCE
+      mapSource: MAP_SOURCE,
+      mapOptions: {
+        container: 'map-main',
+        center: [8.3221, 46.5928],
+        maxZoom: 6,
+        minZoom: 1.76,
+        zoom: 3
+      }
     };
   },
 
   computed: {
     currentElement() { return this.$store.getters.currentElement; },
     dataset() {
-      let dataset = this.$store.getters.commonDataset;
+      let dataset = _.filter(this.$store.getters.commonDataset, el => el.shapes_ids && el.shapes_ids.length);
       return dataset;
+    }
+  },
+  methods: {
+    setMap(payload) {
+      this.map = payload.map
     }
   }
 };
@@ -52,7 +74,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  #map {
+  #map-main {
     position: absolute;
     top: 57px;
     left: 0;
