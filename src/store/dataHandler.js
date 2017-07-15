@@ -19,7 +19,7 @@ const handlers = {
 
 export default function dataHandler(store) {
   store.subscribe(mutation => {
-    if (mutation.type === 'router/ROUTE_CHANGED') {
+    if (mutation.type === 'route/ROUTE_CHANGED') {
       switch (mutation.payload.to.name) {
         case 'view_map':
           handlers.root(store);
