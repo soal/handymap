@@ -16,11 +16,11 @@
   "dependencies": {
     "bootstrap-vue": "^0.11.0",
     "lodash": "^4.17.4",
-    "mapbox-gl": "^0.35.1",
-    "vue": "^2.2.1",
-    "vue-router": "^2.3.0",
-    "vuex": "^2.2.1",
-    "vuex-router-sync": "^4.1.2"
+    "mapbox-gl": "^0.38",
+    "vue": "latest",
+    "vue-router": "latest",
+    "vuex": "latest",
+    "vuex-router-sync": "latest"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
@@ -82,9 +82,9 @@
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
     "url-loader": "^0.5.7",
-    "vue-loader": "^11.1.4",
-    "vue-style-loader": "^2.0.0",
-    "vue-template-compiler": "^2.2.4",
+    "vue-loader": "latest",
+    "vue-style-loader": "latest",
+    "vue-template-compiler": "latest",
     "webpack": "^2.2.1",
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",

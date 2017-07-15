@@ -5,9 +5,9 @@ export const API_VERSION = 'v1';
 
 let fakeAPI;
 // fakeAPI = 'https://hf-fake-api.herokuapp.com/api';
-// fakeAPI = "http://192.168.0.35:9000/api";
-fakeAPI = "http://192.168.0.42:9000/api";
-// fakeAPI = 'http://localhost:9000/api';
+//  fakeAPI = "http://192.168.0.35:9000/api";
+// fakeAPI = "http://192.168.0.42:9000/api";
+fakeAPI = 'http://localhost:9000/api';
 
 // export const API_ROOT = (process.env.NODE_ENV === "production")
 //       ? "https://handymap.com/api"
