@@ -15,8 +15,6 @@
     <nav-control></nav-control>
     <element-shape v-for="element of dataset" :key="element.id"
       :element="element"
-      :mapId="mapOptions.container"
-      :map="map"
     >
     </element-shape>
   </gl-map>

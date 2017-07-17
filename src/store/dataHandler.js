@@ -13,6 +13,8 @@ const handlers = {
 
   scenario: async (store, name) => {
     await store.dispatch('putScenario', name);
+    // store.state.scenario.contexts.map(async context => await store.dispatch('fetchElements', store.state.scenario.contexts.dataset))
+    // await store.dispatch('fetchElements', store.state.scenario.contexts.dataset)
   }
 }
 

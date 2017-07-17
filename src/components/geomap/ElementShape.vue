@@ -2,8 +2,6 @@
 <div>
   <layer v-for="shape of visibleShapes" :key="shape.properties.id"
         :sourceId.sync="shape.properties.id"
-        :mapId="mapId"
-        :map.sync="map"
         :source.sync="shape"
         :layerId="shape.properties.id"
         :listenUserEvents="false"
@@ -22,11 +20,7 @@
     components: {
       Layer: MglGeojsonLayer
     },
-    props: ['element', 'mapId', 'map'],
-
-    created() {
-      console.log('HELLO SHAPE');
-    },
+    props: ['element'],
 
     mounted() {
       let shapes = this.element.shapes_ids.map(id => {
@@ -35,7 +29,6 @@
       Promise.all(shapes).then(shapes => {
         this.$store.commit('addShapes', shapes);
       });
-      console.log(this)
     },
 
     computed: {
