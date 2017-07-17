@@ -1,12 +1,12 @@
-import {uniq, flatten, compact} from 'lodash';
+import { uniq, flatten, compact } from 'lodash'
 
 export default {
 
   queryElement: state => {
-    return (value, selector='id') => state.elements.find(element => element[selector] === value);
+    return (value, selector='id') => state.elements.find(element => element[selector] === value)
   },
   queryElements: state => (value, selector='id') => {
-    return state.elements.filter(element => value.indexOf(element[selector]) !== -1);
+    return state.elements.filter(element => value.indexOf(element[selector]) !== -1)
   },
 
   // single element getters
@@ -14,13 +14,13 @@ export default {
 
   infoFields: () => (element, context) => {
     element.info.map(field => {
-      return context.info_fields.indexOf(field.name) !== -1 ? field : undefined;
-    });
+      return context.info_fields.indexOf(field.name) !== -1 ? field : undefined
+    })
   },
   elementShapes: state => {
     return ids => {
-      return compact(state.shapes.filter(shape => ids.indexOf(+shape.properties.id)));
-    };
+      return compact(state.shapes.filter(shape => ids.indexOf(+shape.properties.id) !== -1))
+    }
   },
 
   selectedElements: state => state.elements.filter(el => el.id in state.selectedElementsIds),
@@ -28,7 +28,7 @@ export default {
   currentElement: (state, getters) => getters.queryElement(state.currentElementId),
 
   commonDataset: (state, getters) => {
-    let rootDataset = state.rootScenario.context.dataset ? state.rootScenario.context.dataset : [];
+    let rootDataset = state.rootScenario.context.dataset ? state.rootScenario.context.dataset : []
     let allIds = uniq(
       compact([
         state.rootScenario.context.rootElement,
@@ -36,7 +36,7 @@ export default {
         ...state.scenario.contexts.map(context => context.rootElement),
         ...flatten(state.scenario.contexts.map(context => context.dataset))
       ])
-    );
-    return getters.queryElements(allIds);
+    )
+    return getters.queryElements(allIds)
   }
-};
+}
