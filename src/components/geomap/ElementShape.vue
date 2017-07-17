@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import { MglGeojsonLayer } from 'vue-mapbox';
+  import { MglGeojsonLayer } from 'vue-mapbox'
 
   export default {
     name: 'ElementShape',
@@ -24,19 +24,17 @@
 
     mounted() {
       let shapes = this.element.shapes_ids.map(id => {
-        return this.$store.dispatch('fetchShape', id);
-      });
+        return this.$store.dispatch('fetchShape', id)
+      })
       Promise.all(shapes).then(shapes => {
-        this.$store.commit('addShapes', shapes);
-      });
+        this.$store.commit('addShapes', shapes)
+      })
     },
 
     computed: {
       visibleShapes() {
         // TODO: filter by time
-        let shapes = this.$store.getters.elementShapes(this.element.shapes_ids);
-        // console.log('El: ', this.element.name, ' Shapes: ', shapes);
-        return shapes;
+        return this.$store.getters.elementShapes(this.element.shapes_ids)
       }
     }
   };

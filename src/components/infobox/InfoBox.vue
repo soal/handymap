@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import ElementsList from './ElementsList.vue';
-import ElementArticle from './ElementArticle.vue';
+import ElementsList from './ElementsList.vue'
+import ElementArticle from './ElementArticle.vue'
 
 export default {
   name: 'InfoBox',
@@ -19,7 +19,7 @@ export default {
   },
 
   computed: {
-    currentElement() { return this.$store.getters.currentElement; }
+    currentElement() { return this.$store.getters.currentElement }
   }
 };
 </script>

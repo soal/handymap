@@ -1,11 +1,11 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
-import Intro from './components/Intro.vue';
-import MapViewer from './components/MapViewer.vue';
-import ElementArticle from './components/infobox/ElementArticle.vue';
+import Intro from './components/Intro.vue'
+import MapViewer from './components/MapViewer.vue'
+import ElementArticle from './components/infobox/ElementArticle.vue'
 
 const routes = [
   { path: '/',
@@ -40,11 +40,11 @@ const routes = [
       }
     ]
   }
-];
+]
 
 export default new VueRouter({
   mode: 'history',
   transitionOnLoad: true,
   saveScrollPosition: true,
   routes
-});
+})

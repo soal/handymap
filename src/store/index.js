@@ -1,15 +1,15 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-import { DEBUG } from '../config';
-import dataHandler from './dataHandler.js';
-import getters from './getters';
-import mutations from './mutations';
-import actions from './actions';
+import { DEBUG } from '../config'
+import dataHandler from './dataHandler.js'
+import getters from './getters'
+import mutations from './mutations'
+import actions from './actions'
 
 
-Vue.use(Vuex);
-Vue.config.debug = DEBUG;
+Vue.use(Vuex)
+Vue.config.debug = DEBUG
 
 export default new Vuex.Store({
   state: {
@@ -50,4 +50,4 @@ export default new Vuex.Store({
   actions,
   plugins: [dataHandler],
   strict: DEBUG
-});
+})
