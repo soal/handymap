@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import moment from 'moment'
 
 import { DEBUG } from '../config'
 import dataHandler from './dataHandler.js'
@@ -42,7 +43,17 @@ export default new Vuex.Store({
     elements: [],
     shapes: [],
     selectedElementsIds: [],
-    currentElementId: ''
+    currentElementId: '',
+
+    timeline: {
+      currentDate: moment(),
+      startDate: moment('-5000-01-01'),
+      endDate: moment(),
+      visibleDates: {
+        startDate: moment('-5000-01-01'),
+        endDate: moment()
+      }
+    }
 
   },
   getters,
