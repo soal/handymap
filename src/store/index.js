@@ -16,6 +16,7 @@ export default new Vuex.Store({
   state: {
     title: 'HistoryFlow',
     shortTitle: 'HF',
+    infoBoxShowed: false,
 
     dicts: {},
 
@@ -47,11 +48,11 @@ export default new Vuex.Store({
 
     timeline: {
       currentDate: moment(),
-      startDate: moment('-5000-01-01'),
+      startDate: moment('-5000/01/01'),
       endDate: moment(),
       visibleDates: {
-        startDate: moment('-5000-01-01'),
-        endDate: moment()
+        startDate: moment('-220/01/01'),
+        endDate: moment('-200/01/01')
       }
     }
 

@@ -20,6 +20,14 @@ export default {
 
   computed: {
     currentElement() { return this.$store.getters.currentElement }
+  },
+
+  mounted() {
+    this.$store.commit('showInfoBox')
+  },
+
+  beforeDestroy() {
+    this.$store.commit('hideInfoBox')
   }
 };
 </script>
