@@ -6,6 +6,7 @@ Vue.use(VueRouter)
 import Intro from './components/Intro.vue'
 import MapViewer from './components/MapViewer.vue'
 import ElementArticle from './components/infobox/ElementArticle.vue'
+import ScenarioBox from './components/infobox/ScenarioBox.vue'
 
 const routes = [
   { path: '/',
@@ -20,7 +21,7 @@ const routes = [
         path: 'scenarios/:name',
         name: 'scenario',
         components: {
-          // infobox: ScenarioBox
+          infobox: ScenarioBox
         },
         children: [
           {

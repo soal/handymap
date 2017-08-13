@@ -1,33 +1,26 @@
 <template>
   <div id="infobox" class="hidden-sm-down" v-if="currentElement && currentElement.id">
     <div class="infobox-wrap">
-      <h2><b>{{ currentElement.id }}</b> {{ currentElement.label }}</h2>
       <router-view name="infobox"></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import ElementsList from './ElementsList.vue'
-import ElementArticle from './ElementArticle.vue'
+// import ElementsList from './ElementsList.vue'
+// import ElementArticle from './ElementArticle.vue'
+// import ScenanrioBox from './ScenanrioBox.vue'
 
 export default {
   name: 'InfoBox',
   components: {
-    ElementArticle,
-    ElementsList
+    // ElementArticle,
+    // ElementsList,
+    // ScenanrioBox
   },
 
   computed: {
     currentElement() { return this.$store.getters.currentElement }
-  },
-
-  mounted() {
-    this.$store.commit('showInfoBox')
-  },
-
-  beforeDestroy() {
-    this.$store.commit('hideInfoBox')
   }
 };
 </script>

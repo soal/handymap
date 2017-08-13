@@ -13,7 +13,7 @@ import { mapState, mapGetters } from 'vuex'
 
 import GeoMap from './geomap/GeoMap.vue'
 import InfoBox from './infobox/InfoBox.vue'
-import Timeline from './Timeline.vue'
+import Timeline from './Timeline/Timeline.vue'
 
 export default {
   name: 'MapViewer',
