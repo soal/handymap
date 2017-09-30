@@ -1,22 +1,15 @@
 <template>
   <div id="infobox" class="hidden-sm-down" v-if="currentElement && currentElement.id">
     <div class="infobox-wrap">
-      <h2><b>{{ currentElement.id }}</b> {{ currentElement.label }}</h2>
       <router-view name="infobox"></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import ElementsList from './ElementsList.vue'
-import ElementArticle from './ElementArticle.vue'
 
 export default {
   name: 'InfoBox',
-  components: {
-    ElementArticle,
-    ElementsList
-  },
 
   computed: {
     currentElement() { return this.$store.getters.currentElement }

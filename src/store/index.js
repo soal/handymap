@@ -12,10 +12,23 @@ import actions from './actions'
 Vue.use(Vuex)
 Vue.config.debug = DEBUG
 
+const timelineZooomLevels = {
+  hours: {},
+  days: {},
+  halfMonths: {},
+  months: {},
+  halfYears: {},
+  years: {},
+  decades: {},
+  halfCenturies: {},
+  centuries: {}
+}
+
 export default new Vuex.Store({
   state: {
     title: 'HistoryFlow',
     shortTitle: 'HF',
+    infoBoxShowed: false,
 
     dicts: {},
 
@@ -47,11 +60,15 @@ export default new Vuex.Store({
 
     timeline: {
       currentDate: moment(),
-      startDate: moment('-5000-01-01'),
-      endDate: moment(),
+      startDate: moment('-5000/01/01'),
+      endDate: moment(new Date()),
       visibleDates: {
-        startDate: moment('-5000-01-01'),
-        endDate: moment()
+        startDate: moment('-230/01/01'),
+        endDate: moment('-190/01/01')
+      },
+      period: {
+        startDate: moment('-220/01/01'),
+        endDate: moment('-200/01/01')
       }
     }
 

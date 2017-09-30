@@ -7,12 +7,13 @@
 </template>
 
 <script>
+import infoboxMixin from './infoboxMixin'
 
 export default {
-  name: 'ElementArticle',
+  mixins: [infoboxMixin],
 
   computed: {
-    element() { return this.$store.getters.currentElement  }
+    element() { return this.$store.getters.currentElement }
   }
 };
 </script>

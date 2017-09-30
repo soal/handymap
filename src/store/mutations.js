@@ -37,5 +37,11 @@ export default {
   },
   clearShapes(state) {
     state.shapes = []
+  },
+  showInfoBox(state) {
+    state.infoBoxShowed = true
+  },
+  hideInfoBox(state) {
+    state.infoBoxShowed = false
   }
 }
