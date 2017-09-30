@@ -7,17 +7,9 @@
 </template>
 
 <script>
-// import ElementsList from './ElementsList.vue'
-// import ElementArticle from './ElementArticle.vue'
-// import ScenanrioBox from './ScenanrioBox.vue'
 
 export default {
   name: 'InfoBox',
-  components: {
-    // ElementArticle,
-    // ElementsList,
-    // ScenanrioBox
-  },
 
   computed: {
     currentElement() { return this.$store.getters.currentElement }

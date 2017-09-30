@@ -6,7 +6,9 @@
     id="timeline"
     ref="timelineSvg"
   >
-    <rect ref="timelineBg" x="0" y="0" width="100%" height="30"></rect>
+    <rect ref="timelineBg" x="0" y="0" width="100%" height="30">
+
+    </rect>
     <rect ref="visibleStartEl" x="5" y="0" width="2" height="30" fill="#ff0000" style=""></rect>
     <rect ref="visibleEndEl" :x="visibleEndPos[0]" y="0" width="2" height="30" fill="#ff0000" style=""></rect>
   </svg>
@@ -48,16 +50,9 @@ export default {
   },
 
   methods: {
-    createTimeline() {
-      this.timeline = Snap(this.$refs.timelineSvg)
-      this.timelineBg = this.timeline.rect(0, 0, '100%', 30)
-      this.visibleStartEl = this.timeline
-        .rect(...this.visibleStartPos, 2, 30)
-        .attr({ fill: '#f00' })
-      this.visibleEndEl = this.timeline
-        .rect(...this.visibleEndPos, 2, 30)
-        .attr({ fill: '#f00' })
-    },
+    computePeriods() {
+
+    }
   }
 }
 </script>

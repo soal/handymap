@@ -13,7 +13,7 @@ export default {
   mixins: [infoboxMixin],
 
   computed: {
-    element() { return this.$store.getters.currentElement  }
+    element() { return this.$store.getters.currentElement }
   }
 };
 </script>

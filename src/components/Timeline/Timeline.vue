@@ -1,16 +1,17 @@
 <template>
   <div id="timeline-container" :class="[ infoBoxShowed ? 'short' : '' ]" ref='timelineContainer'>
-    <TimelineMini
-      v-if="mini"
-      :periodStart="periodStart"
-      :periodEnd="periodEnd"
-      :visibleStart="visibleStart"
-      :visibleEnd="visibleEnd"
-      :currentDate="currentDate"
-      :width="timelineWidth"
-    >
-    </TimelineMini>
-    </svg>
+    <transition>
+      <TimelineMini
+        v-if="mini"
+        :periodStart="periodStart"
+        :periodEnd="periodEnd"
+        :visibleStart="visibleStart"
+        :visibleEnd="visibleEnd"
+        :currentDate="currentDate"
+        :width="timelineWidth"
+      >
+      </TimelineMini>
+    </transition>
   </div>
 
 </template>

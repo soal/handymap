@@ -27,7 +27,7 @@ import {
   MglNavigationControl
 } from 'vue-mapbox';
 
-import {MAP_SOURCE, MAPBOX_ACCESS_TOKEN} from '../../config';
+import { MAP_SOURCE, MAPBOX_ACCESS_TOKEN } from '../../config';
 import api from '../../api';
 import _ from 'lodash';
 import ElementShape from './ElementShape.vue';
