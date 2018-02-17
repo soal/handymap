@@ -1,13 +1,21 @@
 <template>
-  <div id="hf" class="container-fluid">
-    <top-bar></top-bar>
-    <router-view></router-view>
-  </div>
+<v-app>
+  <v-content>
+    <v-container id="app-container" fluid wrap>
+      <v-layout>
+        <v-flex>
+          <top-bar></top-bar>
+          <router-view></router-view>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-content>
+</v-app>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import TopBar from './TopBar.vue';
+import { mapState } from 'vuex'
+import TopBar from '@/components/TopBar.vue'
 
 export default {
   name: 'App',
@@ -17,69 +25,48 @@ export default {
 
   methods: {
     clearMap() {
-      this.$store.commit('setCurrentElement', null);
+      this.$store.commit('ELEMENS_SET_CURRENT', null)
     }
   }
-};
+}
 </script>
 
-<style lang="scss">
-  @import "~mapbox-gl/dist/mapbox-gl.css";
-  @import "~bootstrap/dist/css/bootstrap.css";
-  @import "~bootstrap-vue/dist/bootstrap-vue.css";
+<style>
+body {
+  height: 100%;
+  min-height: 100%;
+}
+#app-container {
+  padding: 0;
+}
+/* #app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
 
-  html {
-    overflow: auto;
-  }
-  // a {
-  //   &:hover {
-  //     cursor: pointer;
-  //   }
-  // }
-  a.mapboxgl-ctrl-logo {
-    display: none;
-  }
-  #hf {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
-  }
+main {
+  text-align: center;
+  margin-top: 40px;
+}
 
-  .navbar {
-    z-index: 2;
+header {
+  margin: 0;
+  height: 56px;
+  padding: 0 16px 0 24px;
+  background-color: #35495E;
+  color: #ffffff;
+}
 
-    h1, h2, nav, button {
-      display: inline-block;
-      line-height: 1em;
-    }
-
-    h1, h2 {
-      border: none;
-      font-weight: normal;
-    }
-    h1 {
-      font-size: 20px;
-      margin-top: 16px;
-    }
-    h2 {
-      font-size: 16px;
-    }
-
-    a {
-      color: #fff;
-      text-decoration: none;
-    }
-  }
-
-
-  // ul {
-  //   list-style-type: none;
-  //   padding: 0;
-  // }
-
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
+header span {
+  display: block;
+  position: relative;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: .02em;
+  font-weight: 400;
+  box-sizing: border-box;
+  padding-top: 16px;
+} */
 </style>

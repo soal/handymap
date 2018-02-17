@@ -7,8 +7,7 @@
         :listenUserEvents="false"
         :type="shape.properties.type"
         :paint.sync="shape.properties.paint"
-  >
-  </layer>
+  />
 </div>
 </template>
 
@@ -37,7 +36,5 @@
         return this.$store.getters.elementShapes(this.element.shapes_ids)
       }
     }
-  };
+  }
 </script>
-
-<style lang="scss"></style>

@@ -8,26 +8,30 @@ module.exports = {
   },
   env: {
     browser: true,
+    es6: true,
+    worker: true,
+    serviceworker: true,
+    jest: true
   },
-  extends: 'vue',
+  // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
+  extends: 'standard',
   // required to lint *.vue files
   plugins: [
-    'html',
     'import',
-    'vue'
+    'html'
   ],
   // add your custom rules here
   'rules': {
+    // allow paren-less arrow functions
+    'arrow-parens': 0,
+    // allow async-await
+    'generator-star-spacing': 0,
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-    'no-unused-vars': 1,
-    "indent": [1, 2, { "SwitchCase": 1 }],
-    "semi": [1],
-    "quotes": [1, "single", "avoid-escape"],
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 1,
+    "camelcase": 0,
+    "comma-dangle": [2, "never"],
+    "complexity": 2,
     "space-before-function-paren": [0, "never"],
-    "prefer-const": [0],
-    "space-infix-ops": [0],
-    "template-curly-spacing": [1],
-    "no-multiple-empty-lines": [0]
+    "no-unused-vars": 1
   }
 }

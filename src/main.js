@@ -1,22 +1,25 @@
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import mapboxgl from 'mapbox-gl'
-import { sync } from 'vuex-router-sync'
 import VueMapbox from 'vue-mapbox'
-import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
 
-import store from './store'
-import router from './router'
+import router from '@/router'
+import store from '@/store'
+import App from '@/App'
 
-import App from './App.vue'
+Vue.config.productionTip = false
 
-Vue.use(BootstrapVue)
+Vue.use(Vuetify)
 Vue.use(VueMapbox, { mapboxgl })
 
-sync(store, router)
-
-const app = new Vue({ // eslint-disable-line no-new, no-unused-vars
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
   store,
   router,
-  render: (h) => h(App)
-}).$mount('#app')
-
+  template: '<App/>',
+  components: { App }
+})

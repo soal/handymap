@@ -1,5 +1,4 @@
 <template>
-<div>
   <gl-map
     :accessToken="accessToken"
     :mapStyle.sync="mapSource"
@@ -7,30 +6,28 @@
     :center.sync="mapOptions.center"
     :maxZoom.sync="mapOptions.maxZoom"
     :minZoom.sync="mapOptions.minZoom"
-    :zoom.sync="mapOptions.zoom"
     :hash="true"
-    :attributionControl="false"
-    @mgl-load="setMap"
+    :attributionControl="true"
   >
-    <nav-control></nav-control>
+    <nav-control
+      position="bottom-right"
+    />
     <element-shape v-for="element of dataset" :key="element.id"
       :element="element"
     >
     </element-shape>
   </gl-map>
-</div>
 </template>
 
 <script>
 import {
   MglMap,
   MglNavigationControl
-} from 'vue-mapbox';
+} from 'vue-mapbox'
 
-import {MAP_SOURCE, MAPBOX_ACCESS_TOKEN} from '../../config';
-import api from '../../api';
-import _ from 'lodash';
-import ElementShape from './ElementShape.vue';
+import { MAP_SOURCE, MAPBOX_ACCESS_TOKEN } from '@/config'
+// import api from '@/api'
+import ElementShape from '@/components/Geomap/ElementShape.vue'
 
 export default {
   name: 'GeoMap',
@@ -42,7 +39,6 @@ export default {
 
   data() {
     return {
-      map: undefined,
       accessToken: MAPBOX_ACCESS_TOKEN,
       mapSource: MAP_SOURCE,
       mapOptions: {
@@ -52,31 +48,26 @@ export default {
         minZoom: 1.76,
         zoom: 3
       }
-    };
+    }
   },
 
   computed: {
-    currentElement() { return this.$store.getters.currentElement; },
+    currentElement() { return this.$store.getters.currentElement },
     dataset() {
-      let dataset = _.filter(this.$store.getters.commonDataset, el => el.shapes_ids && el.shapes_ids.length);
-      return dataset;
+      let dataset = this.$store.getters.commonDataset.filter(el => el.shapes_ids && el.shapes_ids.length)
+      return dataset
     }
   },
-  methods: {
-    setMap(payload) {
-      this.map = payload.map
-    }
-  }
-};
-
+  methods: {}
+}
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   #map-main {
-    position: absolute;
-    top: 57px;
-    left: 0;
-    height: calc(100vh - 57px);
+    /* position: absolute;
+    top: 0;
+    left: 0; */
+    height: 100vh;
     width: 100vw;
   }
 </style>
