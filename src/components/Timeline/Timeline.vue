@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
+import Vue from 'vue'
 import { mapState } from 'vuex'
 import TimelineMini from './TimelineMini.vue'
 
@@ -29,7 +29,7 @@ export default {
     return {
       mini: true,
       timelineWidth: '100%'
-    };
+    }
   },
 
   computed: {
@@ -56,29 +56,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  #timeline-container {
-    height: 30px;
-    will-change: will;
-    width: 100%;
-
-    &.short {
-      width: calc(100% - 30vw);
-      float: right;
-    }
-  }
-  .visibleStart {
-    position: absolute;
-    // top: 0;
-    // left: 5px;
-    // transform: translate(10px, 0);
-  }
-  .visibleEnd {
-    position: absolute;
-    // right: 5px;
-    // top: 0;
-    // transform: translate(calc(100vw - 10px), 0);
-  }
-
-</style>

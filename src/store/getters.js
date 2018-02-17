@@ -3,9 +3,9 @@ import { uniq, flatten, compact } from 'lodash'
 export default {
 
   queryElement: state => {
-    return (value, selector='id') => state.elements.find(element => element[selector] === value)
+    return (value, selector = 'id') => state.elements.find(element => element[selector] === value)
   },
-  queryElements: state => (value, selector='id') => {
+  queryElements: state => (value, selector = 'id') => {
     return state.elements.filter(element => value.indexOf(element[selector]) !== -1)
   },
 

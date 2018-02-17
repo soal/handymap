@@ -3,7 +3,6 @@
     <info-box></info-box>
     <geo-map></geo-map>
     <div id="timeline-box">
-      <timeline></timeline>
     </div>
   </div>
 </template>
@@ -11,16 +10,16 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 
-import GeoMap from './geomap/GeoMap.vue'
-import InfoBox from './infobox/InfoBox.vue'
-import Timeline from './Timeline/Timeline.vue'
+import GeoMap from '@/components/Geomap/GeoMap.vue'
+import InfoBox from '@/components/Infobox/InfoBox.vue'
+// import Timeline from '@/components/Timeline/Timeline.vue'
 
 export default {
   name: 'MapViewer',
   components: {
     GeoMap,
-    InfoBox,
-    Timeline
+    InfoBox
+    // Timeline
   },
 
   computed: {
@@ -32,10 +31,15 @@ export default {
       scenarios: 'scenarios'
     })
   }
-};
+}
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+  #viewer {
+    position: relative;
+    margin-top: -48px;
+    height: 100vh;
+  }
   #timeline-box {
     position: fixed;
     bottom: 0;
@@ -43,4 +47,3 @@ export default {
     width: 100%;
   }
 </style>
-

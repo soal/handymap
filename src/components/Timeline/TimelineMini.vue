@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Snap from 'imports-loader?this=>window,fix=>module.exports=0!snapsvg/dist/snap.svg.js'
+// import Snap from 'imports-loader?this=>window,fix=>module.exports=0!snapsvg/dist/snap.svg.js'
 
 export default {
   props: [
@@ -56,7 +56,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

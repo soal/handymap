@@ -1,17 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import MapViewer from '@/components/MapViewer.vue'
+import ElementArticle from '@/components/Infobox/ElementArticle.vue'
+import ScenarioBox from '@/components/Infobox/ScenarioBox.vue'
 
 Vue.use(VueRouter)
 
-import Intro from './components/Intro.vue'
-import MapViewer from './components/MapViewer.vue'
-import ElementArticle from './components/infobox/ElementArticle.vue'
-import ScenarioBox from './components/infobox/ScenarioBox.vue'
-
 const routes = [
   { path: '/',
-    name: 'intro',
-    components: { default: Intro }
+    redirect: { name: 'view_map' }
   },
   { path: '/map',
     name: 'view_map',

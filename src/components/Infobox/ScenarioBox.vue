@@ -1,8 +1,6 @@
 <template>
   <article>
-    <p>
-      {{ element.text }}
-    </p>
+    <h2><b>{{ currentElement.id }}</b> {{ currentElement.label }}</h2>
   </article>
 </template>
 
@@ -13,10 +11,7 @@ export default {
   mixins: [infoboxMixin],
 
   computed: {
-    element() { return this.$store.getters.currentElement }
+    currentElement() { return this.$store.getters.currentElement }
   }
-};
+}
 </script>
-
-<style lang="scss"></style>
-

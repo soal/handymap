@@ -1,31 +1,45 @@
-import api from '../api'
+import api from '@/api'
+import {
+  SCENARIO_SET,
+  SCENARIO_ROOT_SET,
+  ELEMENTS_SET,
+  ELEMENTS_SELECT,
+  ELEMENTS_SET_CURRENT,
+  ELEMENTS_CLEAR,
+  REFERENCES_SET,
+  SHAPES_ADD_SINGLE,
+  SHAPES_ADD,
+  SHAPES_CLEAR,
+  UI_INFOBOX_SET
+} from '@/store/mutationTypes'
 
 export default {
   fetchElement({ commit }, id) {
     return api.element(id)
       .then(res => {
-        commit('setElements', res)
+        commit(ELEMENTS_SET, res)
         return res
       })
       .catch(err => console.log(err))
   },
+
   fetchElements({ commit }, ids) {
     return api.elements(ids)
       .then(elements => {
-        commit('setElements', elements.data)
+        commit(ELEMENTS_SET, elements.data)
         return elements.data
       })
   },
 
   fetchDicts({ commit }) {
     return api.dicts().then(dicts => {
-      commit('setDicts', dicts)
+      commit(REFERENCES_SET, dicts)
     })
   },
 
   fetchRootScenario({ commit }, id) {
     return api.scenario(id).then(rootScenario => {
-      commit('setRootScenario', rootScenario)
+      commit(SCENARIO_ROOT_SET, rootScenario)
     })
   },
 
@@ -43,8 +57,8 @@ export default {
           return dispatch('fetchElements', context.dataset)
         })
         Promise.all(elements).then(() => {
-          commit('setScenario', scenario)
-          commit('setCurrentElement', scenario.rootElement)
+          commit(SCENARIO_SET, scenario)
+          commit(ELEMENTS_SET_CURRENT, scenario.rootElement)
         })
       })
   },
@@ -53,4 +67,3 @@ export default {
     return api.shape(id).then(shape => shape)
   }
 }
-
