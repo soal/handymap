@@ -1,8 +1,15 @@
 <template>
   <div id="viewer">
-    <info-box></info-box>
-    <geo-map></geo-map>
+    <info-box>
+      <router-view name="infobox"/>
+    </info-box>
+    <geo-map>
+      <keep-alive>
+        <router-view name="map" />
+      </keep-alive>
+    </geo-map>
     <div id="timeline-box">
+      <router-view name="timeline" />
     </div>
   </div>
 </template>

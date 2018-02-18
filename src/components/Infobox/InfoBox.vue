@@ -1,7 +1,8 @@
 <template>
-  <div id="infobox" class="hidden-sm-down" v-if="currentElement && currentElement.id">
+  <div id="infobox">
     <div class="infobox-wrap">
-      <router-view name="infobox"></router-view>
+      <slot />
+      <!-- <router-view name="infobox"></router-view> -->
     </div>
   </div>
 </template>

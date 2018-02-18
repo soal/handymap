@@ -4,8 +4,8 @@
     <v-container id="app-container" fluid wrap>
       <v-layout>
         <v-flex>
-          <top-bar></top-bar>
-          <router-view></router-view>
+          <top-bar />
+          <router-view />
         </v-flex>
       </v-layout>
     </v-container>

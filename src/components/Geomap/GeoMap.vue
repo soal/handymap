@@ -9,13 +9,12 @@
     :hash="true"
     :attributionControl="true"
   >
-    <nav-control
-      position="bottom-right"
-    />
-    <element-shape v-for="element of dataset" :key="element.id"
-      :element="element"
-    >
-    </element-shape>
+    <slot name="map-controls">
+      <nav-control
+        position="bottom-right"
+      />
+    </slot>
+    <slot></slot>
   </gl-map>
 </template>
 

@@ -43,11 +43,13 @@ export default {
     })
   },
 
-  fetchScenario({ commit, dispatch }, name) {
-    return api.scenario(name).then(scenario => {
-      scenario.dirty = false
-      return scenario
-    })
+  async fetchScenario({ commit, dispatch }, name) {
+    return api.scenario(name)
+      .then(scenario => {
+        scenario.dirty = false
+        commit(SCENARIO_SET, scenario)
+        return scenario
+      })
   },
 
   putScenario({ commit, dispatch }, name) {
